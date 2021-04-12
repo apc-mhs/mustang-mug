@@ -1,0 +1,27 @@
+Menu items
+======================
+Smoothie: $3
+Bottled water: $1
+Hot tea: $1.25
+Hot coffee: $1.50
+Iced coffee $2.10 
+Mustang brew: $2.75
+
+-----------------------------------
+
+Coffee customizations: 
+======================
+Whipped cream: $0.50
+
+Flavor shots: 
+#############
+Vanilla: $0.50
+Hazlenut: $0.50
+Agave: $0.50
+Caramel: $0.50
+
+Milk:
+#############
+Milk: $0.00
+Oat milk: $0.85
+Almond milk: $0.85
