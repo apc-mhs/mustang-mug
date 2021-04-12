@@ -4,9 +4,11 @@ The website, backend, and dashboard for the Mustang Mug Cafe. More information t
 ## Specifications for website from Knight 
 - Only open orders up at a certain time for a set amount of time (e.g. open orders at 7:30am until 7:45am)
 - Customizable order cap that's enforced (e.g. for 6/3/1982 only allow 20 orders before shutting down order capability)
-- Two sections: Menu section and order section (can be split by student workload) 
+- Two interfaces: Menu/Ordering and Dashboard/Menu setup (can be split by student workload) 
 - Menu section lists all items for sale with prices, user can select items they want and see totals
 - Order section first step ensures users has an account with MSB (mySchoolBucks API) -- if they do continue, if they don't bounce them back and provide information on who to contact/how to set up an MSB account
+- Dashboard lists any orders that need to processed and allows people working at the cafe to label drinks. Could also set up "text when order is ready" feature
+- Menu setup section allows the people using the dashboard to temporarily edit the menu for a specific day
 - If success and user has MSB account continue with order, adding to cart, paying etc. This step requires use of 'Pay API' rather than the 'Pay Express'
 
 ### Information on MSB is available at the below links: 
