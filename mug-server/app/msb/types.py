@@ -212,4 +212,3 @@ class SearchDepartmentsResponse(MsbPayResponse):
 class SearchGLAccountsResponse(MsbPayResponse):
     glaccounts: List['ClientProperty']
     meta: 'ListPaging'
-    
