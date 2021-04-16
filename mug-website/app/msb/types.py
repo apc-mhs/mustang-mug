@@ -9,13 +9,13 @@ class APIServer(Enum):
     PRODUCTION = 'https://www.myschoolbucks.com/msbpay/v2'
     
 
-
 MsbPayResult = Literal['unknown','success','error',]
 CartStatus = Literal['pending','canceled','authorized','closed',]
 PaymentTxnType = Literal['sale','credit','refund','reversal','preauth','postauth',]
 PaymentType = Literal['sale','credit',]
 OrderStatus = Literal['active','canceled','closed','declined','pending','review','void',]
 PayApiEventType = Literal['ping','cart.authorized','cart.processed','cart.canceled','payment.settled','payment.authorized','payment.failed','payment.refunded',]
+
 class MsbPayResponse(TypedDict):
     result: 'MsbPayResult'
     errors: List[str]
