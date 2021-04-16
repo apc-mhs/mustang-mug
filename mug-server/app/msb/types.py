@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List, Literal, TypedDict
 
 
-class APIServers(Enum):
+class APIServer(Enum):
     LAB = 'https://schoolbucks.msb-lab.com/msbpay/v2'
     QA = 'https://test.www.myschoolbucks.com/msbpay/v2'
     STAGING = 'https://staging.www.myschoolbucks.com/msbpay/v2'
