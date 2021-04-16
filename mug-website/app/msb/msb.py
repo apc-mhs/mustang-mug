@@ -2,7 +2,7 @@ from typing import Any, Dict, Optional
 
 import requests
 
-from .types import (
+from .models import (
     APIServer,
     BooleanResponse,
     CartPaymentRefundResponse,
