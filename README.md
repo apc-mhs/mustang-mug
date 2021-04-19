@@ -15,6 +15,7 @@ The website, backend, and dashboard for the Mustang Mug Cafe. More information t
 
 - https://www.myschoolbucks.com/ver2/developer/msbpayapi
 - https://www.myschoolbucks.com/ver2/developer/home
+- https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi
 
 
 ## Hosting ideas
