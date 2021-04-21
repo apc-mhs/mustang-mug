@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-DATE_FORMAT = '%Y-%m-%dT%H:%M:%S.%f%Z'
+DATE_FORMAT = '%Y-%m-%dT%H:%M:%S.%f%z'
 
 
 def to_msbpay_string(dt: datetime) -> str:
