@@ -5,7 +5,7 @@
     },
     "hosting": {
         "site": "mustang-mug",
-        "public": "static",
+        "public": "public",
         "rewrites": [
             {
                 "source": "**",
