@@ -1,11 +1,11 @@
 .DS_Store
 node_modules
-/.svelte
-/build
+.svelte
+build
 *.log
 .npmrc
 *.rules
 *.indexes.json
 .firebaserc
 .vscode
-public/*
+public
