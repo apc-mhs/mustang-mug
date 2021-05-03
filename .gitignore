@@ -8,4 +8,4 @@ node_modules
 *.indexes.json
 .firebaserc
 .vscode
-_app
+public/*
