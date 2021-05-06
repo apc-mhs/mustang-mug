@@ -1,7 +1,7 @@
 # mustang-mug
 The website, backend, and dashboard for the Mustang Mug Cafe. More information to come. 
 
-## Installation
+## Setup
 ### Install homebrew
     cd && mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
 ### Install Node
