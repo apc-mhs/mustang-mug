@@ -1,6 +1,27 @@
 # mustang-mug
 The website, backend, and dashboard for the Mustang Mug Cafe. More information to come. 
 
+## Installation
+### Install homebrew
+    cd && mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+### Install Node
+    brew install node
+### Install Firebase Tools
+    mkdir ~/.npm-global
+    npm config set prefix '~/.npm-global'
+After changing your npm prefix, you need to activate it in your bash profile. Open the profile:
+
+    vi ~/.bash_profile
+Add the following lines to the file:
+
+    export PATH=~/.npm-global/bin:$PATH
+Then reactivate your bash profile:
+
+    . ~/.bash_profile
+Now, you can install the firebase tools:
+
+    npm install -g firebase-tools
+
 ## Specifications for website from Knight 
 - Only open orders up at a certain time for a set amount of time (e.g. open orders at 7:30am until 7:45am)
 - Customizable order cap that's enforced (e.g. for 6/3/1982 only allow 20 orders before shutting down order capability)
