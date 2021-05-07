@@ -1,8 +1,10 @@
 const firebaseAdapter = require("svelte-adapter-firebase");
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+const config = {
 	kit: {
 		adapter: firebaseAdapter()
 	}
 };
+
+export default config;
