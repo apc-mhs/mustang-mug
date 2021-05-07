@@ -1,4 +1,4 @@
-const firebaseAdapter = require("svelte-adapter-firebase");
+import firebaseAdapter from 'svelte-adapter-firebase';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
