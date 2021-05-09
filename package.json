@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "svelte-kit dev",
-    "build": "npx -y rimraf public/* && svelte-kit build --verbose && npx -y touch-for-windows public/.gitkeep",
+    "build": "npx -y rimraf public/* && svelte-kit build --verbose && npx -y touch public/.gitkeep",
     "preview": "svelte-kit preview"
   },
   "devDependencies": {
