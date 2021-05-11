@@ -1,42 +1,42 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "site": "mustang-mug",
+    "public": "public",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "ssrServer"
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "/src/"
+    ],
+    "predeploy": [
+      "npm run build"
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
     "firestore": {
-        "rules": "firestore.rules",
-        "indexes": "firestore.indexes.json"
+      "port": 8080
     },
     "hosting": {
-        "site": "mustang-mug",
-        "public": "public",
-        "rewrites": [
-            {
-                "source": "**",
-                "function": "ssrServer"
-            }
-        ],
-        "ignore": [
-            "firebase.json",
-            "**/.*",
-            "**/node_modules/**",
-            "/src/"
-        ],
-        "predeploy": [
-            "npm run build"
-        ]
+      "port": 5000
     },
-    "functions": {
-        "source": "functions"
-    },
-    "emulators": {
-        "functions": {
-            "port": 5001
-        },
-        "firestore": {
-            "port": 8080
-        },
-        "hosting": {
-            "port": 5000
-        },
-        "ui": {
-            "enabled": true
-        }
+    "ui": {
+      "enabled": true
     }
+  }
 }
