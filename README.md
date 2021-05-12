@@ -65,7 +65,8 @@ Build the necessary hosting files for future runs:
     - [MSB Developer Resources](https://www.myschoolbucks.com/ver2/developer/home)
     - [MSB API Documentation](https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi)
 - Svelte
-    - [Svelte Complete Documentation](https://kit.svelte.dev/docs) 
+    - [SvelteKit Documentation](https://kit.svelte.dev/docs) 
+    - [Svelte Tutorial](https://svelte.dev/tutorial/)
 - Firebase
     - Declan put stuff here
 
