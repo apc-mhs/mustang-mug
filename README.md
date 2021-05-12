@@ -66,9 +66,8 @@ Build the necessary hosting files for future runs:
     - [MSB API Documentation](https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi)
 - Svelte
     - [Svelte Complete Documentation](https://kit.svelte.dev/docs) 
-    - [Custom CSS Transitions with Svelte](https://svelte.dev/tutorial/custom-css-transitions)
 - Firebase
-    - Andrew put stuff here
+    - Declan put stuff here
 
 ## Selected Administration-Sourced Information for Website
 ### Technical Specifications 
