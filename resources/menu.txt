@@ -21,9 +21,9 @@ Peanut Butter Jelly: $3.00
 Branches that customize
 -----------------------------------
 
-Options for Hot Coffee
+Options for Hot Coffee, Iced Coffee, Mustang Brew
 ======================
-Whipped cream: $0.50
+Whipped Cream: $0.50
 
 Flavor shots: 
 #############
@@ -38,7 +38,7 @@ Milk: $0.00
 Oat milk: $0.85
 Almond milk: $0.85
 
-Options for Cappuccino - French Vanilla, Latte, Hot Chocolate, Iced Coffee, Mustang Brew, 
+Options for Cappuccino - French Vanilla, Latte, Hot Chocolate, 
 ======================
 Espresso Shot: Y/N
 
