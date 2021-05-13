@@ -10,3 +10,4 @@ build
 .firebaserc
 .vscode
 public
+.firebase
