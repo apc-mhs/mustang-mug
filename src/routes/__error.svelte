@@ -35,7 +35,7 @@ export let status;
         <h3>{error.message}</h3>
         <p>
             {#if status >= 500}
-                An internal error prevented your action from succeeding.
+                An internal error occured during your request.
             {:else}
                 Your request could not be processed.
             {/if}
