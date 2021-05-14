@@ -29,7 +29,7 @@ Whipped Cream: $0.50
 Flavor shots: 
 #############
 Vanilla: $0.50
-Hazlenut: $0.50
+Hazelnut: $0.50
 Agave: $0.50
 Caramel: $0.50
 
