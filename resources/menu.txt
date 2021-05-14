@@ -6,13 +6,14 @@ Smoothie - Frozen Strawberry Banana: $3.00
 Cappuccino - French Vanilla: $2.00
 Latte: $2.00
 Hot Chocolate: $2.00
+Hot Tea: $1.25
 Hot Coffee: $1.85
 Iced Coffee: $2.10
 Mustang Brew: $2.75
 Iced Tea: $1.50
 Fruit Punch: $1.50
 Lemonade: $1.50
-Pink Lemonade" $1.50
+Pink Lemonade: $1.50
 Bottled Water: $1.00
 Apple Juice: $1.50
 Peanut Butter Jelly: $3.00
@@ -28,7 +29,7 @@ Whipped Cream: $0.50
 Flavor shots: 
 #############
 Vanilla: $0.50
-Hazlenut: $0.50
+Hazelnut: $0.50
 Agave: $0.50
 Caramel: $0.50
 
@@ -44,7 +45,7 @@ Espresso Shot: Y/N
 
 Options for Hot Tea
 ======================
-Select 1 
+(Select 1)
 
 Decaf - Chamomile Herbal Tea
 Decaf - Hint of Mint Herbal Tea
