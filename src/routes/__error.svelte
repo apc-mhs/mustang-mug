@@ -1,8 +1,8 @@
 <script context="module">
-import { browser } from '$app/env';
+import { browser, dev } from '$app/env';
 
 export function load({ error, status }) {
-    if (!browser && status >= 500) {
+    if ((!browser || dev) && status >= 500) {
         console.error(error.stack);
     }
 
