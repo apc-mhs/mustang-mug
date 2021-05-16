@@ -3,7 +3,7 @@ import app from '$lib/firebase/firebaseAdmin';
 import cookie from 'cookie';
 
 export async function handle({ request, render }) {
-    const cookies = cookie.parse(request.headers.cookie);
+    const cookies = cookie.parse(request.headers.cookie || '');
     let token;
     if (cookies.token) {
         try {
