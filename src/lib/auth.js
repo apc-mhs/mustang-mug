@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
     app.auth().onIdTokenChanged(async (user) => {
-        Cookies.set('token', user ? await user.getIdToken() : '', {
+        Cookies.set('__session', user ? await user.getIdToken() : '', {
            sameSite: 'strict', secure: true, expires: 1, path: '/'
         });
     })

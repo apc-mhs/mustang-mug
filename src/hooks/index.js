@@ -5,9 +5,9 @@ import cookie from 'cookie';
 export async function handle({ request, render }) {
     const cookies = cookie.parse(request.headers.cookie || '');
     let token;
-    if (cookies.token) {
+    if (cookies.__session) {
         try {
-            token = await app.auth().verifyIdToken(cookies.token);
+            token = await app.auth().verifyIdToken(cookies.__session);
         } catch (error) { 
             console.log(error);
         }
