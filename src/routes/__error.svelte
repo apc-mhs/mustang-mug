@@ -101,6 +101,7 @@ export let status;
     font-weight: 900;
     font-size: 15rem;
     line-height: 1;
+    text-shadow: 10px 10px 4px rgba(0, 0, 0, 0.2);
 }
 
 .coffeemug {
