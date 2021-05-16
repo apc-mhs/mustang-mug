@@ -12,8 +12,10 @@ export async function handle({ request, render }) {
             console.log(error);
         }
     }
-
-    currentUser.set(token && await app.auth().getUser(token.uid));
+    
+    const user = token && await app.auth().getUser(token.uid);
+    currentUser.set(user);
+    request.locals.user = user;
 
     return render(request);
 }
