@@ -1,6 +1,6 @@
 <script>
 import { currentUser } from '$lib/auth';
-import Menu from './components/Menu.svelte';
+import Menu from '$lib/components/Menu.svelte';
 </script>
 
 <body>

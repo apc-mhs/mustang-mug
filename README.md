@@ -99,6 +99,8 @@ In a separate shell tab, start the dev server.
 Page graph:
 ![page graph](resources/readme/page_graph.jpg)
 
+Menu tree:
+![menu tree](resources/readme/menu_hierarchy.jpg)
 
 ### Current Mustang-Mug Order Procedure
 - Google form that's set up to only be open for a set period of time based on a conference scheduling calendar Chrome extension (tell me this isn't jank af)
