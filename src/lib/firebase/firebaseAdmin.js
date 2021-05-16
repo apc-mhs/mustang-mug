@@ -1,11 +1,14 @@
 import * as admin from 'firebase-admin';
-import '@firebase/firestore';
-import '@firebase/auth';
+import 'firebase/firestore';
+import 'firebase/auth';
 import { config } from 'dotenv';
 import path from 'path';
+import { dev } from '$app/env';
 
 // Load firebase admin environment variables
-config({ path: path.resolve(process.cwd(), '.env.development.local') })
+if (dev) {
+    config({ path: path.resolve(process.cwd(), '.env.development.local') })
+}
 
 const appName = import.meta.env.VITE_APP_NAME;
 
@@ -29,5 +32,4 @@ export function loadFirebaseAdmin() {
     return app;
 }
 
-const app = loadFirebaseAdmin();
-export default app;
+export default loadFirebaseAdmin();

@@ -15,7 +15,7 @@
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
     "svelte": "^3.38.2",
-    "svelte-adapter-firebase": "^0.7.4",
+    "svelte-adapter-firebase": "^0.7.5",
     "svelte-preprocess": "^4.7.3"
   },
   "type": "module"

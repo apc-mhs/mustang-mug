@@ -1,6 +1,6 @@
-import firebase from '@firebase/app';
-import '@firebase/firestore';
-import '@firebase/auth';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 import { dev } from '$app/env';
 
 const appName = import.meta.env.VITE_APP_NAME;
@@ -39,5 +39,4 @@ function initializeDev(app) {
     app.auth().useEmulator('http://localhost:9099');
 }
 
-const app = loadFirebase();
-export default app;
+export default loadFirebase();
