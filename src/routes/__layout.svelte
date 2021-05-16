@@ -1,32 +1,30 @@
 <script>
 import { signInAnonymously } from '$lib/auth';
-import Navbar from './components/Navbar.svelte'; 
+import Navbar from './components/Navbar.svelte';
 import Footer from './components/Footer.svelte';
 import '../app.css';
-
 
 signInAnonymously();
 </script>
 
+<!-- Navbar and Footer should be moved outside of main -->
 <main>
-    <Navbar/>
+    <Navbar />
     <slot />
-    <Footer/>
+    <Footer />
 </main>
 
 <style>
 :root {
-    /*made styling annoying and not quite sure what the point was 
-    --header-height: 50px;
-    */
+    --header-height: 6vh;
 }
 
-/*
-these hardcoded elements are definitly 
-*/
+/* These hardcoded elements are definitly not ideal - should probably be revised */
 main {
     position: relative;
-    top: var(--header-height);
-    min-height: 100vh;background-color: rgb(71, 70, 70);
+    /* Commented out due to extra space being created with it present
+    top: var(--header-height); */
+    min-height: 100vh;
+    background-color: rgb(71, 70, 70);
 }
 </style>

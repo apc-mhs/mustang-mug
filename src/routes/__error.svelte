@@ -27,8 +27,8 @@ export let status;
         <div class="number">4</div>
         <div class="coffeemug">
             <img
-                src="../../coffeemug.png"
-                alt="cart icon"
+                src="coffeemug.png"
+                alt="Coffee Cup"
                 height="230px"
                 width="230px"
             />
@@ -41,7 +41,7 @@ export let status;
     <div class="not-found">
         <h3>Page not found</h3>
        
-        <p>Head back to the <a href="../">menu</a> or view your <a href="cart">cart</a></p>
+        <p>Head back to the <a href="/">menu</a> or view your <a href="cart">cart</a></p>
     </div>
 {:else}
     <div class="other-error">
