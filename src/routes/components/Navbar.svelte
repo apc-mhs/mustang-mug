@@ -53,6 +53,7 @@
       background-color: rgba(206, 44, 44, 0.8);
       font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
       height: 6vh;
+      box-shadow: 0px 1px 5px 0px black;
     }
   
     .inner {
@@ -62,6 +63,7 @@
       display: flex;
       align-items: center;
       height: 100%;
+      
     }
   
     .mobile-icon {
