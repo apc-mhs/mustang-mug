@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
-import 'firebase/firestore';
-import 'firebase/auth';
+import '@firebase/firestore';
+import '@firebase/auth';
 import { config } from 'dotenv';
 import path from 'path';
 

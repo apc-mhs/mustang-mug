@@ -2,9 +2,8 @@
   "name": "mustang-mug",
   "version": "0.1.0",
   "scripts": {
-    "env": "node -r dotenv/config",
     "dev": "svelte-kit dev",
-    "build": "npx -y rimraf public/* && svelte-kit build --verbose && npx -y touch public/.gitkeep",
+    "build": "npx -y rimraf public/* && svelte-kit build && npx -y touch public/.gitkeep",
     "preview": "svelte-kit preview"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 import { browser } from '$app/env';
 import app from '$lib/firebase/firebase';
-import { authState } from 'rxfire/auth';
+import { authState } from 'rxfire/auth/dist/index.esm';
 import { writable } from 'svelte/store';
 import Cookies from 'js-cookie';
 

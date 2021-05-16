@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from '@firebase/app';
+import '@firebase/firestore';
+import '@firebase/auth';
 import { dev } from '$app/env';
 
 const appName = import.meta.env.VITE_APP_NAME;
