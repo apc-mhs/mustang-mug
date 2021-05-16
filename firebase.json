@@ -16,7 +16,8 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "/src/"
+      "/src/",
+      "/resources/"
     ],
     "predeploy": [
       "npm run build"
