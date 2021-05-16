@@ -1,7 +1,14 @@
 <script>
+let checkoutStatus = 'Unknown';
+
+async function checkout() {
+    checkoutStatus = await fetch('/checkout', { method: 'POST' }).then((res) => res.text());
+}
 </script>
 
 <h1>welcome to the mf cart</h1>
+<button on:click={checkout}>Checkout</button>
+<p>{checkoutStatus}</p>
 
 <style>
 * {
