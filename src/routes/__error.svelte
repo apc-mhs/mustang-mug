@@ -1,8 +1,8 @@
 <script context="module">
-import { browser } from '$app/env';
+import { browser, dev } from '$app/env';
 
 export function load({ error, status }) {
-    if (!browser && status >= 500) {
+    if ((!browser || dev) && status >= 500) {
         console.error(error.stack);
     }
 
@@ -35,7 +35,7 @@ export let status;
         <h3>{error.message}</h3>
         <p>
             {#if status >= 500}
-                An internal error prevented your action from succeeding.
+                An internal error occured during your request.
             {:else}
                 Your request could not be processed.
             {/if}

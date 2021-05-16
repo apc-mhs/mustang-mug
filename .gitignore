@@ -11,3 +11,5 @@ build
 .vscode
 public
 .firebase
+src/admin/*.json
+*.local

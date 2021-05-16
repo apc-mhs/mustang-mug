@@ -1,5 +1,8 @@
 <script>
+import { signInAnonymously } from '$lib/auth';
 import '../app.css';
+
+signInAnonymously();
 </script>
 
 <main>

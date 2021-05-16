@@ -2,20 +2,23 @@
 The website, backend, and dashboard for the Mustang Mug Cafe. This readme serves chiefly as a contribution guide for GMHS students. If you have a question about a specific issue, please reach out to the individual who created the issue. 
 
 ## Table of Contents 
-1. [Contribution Guides](#contribution-guides)
-2. [Setup](#setup)
-   - [Install Homebrew](#install-homebrew)
-   - [Install Node](#install-node)
-   - [Install Firebase Tools](#install-firebase-tools)
-   - [Configure the repoistory](#configure-the-repository)
-3. [Selected Documentation](#selected-documentation) 
-   - [Design](#design)
-   - [Development](#development)
-4. [Selected Administration-Sourced Information for Website](#selected-administration-sourced-information-for-website)
-   - [Technical Specifications](#technical-specifications)
-   - [Current Mustang-Mug Order Procedure](#current-mustang-mug-order-procedure)
-   - [Benefits of API and Order Site over a Google Form](#benefits-of-an-api-and-order-site-over-a-google-form)
-5. [Project Timeline](#project-timeline)
+- [mustang-mug](#mustang-mug)
+  - [Table of Contents](#table-of-contents)
+  - [Contribution Guides](#contribution-guides)
+  - [Setup](#setup)
+    - [Install homebrew](#install-homebrew)
+    - [Install Node](#install-node)
+    - [Install Firebase Tools](#install-firebase-tools)
+    - [Configure the repository](#configure-the-repository)
+    - [Test your code](#test-your-code)
+  - [Selected Documentation](#selected-documentation)
+    - [Design](#design)
+    - [Development](#development)
+  - [Selected Administration-Sourced Information for Website](#selected-administration-sourced-information-for-website)
+    - [Technical Specifications](#technical-specifications)
+    - [Current Mustang-Mug Order Procedure](#current-mustang-mug-order-procedure)
+    - [Benefits of an API and Order Site over a Google Form](#benefits-of-an-api-and-order-site-over-a-google-form)
+  - [Project Timeline](#project-timeline)
     
 ## Contribution Guides 
 If you'd like to begin contributing, there are two different pathways to help out, one being design and the other development. Before you begin with either, please read their corresponding guides. 
@@ -54,6 +57,18 @@ In terminal, inside your repository's folder, install dependencies:
 Build the necessary hosting files for future runs:
 
     npm run build
+### Test your code
+Create a file called `.env.development.local` in your project's root directory. Add these lines:
+
+    GOOGLE_APPLICATION_CREDENTIALS="./src/admin/mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json"
+    FIRESTORE_EMULATOR_HOST="localhost:8080"
+    FIREBASE_AUTH_EMULATOR_HOST="localhost:9099"
+Then, add your service account JSON file to the `admin` directory inside `src`. You can get this file by contacting @AndrewLester. The file should be named `mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json`. Now, you are ready to test. Run the firebase emulators:
+
+    firebase emulators:start
+In a separate shell tab, start the dev server.
+
+    npm run dev
     
 ## Selected Documentation 
 ### Design
