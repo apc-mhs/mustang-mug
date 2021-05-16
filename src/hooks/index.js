@@ -5,15 +5,17 @@ import cookie from 'cookie';
 export async function handle({ request, render }) {
     const cookies = cookie.parse(request.headers.cookie || '');
     let token;
-    if (cookies.token) {
+    if (cookies.__session) {
         try {
-            token = await app.auth().verifyIdToken(cookies.token);
+            token = await app.auth().verifyIdToken(cookies.__session);
         } catch (error) { 
             console.log(error);
         }
     }
-
-    currentUser.set(token && await app.auth().getUser(token.uid));
+    
+    const user = token && await app.auth().getUser(token.uid);
+    currentUser.set(user);
+    request.locals.user = user;
 
     return render(request);
 }
