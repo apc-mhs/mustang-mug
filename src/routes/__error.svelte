@@ -22,12 +22,26 @@ export let error;
 export let status;
 </script>
 
+<div class="center">
+    <div class="error">
+        <div class="number">4</div>
+        <div class="coffeemug">
+            <img
+                src="../../coffeemug.png"
+                alt="cart icon"
+                height="230px"
+                width="230px"
+            />
+        </div>
+        <div class="number">4</div>
+    </div>
+</div>
+
 {#if status === 404}
     <div class="not-found">
-        <h1>404 Error</h1>
         <h3>Page not found</h3>
-        <!-- TODO: Link to menu and cart pages -->
-        <p>Head back to the menu or view your cart</p>
+       
+        <p>Head back to the <a href="../">menu</a> or view your <a href="cart">cart</a></p>
     </div>
 {:else}
     <div class="other-error">
@@ -46,6 +60,12 @@ export let status;
 {/if}
 
 <style>
+* {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    color: white;
+    margin-top: 3vh;
+}
+
 .not-found,
 .other-error {
     display: flex;
@@ -60,5 +80,31 @@ export let status;
 .other-error > * {
     text-align: center;
     max-width: 75ch;
+}
+
+.center {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.error {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.number {
+    font-weight: 900;
+    font-size: 15rem;
+    line-height: 1;
+}
+
+.coffeemug {
+    margin-top: 20px;
+    margin-left: 20px;
 }
 </style>
