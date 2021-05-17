@@ -57,6 +57,9 @@ In terminal, inside your repository's folder, install dependencies:
 Build the necessary hosting files for future runs:
 
     npm run build
+Set the firebase project
+ 
+    firebase use --add
 ### Test your code
 Create a file called `.env.development.local` in your project's root directory. Add these lines:
 
