@@ -18,11 +18,9 @@ async function getDocuments(collection) {
         return snapshots.map((snapshot) => snapshot.docs);
     });
 
-    console.log('Modified:', modified.map((doc) =>doc.id));
-
     // Cached documents that were not modified
     const shouldCache = cached.filter((cachedDoc) => !modified.some((modifiedDoc) => modifiedDoc.id === cachedDoc.id));
-    console.log('Cache:', shouldCache.map((doc) => doc.id));
+
     const data = [...shouldCache, ...modified].map((doc) => doc.data());
     if (modified.length > 0 && data.length > 0) {
         const lastModifiedDocument = data.reduce((prevHighest, current) => {
