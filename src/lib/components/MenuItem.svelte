@@ -2,10 +2,11 @@
 import { fade } from 'svelte/transition';
 
 export let item;
-export let quantity;
-export let selected;
+export let quantity = 1;
+export let selected = false;
 
 const maxPurchaseQuantity = 3;
+const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 </script>
 
 <div class="item" class:out-of-stock={!item.stock} transition:fade={{ duration: 250 }}>
@@ -19,11 +20,12 @@ const maxPurchaseQuantity = 3;
         />
         {item.name}
     </label>
+    {numberFormatter.format(item.price)}
     {#if selected}
         <label for={item.id + '-quantity'}>Quantity:</label>
-        <select id={item.id + '-quantity'}>
+        <select id={item.id + '-quantity'} bind:value={quantity}>
             {#each new Array(maxPurchaseQuantity).fill(0) as _, i (i)}
-                <option>{i + 1}</option>
+                <option value={i + 1}>{i + 1}</option>
             {/each}
         </select>
     {/if}
