@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { dev } from '$app/env';
+import { browser, dev } from '$app/env';
 
 const appName = import.meta.env.VITE_APP_NAME;
 
@@ -27,6 +27,12 @@ function loadFirebase() {
         if (dev) {
             initializeDev(app);
         }
+        if (browser) {
+            app.firestore().enablePersistence()
+                .catch((err) => {
+                    console.error('Persistence failed to enable with error', err);
+                });
+        }
     }
     return app;
 }
@@ -40,3 +46,7 @@ function initializeDev(app) {
 }
 
 export default loadFirebase();
+
+export {
+    firebase
+}
