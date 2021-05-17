@@ -7,7 +7,7 @@ import { dev } from '$app/env';
 
 // Load firebase admin environment variables
 if (dev) {
-    config({ path: path.resolve(process.cwd(), '.env.development.local') })
+    config({ path: path.resolve(process.cwd(), '.env.development.local') });
 }
 
 const appName = import.meta.env.VITE_APP_NAME;
