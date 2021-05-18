@@ -2,7 +2,9 @@
 let checkoutStatus = 'Unknown';
 
 async function checkout() {
-    checkoutStatus = await fetch('/checkout', { method: 'POST' }).then((res) => res.text());
+    checkoutStatus = await fetch('/checkout', { method: 'POST' }).then((res) =>
+        res.text()
+    );
 }
 </script>
 

@@ -7,7 +7,7 @@ let showMobileMenu = false;
 // List of navigation items
 const navItems = [
     { label: 'Menu', href: '/' },
-    { label: 'Page ABC', href: '#' },
+    { label: 'My School Bucks Account Creation', href: 'link to that pdf from FCCPS that teaches people how to make MSB accounts' },
 ];
 
 // Mobile menu click event handler
@@ -37,6 +37,14 @@ onMount(() => {
         >
             <div class="middle-line" />
         </div>
+        <img
+            class="mug_logo"
+            src="missingimage.jpg"
+            alt="Mustang Mug Logo"
+            height="45px"
+            width="45px"
+        />
+        <p class="mug-text">Mustang Mug</p>
         <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
             {#each navItems as item}
                 <li>
@@ -170,6 +178,16 @@ nav {
     align-items: center;
     padding: 0 10px;
     font-size: 13px;
+}
+
+.mug-text {
+    display: initial;
+    color: white;
+    font-size: 2em;
+    text-decoration: none;
+    margin-left: 1vw;
+    /* this is a very hacky solution to not make the text stack on top of itself -- better fix anyone?*/
+    min-width: 20vw;
 }
 
 @media only screen and (min-width: 767px) {

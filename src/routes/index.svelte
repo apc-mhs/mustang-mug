@@ -2,18 +2,17 @@
 import Menu from '$lib/components/Menu.svelte';
 import menuQuery from './_menuQuery';
 
-const skeletonItems = new Array(10).fill(5).map((_) => {   
-    return {    
+const skeletonItems = new Array(10).fill(5).map((_) => {
+    return {
         name: Math.random().toString().substring(0, 5),
         price: 0,
         stock: false,
-        image: 'menu-item-placeholder.jpg'
+        image: 'menu-item-placeholder.jpg',
     };
 });
 </script>
 
 <section>
-    <h1>Mustang Mug!</h1>
     {#await menuQuery()}
         <Menu skeleton items={skeletonItems} />
     {:then items}
