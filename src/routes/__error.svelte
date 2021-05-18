@@ -47,16 +47,20 @@ export let status;
 {:else}
     <div class="other-error">
         <div class="error">
-            <div class="number">5</div>
-            <div class="coffeemug">
-                <img
-                    src="coffeemug.png"
-                    alt="Coffee Cup"
-                    height="230px"
-                    width="230px"
-                />
-            </div>
-            <div class="number">{status.toString().substring(2)}</div>
+            <div class="number">{status.toString().charAt(0)}</div>
+            {#if status.toString().charAt(1) == 0}
+                <div class="coffeemug">
+                    <img
+                        src="coffeemug.png"
+                        alt="Coffee Cup"
+                        height="230px"
+                        width="230px"
+                    />
+                </div>
+            {:else}
+                <div class="number">{status.toString().charAt(1)}</div>
+            {/if}
+            <div class="number">{status.toString().charAt(2)}</div>
         </div>
         <h3>{error.message}</h3>
         <p>
