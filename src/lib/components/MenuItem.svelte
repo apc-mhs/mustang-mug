@@ -6,11 +6,18 @@ export let quantity = 1;
 export let selected = false;
 
 const maxPurchaseQuantity = 3;
-const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const numberFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
 </script>
 
-<div class="item" class:out-of-stock={!item.stock} transition:fade={{ duration: 250 }}>
-    <img src="{item.image}" alt="Picture of {item.name}">
+<div
+    class="item"
+    class:out-of-stock={!item.stock}
+    transition:fade={{ duration: 250 }}
+>
+    <img src={item.image} alt="Picture of {item.name}" />
     <label>
         <input
             id={item.id}
@@ -35,6 +42,9 @@ const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', curr
 </div>
 
 <style>
+input {
+    margin-right: 5px;
+}
 .item {
     width: 150px;
     height: 200px;
@@ -56,8 +66,5 @@ label {
 }
 label:hover {
     cursor: pointer;
-}
-input {
-    margin-right: 5px;
 }
 </style>

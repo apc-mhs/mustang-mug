@@ -18,7 +18,6 @@ signInAnonymously();
 :root {
     --header-height: 6vh;
 }
-
 /* These hardcoded elements are definitly not ideal - should probably be revised */
 main {
     position: relative;

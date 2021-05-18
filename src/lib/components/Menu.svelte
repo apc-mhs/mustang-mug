@@ -13,19 +13,19 @@ export let skeleton = false;
             <h2>Refine Menu</h2>
             <li>
                 <input type="checkbox" id="item1" />
-                <label for="item1">Show nails</label><br />
+                <label for="item1">Selection 1</label><br />
             </li>
             <li>
                 <input type="checkbox" id="item2" />
-                <label for="item2">Show drinks made by orphans</label><br />
+                <label for="item2">Selection 2</label><br />
             </li>
             <li>
                 <input type="checkbox" id="item2" />
-                <label for="item2">Edible</label><br />
+                <label for="item2">Selection 3</label><br />
             </li>
             <li>
-                <p>Level of child labor:</p>
-                <input type="range" min="1" max="100" value="50" />
+                <p>Scale</p>
+                <input type="range" min="1" max="100" value="100" />
             </li>
         </ul>
     </div>
@@ -52,19 +52,19 @@ export let skeleton = false;
     display: flex;
     flex-direction: row;
 }
-
 .flex-right {
     width: 85%;
     margin: 0.3em;
     padding: 0.3em;
 }
-
 .flex-left {
     width: 15%;
     margin: 0.3em;
     padding: 0.3em;
 }
-
+h2 {
+    text-align: center;
+}
 .checkboxes {
     color: black;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -72,6 +72,7 @@ export let skeleton = false;
     margin: 0.3em;
     padding: 0.3em;
     text-align: center;
+    box-shadow: 0px 0px 3px 0px black;
 }
 .items {
     display: flex;
@@ -81,11 +82,6 @@ export let skeleton = false;
     width: 100%;
     height: 100%;
 }
-
-h2 {
-    text-align: center;
-}
-
 .selection-items {
     list-style: none;
     margin: 0.3em;
@@ -93,8 +89,8 @@ h2 {
     background-color: rgb(175, 175, 175);
     text-decoration: none;
     color: black;
+    box-shadow: 0px 0px 3px 0px black;
 }
-
 li {
     margin-bottom: 0.5em;
 }

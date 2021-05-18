@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<h1>wow thanks for shopping with us ur so cool</h1>
+<h1>This page will be for to confirm when someone's order goes through.</h1>
 
 <style>
 * {

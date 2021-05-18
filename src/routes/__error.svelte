@@ -47,20 +47,20 @@ export let status;
 {:else}
     <div class="other-error">
         <div class="error">
-            <div class="number">{status.toString().charAt(0)}</div>
-            {#if status.toString().charAt(1) == 0}
-                <div class="coffeemug">
-                    <img
-                        src="coffeemug.png"
-                        alt="Coffee Cup"
-                        height="230px"
-                        width="230px"
-                    />
-                </div>
-            {:else}
-                <div class="number">{status.toString().charAt(1)}</div>
-            {/if}
-            <div class="number">{status.toString().charAt(2)}</div>
+            {#each status.toString() as char}
+                {#if char == 0}
+                    <div class="coffeemug">
+                        <img
+                            src="coffeemug.png"
+                            alt="Coffee Cup"
+                            height="230px"
+                            width="230px"
+                        />
+                    </div>
+                {:else}
+                    <div class="number">{char}</div>
+                {/if}
+            {/each}
         </div>
         <h3>{error.message}</h3>
         <p>
@@ -81,7 +81,12 @@ export let status;
     color: white;
     margin-top: 3vh;
 }
-
+.error {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+}
 .not-found,
 .other-error {
     display: flex;
@@ -91,19 +96,11 @@ export let status;
     height: 100%;
     width: 100%;
 }
-.error {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-content: center;
-}
-
 .not-found > *,
 .other-error > * {
     text-align: center;
     max-width: 75ch;
 }
-
 .center {
     height: 100%;
     display: flex;
@@ -111,14 +108,12 @@ export let status;
     justify-content: center;
     flex-direction: column;
 }
-
 .number {
     font-weight: 900;
     font-size: 15rem;
     line-height: 1;
     text-shadow: 10px 10px 4px rgba(0, 0, 0, 0.2);
 }
-
 .coffeemug {
     margin-top: 20px;
     margin-left: 20px;
