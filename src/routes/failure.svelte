@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<h1>aw ur order couldn't go through :(</h1>
+<h1>This page will be for alerting someone when their order fails.</h1>
 
 <style>
 * {

@@ -7,7 +7,10 @@ let showMobileMenu = false;
 // List of navigation items
 const navItems = [
     { label: 'Menu', href: '/' },
-    { label: 'My School Bucks Account Creation', href: 'link to that pdf from FCCPS that teaches people how to make MSB accounts' },
+    {
+        label: 'My School Bucks Account Creation',
+        href: 'link to that pdf from FCCPS that teaches people how to make MSB accounts',
+    },
 ];
 
 // Mobile menu click event handler
@@ -64,13 +67,6 @@ onMount(() => {
 </nav>
 
 <style>
-nav {
-    background-color: rgba(206, 44, 44, 0.8);
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    height: 6vh;
-    box-shadow: 0px 1px 5px 0px black;
-}
-
 .inner {
     max-width: 95vw;
     margin: auto;
@@ -78,6 +74,56 @@ nav {
     display: flex;
     align-items: center;
     height: 100%;
+}
+
+nav {
+    background-color: rgba(206, 44, 44, 0.8);
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    height: 6vh;
+    position: relative;
+    /* Is there a better way to do this?*/
+    z-index: 9999;
+    box-shadow: 0px 1px 5px 0px black;
+}
+.navbar-list {
+    display: none;
+    width: 100%;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0 40px;
+}
+
+.navbar-list.mobile {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    display: block;
+    height: calc(100% - 6vh);
+    bottom: 0;
+    left: 0;
+}
+
+.navbar-list li {
+    list-style-type: none;
+    position: relative;
+}
+
+.navbar-list li:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+}
+
+.navbar-list a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    height: 45px;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 13px;
 }
 
 .mobile-icon {
@@ -137,47 +183,6 @@ nav {
 
 .mobile-icon.active .middle-line {
     transform: rotate(45deg);
-}
-
-.navbar-list {
-    display: none;
-    width: 100%;
-    justify-content: flex-end;
-    margin: 0;
-    padding: 0 40px;
-}
-
-.navbar-list.mobile {
-    background-color: rgba(0, 0, 0, 0.8);
-    position: fixed;
-    display: block;
-    height: calc(100% - 6vh);
-    bottom: 0;
-    left: 0;
-}
-
-.navbar-list li {
-    list-style-type: none;
-    position: relative;
-}
-
-.navbar-list li:before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-}
-
-.navbar-list a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    height: 45px;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 13px;
 }
 
 .mug-text {

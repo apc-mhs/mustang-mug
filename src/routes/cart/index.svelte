@@ -8,7 +8,7 @@ async function checkout() {
 }
 </script>
 
-<h1>welcome to the mf cart</h1>
+<h1>Welcome to the cart</h1>
 <button on:click={checkout}>Checkout</button>
 <p>{checkoutStatus}</p>
 
