@@ -3,6 +3,7 @@ import { getDocuments, getDocumentsWhere } from "$lib/query";
 import { firebase } from '$lib/firebase/firebase';
 import Icon from './Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
+import { browser } from "$app/env";
 
 
 export let options;
@@ -20,11 +21,14 @@ let optionsData = [];
 //         options.map((option) => option.id)
 //     );
 // })
-getDocuments('options')
-.then((data) => {
-    const validOptionIds = options.map((option) => option.id);
-    optionsData = data.filter((option) => validOptionIds.includes(option.id));
-});
+
+if (browser) {
+    getDocuments('options')
+        .then((data) => {
+            const validOptionIds = options.map((option) => option.id);
+            optionsData = data.filter((option) => validOptionIds.includes(option.id));
+        });
+}
 
 function toggle(option) {
     const index = selectedOptions.indexOf(option);
