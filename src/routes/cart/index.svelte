@@ -1,4 +1,6 @@
 <script>
+import { browser } from '$app/env';
+
 let checkoutStatus = 'Unknown';
 
 async function checkout() {

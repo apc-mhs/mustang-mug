@@ -5,6 +5,11 @@ function navigateBack(e) {
     history.back();
 }
 
+function sleep(millis) {
+    return new Promise((resolve, _) => setTimeout(resolve, millis));
+}
+
 export {
-    navigateBack
+    navigateBack,
+    sleep,
 }

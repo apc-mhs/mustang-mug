@@ -1,9 +1,35 @@
 <script>
 import SkeletonLayout from '$lib/components/SkeletonLayout.svelte';
 import MenuItem from '$lib/components/MenuItem.svelte';
+import { goto } from '$app/navigation';
+import { fade } from 'svelte/transition';
 
 export let items;
 export let skeleton = false;
+
+$: sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
+
+const cartData = new Array(items.length);
+for (let i = 0; i < cartData.length; i++) {
+    cartData[i] = {};
+}
+
+async function addToCart() {
+    const formData = new FormData();
+    for (let cartItem of cartData) {
+        if (!('in' in cartItem)) continue;
+
+        const { id, ...cartItemData } = cartItem;
+        formData.set(cartItem.id, cartItemData);
+    }
+
+    const res = await fetch('/cart/create', { method: 'POST', body: formData });
+    if (res.status === 200) {
+        goto('/cart');
+    } else {
+        console.error(res);
+    }
+}
 </script>
 
 <div class="flex-container">
@@ -33,16 +59,21 @@ export let skeleton = false;
         <div class="checkboxes">
             <h2>Menu</h2>
             <div class="items">
-                {#each items as item}
+                {#each sortedItems as item, i}
                     {#if skeleton}
-                        <SkeletonLayout>
-                            <MenuItem {item} />
-                        </SkeletonLayout>
+                        <div out:fade={{ duration: 250 }}>
+                            <SkeletonLayout>
+                                <MenuItem {item} />
+                            </SkeletonLayout>
+                        </div>
                     {:else}
-                        <MenuItem {item} />
+                        <div>
+                            <MenuItem {item} bind:cartItems={cartData[i]} />
+                        </div>
                     {/if}
                 {/each}
             </div>
+            <button on:click={addToCart}>Add items to cart</button>
         </div>
     </div>
 </div>
