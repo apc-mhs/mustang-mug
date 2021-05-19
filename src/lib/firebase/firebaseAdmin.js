@@ -33,3 +33,7 @@ export function loadFirebaseAdmin() {
 }
 
 export default loadFirebaseAdmin();
+
+export {
+    admin
+}
