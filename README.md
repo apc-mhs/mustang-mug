@@ -74,7 +74,7 @@ Then, add your service account JSON file to the `admin` directory inside `src`. 
 In a separate shell tab, start the dev server.
 
     npm run dev
-If you want to do a full test with the Firebase emulators, make sure to get the Firebase function config locally:
+If you want to do a full test with the Firebase emulators, make sure to get the Firebase function config locally (run this in the functions folder):
     firebase functions:config:get > .runtimeconfig.json
     
 ## Selected Documentation 
