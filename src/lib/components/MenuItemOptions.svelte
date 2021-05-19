@@ -4,6 +4,7 @@ import { firebase } from '$lib/firebase/firebase';
 import Icon from './Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
 import { browser } from "$app/env";
+import { numberFormatter } from '$lib/utils';
 
 
 export let options;
@@ -40,8 +41,8 @@ function toggle(option) {
 }
 </script>
 
-<div>
-    {message}
+<div class="item-options">
+    <p>{message}</p>
     <div class="options-list">
         {#each optionsData as option}
             <div class="option" on:click={toggle(option)} class:selected={selectedOptions.includes(option)}>
@@ -50,18 +51,37 @@ function toggle(option) {
                         <Icon name="check" width="16" height="16" />
                     </span>
                 {/if}
-                <p>{option.name}</p>
+                <p>{option.name} - {numberFormatter.format(option.price)}</p>
             </div>
         {/each}
     </div>
 </div>
 
 <style>
-.options-list {
+.item-options {
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: center;
-    gap: 0px 5px;
+    width: 100%;
+    padding: 5px 10px;
+}
+
+.item-options > p {
+    margin-right: 5px;
+}
+
+.item-options > * {
+    flex: 0 0 auto;
+}
+
+.options-list {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 3px 5px;
 }
 
 .option {
@@ -70,7 +90,7 @@ function toggle(option) {
     align-items: center;
     gap: 0px 2px;
     border: 2px solid currentColor;
-    border-radius: 15px;
+    border-radius: 20px;
     color: white;
     font-size: 13px;
     padding: 5px 8px;

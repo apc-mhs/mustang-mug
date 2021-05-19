@@ -26,6 +26,9 @@ export let simple = false;
 }
 .wrapper :global(input),
 .wrapper :global(p),
+.wrapper :global(h1),
+.wrapper :global(h2),
+.wrapper :global(h3),
 .wrapper :global(legend),
 .wrapper :global(div:empty),
 .wrapper :global(label),
@@ -49,6 +52,9 @@ export let simple = false;
     );
     background-size: 200% 100%;
     animation: loading 1s infinite ease;
+}
+.wrapper :global(select) {
+    display: none;
 }
 .wrapper :global(::placeholder) {
     color: transparent;

@@ -1,5 +1,5 @@
 <script>
-import { sleep } from "$lib/utils";
+import { sleep, numberFormatter } from "$lib/utils";
 
 import MenuItemOptions from "./MenuItemOptions.svelte";
 
@@ -8,16 +8,16 @@ export let quantity = 0;
 export let cartItems = [];
 
 const maxPurchaseQuantity = 3;
-const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
 let itemElem;
 $: {
-    for (let i = 0; i < quantity; i++) {
-        if (!cartItems[i]) {
-
+    for (let i = 0; i < maxPurchaseQuantity; i++) {
+        if (!cartItems[i] && i < quantity) {
             cartItems[i] = Object.assign({}, item);
             // Must manually set options to {} after copying because its reference is copied
             cartItems[i].options = [];
+        } else if (i >= quantity) {
+            cartItems[i] = null;
         }
     }
 }
@@ -58,7 +58,7 @@ h3 {
     margin-bottom: 0px;
 }
 .item {
-    width: 200px;
+    width: 250px;
     height: auto;
     border: 1px solid rgb(71, 70, 70);
     background-color: white;

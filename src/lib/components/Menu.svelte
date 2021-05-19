@@ -3,6 +3,8 @@ import SkeletonLayout from '$lib/components/SkeletonLayout.svelte';
 import MenuItem from '$lib/components/MenuItem.svelte';
 import { goto } from '$app/navigation';
 import { fade } from 'svelte/transition';
+import Icon from './Icon.svelte';
+import { sleep } from '$lib/utils';
 
 export let items;
 export let skeleton = false;
@@ -14,21 +16,28 @@ for (let i = 0; i < cartData.length; i++) {
     cartData[i] = {};
 }
 
-async function addToCart() {
-    const formData = new FormData();
-    for (let cartItem of cartData) {
-        if (!('in' in cartItem)) continue;
+let updatingCart = false;
 
-        const { id, ...cartItemData } = cartItem;
-        formData.set(cartItem.id, cartItemData);
+async function addToCart() {
+    updatingCart = true;
+    const formData = new FormData();
+    for (let menuItem of cartData) {
+        for (let cartItem in menuItem) {
+            if (!menuItem[cartItem]) continue;
+            const { id } = menuItem[cartItem];
+            formData.set(id + '-' + cartItem, JSON.stringify(menuItem[cartItem]));
+        }
     }
 
-    const res = await fetch('/cart/create', { method: 'POST', body: formData });
+    const res = await fetch('/cart.json', { method: 'POST', body: formData });
     if (res.status === 200) {
-        goto('/cart');
+        // Add some delay so the user knows what happened
+        await sleep(500);
+        await goto('/cart');
     } else {
         console.error(res);
     }
+    updatingCart = false;
 }
 </script>
 
@@ -61,19 +70,26 @@ async function addToCart() {
             <div class="items">
                 {#each sortedItems as item, i}
                     {#if skeleton}
-                        <div out:fade={{ duration: 250 }}>
+                        <div out:fade|local={{ duration: 250 }}>
                             <SkeletonLayout>
                                 <MenuItem {item} />
                             </SkeletonLayout>
                         </div>
                     {:else}
-                        <div>
+                        <div in:fade|local={{ delay: 250, duration: 250 }} >
                             <MenuItem {item} bind:cartItems={cartData[i]} />
                         </div>
                     {/if}
                 {/each}
             </div>
-            <button on:click={addToCart}>Add items to cart</button>
+            {#if !skeleton}
+                <button class="add-to-cart"
+                    on:click={addToCart} in:fade|local={{ duration: 250, delay: 250 }}
+                    disabled={updatingCart}>
+                    <Icon name="add-shopping-cart" width="30" height="30" />
+                    Add items to cart
+                </button>
+            {/if}
         </div>
     </div>
 </div>
@@ -97,6 +113,7 @@ h2 {
     text-align: center;
 }
 .checkboxes {
+    position: relative;
     color: black;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     background: rgb(175, 175, 175);
@@ -121,6 +138,19 @@ h2 {
     text-decoration: none;
     color: black;
     box-shadow: 0px 0px 3px 0px black;
+}
+.add-to-cart {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0px 5px;
+    flex-flow: row nowrap;
+    right: 10px;
+    bottom: 10px;
+    font-size: 30px;
+    margin-top: 30px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 li {
     margin-bottom: 0.5em;
