@@ -86,6 +86,7 @@ If you want to do a full test with the Firebase emulators, make sure to get the 
     - [MSB Overview](https://www.myschoolbucks.com/ver2/developer/msbpayapi)
     - [MSB Developer Resources](https://www.myschoolbucks.com/ver2/developer/home)
     - [MSB API Documentation](https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi)
+    - [MSB API Wrapper Documentation](https://github.com/AndrewLester/msb_pay_api#msb_pay_api)
 - Svelte
     - [SvelteKit Documentation](https://kit.svelte.dev/docs) 
     - [Svelte Tutorial](https://svelte.dev/tutorial/)
