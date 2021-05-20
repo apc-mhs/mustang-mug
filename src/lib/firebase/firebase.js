@@ -24,7 +24,7 @@ function loadFirebase() {
         app = firebase.app(appName);
     } catch (error) {
         app = firebase.initializeApp(firebaseConfig, appName);
-        if (dev) {
+        if (true) {
             initializeDev(app);
         }
         if (browser) {

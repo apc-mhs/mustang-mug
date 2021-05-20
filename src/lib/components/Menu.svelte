@@ -20,16 +20,22 @@ let updatingCart = false;
 
 async function addToCart() {
     updatingCart = true;
-    const formData = new FormData();
+    const formData = {};
     for (let menuItem of cartData) {
         for (let cartItem in menuItem) {
             if (!menuItem[cartItem]) continue;
             const { id } = menuItem[cartItem];
-            formData.set(id + '-' + cartItem, JSON.stringify(menuItem[cartItem]));
+            formData[id + '-' + cartItem] = menuItem[cartItem];
         }
     }
 
-    const res = await fetch('/cart.json', { method: 'POST', body: formData });
+    const res = await fetch('/cart.json', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
     if (res.status === 200) {
         // Add some delay so the user knows what happened
         await sleep(500);
@@ -76,16 +82,19 @@ async function addToCart() {
                             </SkeletonLayout>
                         </div>
                     {:else}
-                        <div in:fade|local={{ delay: 250, duration: 250 }} >
+                        <div in:fade|local={{ delay: 250, duration: 250 }}>
                             <MenuItem {item} bind:cartItems={cartData[i]} />
                         </div>
                     {/if}
                 {/each}
             </div>
             {#if !skeleton}
-                <button class="add-to-cart"
-                    on:click={addToCart} in:fade|local={{ duration: 250, delay: 250 }}
-                    disabled={updatingCart}>
+                <button
+                    class="add-to-cart"
+                    on:click={addToCart}
+                    in:fade|local={{ duration: 250, delay: 250 }}
+                    disabled={updatingCart}
+                >
                     <Icon name="add-shopping-cart" width="30" height="30" />
                     Add items to cart
                 </button>
