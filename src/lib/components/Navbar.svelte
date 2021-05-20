@@ -1,5 +1,6 @@
 <script>
 import { onMount } from 'svelte';
+import Icon from './Icon.svelte';
 
 // Show mobile icon and display menu
 let showMobileMenu = false;
@@ -9,7 +10,7 @@ const navItems = [
     { label: 'Menu', href: '/' },
     {
         label: 'My School Bucks Account Creation',
-        href: 'link to that pdf from FCCPS that teaches people how to make MSB accounts',
+        href: 'documentation/msb_account_creation.pdf',
     },
 ];
 
@@ -36,8 +37,7 @@ onMount(() => {
     <div class="inner">
         <div
             on:click={handleMobileIconClick}
-            class={`mobile-icon${showMobileMenu ? ' active' : ''}`}
-        >
+            class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
             <div class="middle-line" />
         </div>
         <img
@@ -45,22 +45,21 @@ onMount(() => {
             src="missingimage.jpg"
             alt="Mustang Mug Logo"
             height="45px"
-            width="45px"
-        />
+            width="45px" />
         <p class="mug-text">Mustang Mug</p>
         <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
             {#each navItems as item}
                 <li>
-                    <a href={item.href}>{item.label}</a>
+                    {#if item.label == 'My School Bucks Account Creation'}
+                        <a href={item.href} target="_blank" rel="external"
+                            >{item.label}</a>
+                    {:else}
+                        <a href={item.href}>{item.label}</a>
+                    {/if}
                 </li>
             {/each}
             <a href="cart">
-                <img
-                    src="cart.svg"
-                    alt="Cart Icon"
-                    height="30px"
-                    width="30px"
-                />
+                <Icon name="cart-icon" width="30" height="30" />
             </a>
         </ul>
     </div>
