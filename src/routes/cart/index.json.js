@@ -168,8 +168,7 @@ async function getCart(cartId) {
 
 function createCartItemsWithProperties(formData, user) {
     const cartItems = [];
-    for (let cartItemJSON of formData.values()) {
-        const cartItem = JSON.parse(cartItemJSON);
+    for (let cartItem of Object.values(formData)) {
         const itemPrice = cartItem.price + cartItem.options.reduce((cumPrice, cur) => cumPrice + cur.price, 0);
         cartItems.push({
             clientId,
@@ -197,8 +196,7 @@ function createCartItemsWithProperties(formData, user) {
 
 function createCartItems(formData, user) {
     const cartItems = [];
-    for (let cartItemJSON of formData.values()) {
-        const cartItem = JSON.parse(cartItemJSON);
+    for (let cartItem of formData.values()) {
         const itemId = [cartItem.id, ...cartItem.options.map((option) => option.id)].join(' + ');
         const itemName = [cartItem.name, ...cartItem.options.map((option) => option.name)].join(' + ');
         const itemPrice = cartItem.price + cartItem.options.reduce((cumPrice, cur) => cumPrice + cur.price, 0);
