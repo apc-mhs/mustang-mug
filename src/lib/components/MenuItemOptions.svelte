@@ -51,7 +51,12 @@ function toggle(option) {
                         <Icon name="check" width="16" height="16" />
                     </span>
                 {/if}
-                <p>{option.name} - {numberFormatter.format(option.price)}</p>
+                <p>
+                    {option.name}
+                    {#if option.price}
+                        - {numberFormatter.format(option.price)}
+                    {/if}
+                </p>
             </div>
         {/each}
     </div>
@@ -85,20 +90,26 @@ function toggle(option) {
 }
 
 .option {
+    box-sizing: content-box;
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    justify-content: center;
     gap: 0px 2px;
     border: 2px solid currentColor;
     border-radius: 20px;
+    height: 16px;
     color: white;
     font-size: 13px;
-    padding: 5px 8px;
+    padding: 5px 16px;
     color: gray;
     cursor: pointer;
+    transition: padding 400ms ease-out;
 }
 
 .option.selected {
     color: skyblue;
+    /* Set padding left-right to take off 16 (width of checkmark) total pixels */
+    padding: 5px 8px;
 }
 </style>
