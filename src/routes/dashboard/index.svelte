@@ -6,6 +6,5 @@
 <style>
 * {
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    color: white;
 }
 </style>
