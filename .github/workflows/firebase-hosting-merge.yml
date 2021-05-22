@@ -2,7 +2,7 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+on:
   push:
     branches:
       - main
@@ -14,10 +14,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '15'
-      - run: npm install && npm install --prefix functions && npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Install Dependencies
+        run: npm install && npm install --prefix functions
+      - name: Build
+        run: npm run build
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUSTANG_MUG }}'
-          channelId: live
-          projectId: mustang-mug
+          args: deploy --message \"${{ github.event.head_commit.message }}\"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
