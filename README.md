@@ -68,7 +68,7 @@ Create a file called `.env.development.local` in your project's root directory. 
     GOOGLE_APPLICATION_CREDENTIALS="./src/admin/mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json"
     FIRESTORE_EMULATOR_HOST="localhost:8080"
     FIREBASE_AUTH_EMULATOR_HOST="localhost:9099"
-Then, add your service account JSON file to the `admin` directory inside `src`. You can get this file by contacting [@AndrewLester](https://github.com/AndrewLester). The file should be named `mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json`. Now, you are ready to test. Run the firebase emulators:
+Then, add your service account JSON file to the `admin` directory inside `src`. You can get this file by contacting [@AndrewLester](https://github.com/AndrewLester). The file should be named `mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json`. Also ask for the MySchoolBucks API key at the same time, which you'll need to test API interactions. Now, you are ready to test. Run the firebase emulators:
 
     firebase emulators:start
 In a separate shell tab, start the dev server.
