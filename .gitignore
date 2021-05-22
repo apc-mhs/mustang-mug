@@ -5,8 +5,6 @@ node_modules
 build
 *.log
 .npmrc
-*.rules
-*.indexes.json
 .firebaserc
 .vscode
 public
