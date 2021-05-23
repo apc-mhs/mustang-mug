@@ -104,7 +104,8 @@ function toggle(option) {
     padding: 5px 16px;
     color: gray;
     cursor: pointer;
-    transition: padding 400ms ease-out;
+    /* Transition function equal to cubicOut (in horizontalSlide) */
+    transition: padding 400ms cubic-bezier(0.215, 0.610, 0.355, 1.000);
 }
 
 .option.selected {
