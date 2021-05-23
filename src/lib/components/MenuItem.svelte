@@ -23,6 +23,7 @@ $: {
 }
 
 $: if (itemElem && quantity !== null) {
+    // This is essentially a delayed svelte slide transition
     sleep(50).then(() => {
         if (!itemElem) return;
         itemElem.style.maxHeight = itemElem.scrollHeight + 'px';

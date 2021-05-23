@@ -1,6 +1,7 @@
 <script>
 import { getDocuments, getDocumentsWhere } from "$lib/query";
 import { firebase } from '$lib/firebase/firebase';
+import { slide } from 'svelte/transition';
 import Icon from './Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
 import { browser } from "$app/env";
@@ -41,7 +42,7 @@ function toggle(option) {
 }
 </script>
 
-<div class="item-options">
+<div class="item-options" out:slide|local>
     <p>{message}</p>
     <div class="options-list">
         {#each optionsData as option}
