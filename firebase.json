@@ -18,6 +18,9 @@
       "**/node_modules/**",
       "/src/",
       "/resources/"
+    ],
+    "predeploy": [
+      "npm run build"
     ]
   },
   "functions": {

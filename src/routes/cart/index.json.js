@@ -1,4 +1,4 @@
-import { client, getAuthorization, clientId, departmentId, storeId, paymentMethodId } from '$lib/msb';
+import { client, getAuthorization, clientId, departmentId, storeId, paymentMethodId, getCartData } from '$lib/msb';
 import { CartApi, Cart } from 'msb_pay_api';
 import app, { admin } from '$lib/firebase/firebaseAdmin';
 import { numberFormatter } from '$lib/utils';
@@ -18,7 +18,7 @@ export async function post({ locals, body, host }) {
         }
     }
 
-    return await createCart(body, user, host);
+    return await addItemsToCart(body, user, host);
 }
 
 /**
@@ -34,18 +34,15 @@ export async function put({ locals, body }) {
         }
     }
 
-    const cartDocumentSnapshot = await app.firestore()
-        .collection('carts')
-        .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
-        .get();
+    const cartId = await getCartIdFor(user);
 
-    if (cartDocumentSnapshot.empty) {
-        return {
-            status: 400,
-            body: 'Cart does not exist'
-        }
-    } else {
-        return await updateCart(body, cartDocumentSnapshot.docs[0].data().cartId);
+    if (cartId) {
+        return await updateCart(body, cartId);    
+    }
+
+    return {
+        status: 400,
+        body: 'User does not have a cart'
     }
 }
 
@@ -58,25 +55,58 @@ export async function get({ locals }) {
     if (!user) {
         return {
             status: 400,
-            body: 'A user that isn\'t signed in has no cart'
+            body: 'Can\'t manipulate a cart before signing in'
         }
     }
 
-    const cartDocumentSnapshot = await app.firestore()
-        .collection('carts')
-        .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
-        .get();
+    const cart = await getCartFor(user);
 
-    if (!cartDocumentSnapshot.empty) {
-        return await getCart(cartDocumentSnapshot.docs[0].data().cartId);
+    if (cart) {
+        return {
+            status: 200,
+            body: cart
+        }
     }
+
     return {
         status: 400,
         body: 'User does not have a cart'
     }
 }
 
-async function createCart(body, user, host) {
+async function getCartIdFor(user) {
+    const cartSnapshot = await app.firestore()
+        .collection('carts')
+        .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
+        .get();
+
+    if (cartSnapshot.empty) return null;
+
+    return cartSnapshot.docs[0].data().cartId;
+}
+
+async function getCartFor(user) {
+    return getCart(await getCartIdFor(user));
+}
+
+// Somehow replace this implementation which uses 2 queries (getCartFor and updateCart)
+// With one query (https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts__cartId__addItems)
+// An addItems call with the user's cart id.
+async function addItemsToCart(body, user, host) {
+    const cart = await getCartFor(user);
+
+    // If the user doesn't have a cart yet
+    if (!cart) {
+        return await createCartWithItems(body, user, host);   
+    }
+
+    const newCartItems = createCartItemsWithProperties(body, user);
+    cart.cartItems = cart.cartItems.concat(newCartItems);
+
+    return await updateCart(getCartData(cart), cart.id);
+}
+
+async function createCartWithItems(body, user, host) {
     const cartItems = createCartItemsWithProperties(body, user);
 
     const cartData = {
@@ -153,16 +183,10 @@ async function getCart(cartId) {
     }).then((res) => res.text()));
 
     if (msbCart.result == 'Error') {
-        return {
-            status: 500,
-            body: 'Failed'
-        }
+        return null;
     }
 
-    return {
-        status: 200,
-        body: JSON.stringify(msbCart.cart)
-    }
+    return msbCart.cart;
 }
 
 
@@ -184,8 +208,8 @@ function createCartItemsWithProperties(formData, user) {
             reference: user.uid + ':' + cartItem.id,
             properties: cartItem.options.map((option) => {
                 return {
-                    name: 'With ' + option.name,
-                    value: numberFormatter.format(option.price),
+                    name: 'With ' + option.name + ' (' + numberFormatter.format(option.price) + ')',
+                    value: '',
                     displayResponse: 'visible'
                 }
             })

@@ -1,6 +1,7 @@
 <script>
 import Cart from '$lib/components/Cart.svelte';
 import { browser } from '$app/env';
+import { getCartData } from '$lib/msb';
 
 function checkout() {
     window.location.replace(cart.checkoutUrl);
@@ -22,10 +23,9 @@ function onRemove({ detail: item }) {
         cart.cartItems.splice(index, 1);
         cart = cart;
         // Don't post inherent data that belongs to the cart and can't be changed
-        const { id, status, createdDate, lastUpdated, checkoutUrl, ...cartData } = cart;
         fetch('/cart.json', {
             method: 'PUT',
-            body: JSON.stringify(cartData),
+            body: JSON.stringify(getCartData(cart)),
             headers: {
                 'Content-Type': 'application/json'
             }
