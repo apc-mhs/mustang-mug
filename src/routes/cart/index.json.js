@@ -89,6 +89,9 @@ async function getCartFor(user) {
     return getCart(await getCartIdFor(user));
 }
 
+// Somehow replace this implementation which uses 2 queries (getCartFor and updateCart)
+// With one query (https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts__cartId__addItems)
+// An addItems call with the user's cart id.
 async function addItemsToCart(body, user, host) {
     const cart = await getCartFor(user);
 
