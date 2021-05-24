@@ -1,11 +1,22 @@
 <script>
+import tippy from '$lib/tippy';
+import 'tippy.js/animations/shift-away-subtle.css';
+
+export let content;
+
+const infoBoxProps = {
+    content,
+    placement: 'top',
+    arrow: true,
+    duration: [100, 100],
+    animation: 'shift-away-subtle',
+    touch: ['hold', 450],
+    trigger: 'mouseenter',
+}
 </script>
 
-<span class="info-box-launcher">
-    ?
-    <div class="info-box">
-        <slot />
-    </div>
+<span class="info-box-launcher" use:tippy={infoBoxProps}>
+    <slot>?</slot>
 </span>
 
 <style>
@@ -14,25 +25,5 @@
     text-decoration: underline;
     text-decoration-style: dotted;
     cursor: help;
-}
-
-.info-box-launcher:hover > .info-box {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.info-box {
-    position: absolute;
-    pointer-events: none;
-    font-weight: normal;
-    opacity: 0;
-    width: 150px;
-    padding: 5px;
-    background-color: white;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0px 0px 6px 2px rgb(0, 0, 0, 0.15);
-    transition: opacity 150ms ease;
 }
 </style>

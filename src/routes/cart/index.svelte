@@ -2,9 +2,10 @@
 import Cart from '$lib/components/Cart.svelte';
 import { browser } from '$app/env';
 import { getCartData } from '$lib/msb';
+import menuQuery from '../_menuQuery';
 
 function checkout() {
-    window.location.replace(cart.checkoutUrl);
+    fetch('/cart/checkout', { redirect: 'follow' });
 }
 
 let cart;
@@ -32,12 +33,15 @@ function onRemove({ detail: item }) {
         });
     }
 }
+
+let menuItems = [];
+menuQuery().then((data) => menuItems = data);
 </script>
 
 <h1>View your cart</h1>
 {#if cart || cart === null}
     {#if cart !== null && cart.cartItems.length > 0}
-        <Cart bind:items={cart.cartItems} on:remove={onRemove} />
+        <Cart bind:items={cart.cartItems} on:remove={onRemove} {menuItems} />
     {:else}
         <h2>There is nothing in your cart. Go to the <a href="/">menu</a> and add a few items.</h2>
     {/if}

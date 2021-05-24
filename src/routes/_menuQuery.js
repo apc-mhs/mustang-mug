@@ -1,5 +1,4 @@
 import { browser } from '$app/env';
-import app, { firebase } from '$lib/firebase/firebase';
 import { getDocuments } from '$lib/query';
 
 async function query() {

@@ -17,7 +17,8 @@
     "rxjs": "^6.6.7",
     "svelte": "^3.38.2",
     "svelte-adapter-firebase": "github:AndrewLester/svelte-adapter-firebase",
-    "svelte-preprocess": "^4.7.3"
+    "svelte-preprocess": "^4.7.3",
+    "tippy.js": "^6.3.1"
   },
   "type": "module"
 }
