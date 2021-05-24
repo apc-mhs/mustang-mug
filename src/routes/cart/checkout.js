@@ -1,17 +1,14 @@
-import menuQuery from '../_menuQuery';
-import { getCartData } from '$lib/msb';
 import {
-    getCartIdFor,
-    getCartFor,
-    addItemsToCart,
-    updateCart
-} from './_cart';
-import app from 'firebase-admin';
+    getCartData,
+    getOptionIdsFromProperties,
+} from '$lib/msb/cart';
+import { updateCart, getCart, getCartIdFor } from './_cart';
+import app from '$lib/firebase/firebaseAdmin';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
- export async function get({ locals }) {
+export async function post({ locals }) {
     const user = locals.user;
     if (!user) {
         return {
@@ -20,35 +17,52 @@ import app from 'firebase-admin';
         }
     }
 
-    const cart = await getCartFor(user);
+    const cartId = await getCartIdFor(user);
+    const cart = await getCart(cartId);
     if (!cart) {
         return {
             status: 400,
             body: 'User does not have a cart'
+        };
+    }
+
+    await removeOutOfStockItems(cart);
+    // TODO: Process the cart and set each cart item's "Student name" field to
+    // the student name given in the request body
+
+    const success = await updateCart(getCartData(cart), cartId);
+    if (!success || cart.cartItems.length < 1) {
+        return {
+            status: 400,
+            body: 'Your cart was left in an incomplete state after processing'
         }
     }
 
-    const outOfStockOptions = (await app.firestore()
-        .collection('options')
-        .where('stock', '==', false)
-        .get()
-    ).map((option) => option.id);
-    const outOfStock = (await app.firestore()
-        .collection('items')
-        .where('stock', '==', false)
-        .where('options', 'array-contains-any', outOfStockOptions)
-        .get()
-    ).map((item) => item.id);
-    // const outOfStock = menuItems
-    //     .filter((item) => !item.stock || item.options.some((option) => !option.stock))
-    //     .map((item) => item.id);
-
-    cart.cartItems = cart.cartItems.filter((cartItem) => !outOfStock.includes(cartItem.itemId));
-    cart = await updateCart(getCartData(cart), cart.cartId);
     return {
-        status: 302,
-        headers: {
-            Location: cart.checkoutUrl
+        status: 200,
+        body: {
+            url: cart.checkoutUrl
         }
-    }
+    };
+}
+
+async function removeOutOfStockItems(cart) {
+    const [outOfStockItemIds, outOfStockOptionIds] = await Promise.all([
+        app.firestore()
+            .collection('items')
+            .where('stock', '==', false)
+            .get()
+            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
+        app.firestore()
+            .collection('options')
+            .where('stock', '==', false)
+            .get()
+            .then((snapshot) => snapshot.docs.map((doc) => doc.id))
+    ]);
+
+    cart.cartItems = cart.cartItems.filter((cartItem) => {
+        return !outOfStockItemIds.includes(cartItem.itemId)
+            && !getOptionIdsFromProperties(cartItem.properties)
+                .some((optionId) => outOfStockOptionIds.includes(optionId))
+    });
 }

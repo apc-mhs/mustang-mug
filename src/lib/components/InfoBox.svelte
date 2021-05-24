@@ -21,9 +21,15 @@ const infoBoxProps = {
 
 <style>
 .info-box-launcher {
+    box-sizing: content-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    text-decoration: underline;
-    text-decoration-style: dotted;
     cursor: help;
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 2ch;
+    padding: 2px;
 }
 </style>

@@ -6,29 +6,37 @@ import { createEventDispatcher } from 'svelte';
 import { fade } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 import tippy from '$lib/tippy';
-import app from '$lib/firebase/firebase';
 import { getDocumentsWhere } from '$lib/query';
+import { browser } from '$app/env';
+import { getOptionIdsFromProperties } from '$lib/msb/cart';
 
-export let items = [];
+export let cartItems = [];
 export let menuItems = [];
+export let validCart = false;
 
 const dispatch = createEventDispatcher();
 
-let outOfStockOptionsIds = [];
+let outOfStockOptionIds = [];
 if (browser) {
-    getDocumentsWhere('options', (queryable) => queryable.where('stock', '==', false)).get().then((data) => {
-        outOfStockOptionsIds = data.docs.map((doc) => doc.id);
+    getDocumentsWhere('options', (queryable) => queryable.where('stock', '==', false)).then((data) => {
+        outOfStockOptionIds = data.map((doc) => doc.id);
     });
 }
 
-$: console.log(outOfStockOptionsIds);
-$: outOfStock = menuItems
-    .filter((item) => !item.stock || item.options.some((option) => outOfStockOptionsIds.includes(option.id)))
+$: outOfStockItemIds = menuItems
+    .filter((item) => !item.stock)
     .map((item) => item.id);
+function isOutOfStock(cartItem, optionIds) {
+    return outOfStockItemIds.includes(cartItem.itemId)
+            || getOptionIdsFromProperties(cartItem.properties)
+                .some((optionId) => optionIds.includes(optionId));
+}
+
+$: validCart = cartItems.some((cartItem) => !isOutOfStock(cartItem, outOfStockOptionIds));
 
 const outOfStockTooltipProps = {
     content:
-        'This item has been marked as <strong>out of stock</strong>, so if you proceed to checkout now it will not be available to purchase. You can either remove it from your cart or wait until it becomes available again.',
+        'This item has been marked as <strong>out of stock</strong>, so if you proceed to checkout now it will be removed from your cart. You can either remove it from your cart yourself or wait until it becomes available again.',
     placement: 'left',
     arrow: true,
     duration: [100, 100],
@@ -41,32 +49,38 @@ const outOfStockTooltipProps = {
 </script>
 
 <div class="items">
-    {#each items as item, i (i)}
+    {#each cartItems as item, i (i)}
         <div
             class="item"
             out:fade={{ duration: 150 }}
             animate:flip={{ duration: 150, delay: 150 }}>
             <h2>
-                {#if outOfStock.includes(item.itemId)}
+                {#if isOutOfStock(item, outOfStockOptionIds)}
                     <span
                         class="out-of-stock"
-                        use:tippy={outOfStock.includes(item.itemId)
-                            ? outOfStockTooltipProps
-                            : undefined}>Out of stock</span>
+                        use:tippy={outOfStockTooltipProps}>Out of stock</span>
                 {/if}
                 {item.itemName}
             </h2>
-            <h3>Options:</h3>
-            <ul>
-                {#each item.properties as option, i (i)}
-                    <li>{option.name}</li>
-                {/each}
-            </ul>
-            <h4>
-                Item price
+            <h4>Price: ({numberFormatter.format(menuItems.find((menuItem) => menuItem.id == item.itemId).price)})</h4>
+            {#if item.properties.length > 0}
+                <h3>Options:</h3>
+                <ul>
+                    {#each item.properties as option, i (i)}
+                        <li>
+                            {option.name}
+                            {#if outOfStockOptionIds.includes(option.value)}
+                                <span
+                                    class="out-of-stock">Out of stock</span>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
+            <h4 class="item-price">
                 <InfoBox
                     content="The item price is the cost of the item plus the cost of any of its selected options." />
-                : {numberFormatter.format(item.unitPrice)}
+                Total Item Price: {numberFormatter.format(item.unitPrice)}
             </h4>
             <button on:click={() => dispatch('remove', item)}>
                 <Icon name="remove-shopping-cart" width="16" height="16" />
@@ -81,15 +95,17 @@ const outOfStockTooltipProps = {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    gap: 0px 15px;
+    gap: 15px 0px;
 }
 
 .item {
+    display: flex;
+    flex-flow: column nowrap;
     border-radius: 5px;
     background-color: white;
     max-width: 100%;
     width: 600px;
-    height: 250px;
+    min-height: 250px;
     padding: 10px 20px;
 }
 
@@ -97,6 +113,10 @@ h2,
 h3,
 h4 {
     margin-top: 15px;
+}
+
+.item-price {
+    margin-top: auto;
 }
 
 button {
@@ -108,6 +128,10 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    cursor: default;
+}
+
 span.out-of-stock {
     color: rgb(243, 101, 101);
     background-color: rgb(248, 211, 211);
@@ -115,5 +139,6 @@ span.out-of-stock {
     padding: 3px 5px;
     border-radius: 5px;
     vertical-align: middle;
+    cursor: default;
 }
 </style>

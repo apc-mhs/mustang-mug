@@ -1,7 +1,7 @@
-import { client, getAuthorization, clientId, departmentId, storeId, paymentMethodId, getCartData } from '$lib/msb';
+import { client, getAuthorization } from '$lib/msb';
+import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
 import { CartApi, Cart } from 'msb_pay_api';
 import app, { admin } from '$lib/firebase/firebaseAdmin';
-import { numberFormatter } from '$lib/utils';
 
 const cartApi = new CartApi(client);
 
@@ -23,20 +23,22 @@ async function getCartFor(user) {
 // Somehow replace this implementation which uses 2 queries (getCartFor and updateCart)
 // With one query (https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts__cartId__addItems)
 // An addItems call with the user's cart id.
+/** @returns {Promise<boolean>} */
 async function addItemsToCart(body, user, host) {
     const cart = await getCartFor(user);
 
     // If the user doesn't have a cart yet
     if (!cart) {
-        return await createCartWithItems(body, user, host);   
+        return await createCartWithItems(body, user, host);;
     }
 
     const newCartItems = createCartItemsWithProperties(body, user);
     cart.cartItems = cart.cartItems.concat(newCartItems);
 
-    return await updateCart(getCartData(cart), cart.id);
+    return await updateCart(getCartData(cart), cart.id);;
 }
 
+/** @returns {Promise<boolean>} */
 async function createCartWithItems(body, user, host) {
     const cartItems = createCartItemsWithProperties(body, user);
 
@@ -64,22 +66,17 @@ async function createCartWithItems(body, user, host) {
     // });
 
     if (msbCart.result == 'Error') {
-        return {
-            status: 500,
-            body: 'Failure'
-        }
+        return false;
     }
 
     app.firestore().collection('carts').doc(user.uid).set({
         cartId: msbCart.cartId
     });
 
-    return {
-        status: 200,
-        body: 'Success'
-    }
+    return true;
 }
 
+/** @returns {Promise<boolean>} */
 async function updateCart(body, cartId) {
     /** @type {Cart} */
     const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId, {
@@ -92,16 +89,10 @@ async function updateCart(body, cartId) {
     }).then((res) => res.json());
 
     if (msbCart.result === 'Error') {
-        return {
-            status: 500,
-            body: 'MSB Pay API error'
-        }
+        return false;
     }
 
-    return {
-        status: 200,
-        body: 'Success'
-    }
+    return true;
 }
 
 async function getCart(cartId) {
@@ -118,35 +109,6 @@ async function getCart(cartId) {
     }
 
     return msbCart.cart;
-}
-
-
-function createCartItemsWithProperties(formData, user) {
-    const cartItems = [];
-    for (let cartItem of Object.values(formData)) {
-        const itemPrice = cartItem.price + cartItem.options.reduce((cumPrice, cur) => cumPrice + cur.price, 0);
-        cartItems.push({
-            clientId,
-            departmentId,
-            storeId,
-            paymentMethodId,
-            itemId: cartItem.id,
-            itemName: cartItem.name,
-            unitPrice: itemPrice.toString(),
-            salesTaxAmount: 0,
-            displaySalesTaxRate: 0,
-            studentName: 'Test',
-            reference: user.uid + ':' + cartItem.id,
-            properties: cartItem.options.map((option) => {
-                return {
-                    name: 'With ' + option.name + ' (' + numberFormatter.format(option.price) + ')',
-                    value: '',
-                    displayResponse: 'visible'
-                }
-            })
-        });
-    }
-    return cartItems;
 }
 
 export {

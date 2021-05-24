@@ -18,7 +18,11 @@ export async function post({ locals, body, host }) {
         }
     }
 
-    return await addItemsToCart(body, user, host);
+    const success = await addItemsToCart(body, user, host);
+    return {
+        status: success ? 200 : 500,
+        body: success ? 'Added items to cart' : 'Failed'
+    };
 }
 
 /**
@@ -31,19 +35,23 @@ export async function put({ locals, body }) {
         return {
             status: 400,
             body: 'Can\'t manipulate a cart before signing in'
-        }
+        };
     }
 
     const cartId = await getCartIdFor(user);
 
     if (cartId) {
-        return await updateCart(body, cartId);    
+        const success = await updateCart(body, cartId);
+        return {
+            status: success ? 200 : 500,
+            body: success ? 'Cart updated' : 'Failed'
+        };
     }
 
     return {
         status: 400,
         body: 'User does not have a cart'
-    }
+    };
 }
 
 /**

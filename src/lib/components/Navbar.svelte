@@ -76,10 +76,13 @@ onMount(() => {
 }
 
 nav {
-    background-color: rgba(206, 44, 44, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: rgba(206, 44, 44, 0.85);
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    height: 6vh;
-    position: relative;
+    height: var(--header-height);
     /* Is there a better way to do this?*/
     z-index: 9999;
     box-shadow: 0px 1px 5px 0px black;
@@ -96,7 +99,7 @@ nav {
     background-color: rgba(0, 0, 0, 0.8);
     position: fixed;
     display: block;
-    height: calc(100% - 6vh);
+    height: calc(100% - var(--header-height));
     bottom: 0;
     left: 0;
 }

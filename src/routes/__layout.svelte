@@ -7,23 +7,23 @@ import '../app.css';
 signInAnonymously();
 </script>
 
-<!-- Navbar and Footer should be moved outside of main -->
+<Navbar />
 <main>
-    <Navbar />
     <slot />
     <Footer />
 </main>
 
 <style>
 :root {
-    --header-height: 6vh;
+    --header-height: 50px;
 }
-/* These hardcoded elements are definitly not ideal - should probably be revised */
+
 main {
+    display: flex;
+    flex-flow: column nowrap;
     position: relative;
-    /* Commented out due to extra space being created with it present
-    top: var(--header-height); */
-    min-height: 100vh;
+    top: var(--header-height);
+    min-height: calc(100vh - var(--header-height));
     background-color: rgb(71, 70, 70);
 }
 </style>

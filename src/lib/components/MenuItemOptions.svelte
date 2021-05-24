@@ -49,7 +49,7 @@ function toggle(option) {
 <div class="item-options" out:slide|local>
     <p>{message}</p>
     <div class="options-list">
-        {#each optionsData as option}
+        {#each optionsData.filter((option) => option.stock) as option}
             <div
                 class="option"
                 on:click={toggle(option)}
