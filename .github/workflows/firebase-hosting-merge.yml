@@ -25,10 +25,11 @@ jobs:
           name: public
           path: public
           if-no-files-found: error
+          retention-days: 2
   deploy:
     name: Deploy
     needs: build
-    runs-on: ubtuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
