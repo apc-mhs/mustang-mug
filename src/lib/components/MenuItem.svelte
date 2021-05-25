@@ -50,7 +50,7 @@ $: if (itemElem && quantity !== null) {
             bind:selectedOptions={cartItems[i].options} />
     {/each}
     {#if !item.stock}
-        <p style="display: inline;">Out of stock</p>
+        <p class="out-of-stock">Out of stock</p>
     {/if}
 </div>
 
@@ -70,8 +70,12 @@ h3 {
     padding-bottom: 10px;
     transition: max-height 250ms ease;
 }
-.item.out-of-stock {
-    filter: grayscale(0.5);
+.item.out-of-stock > :not(.out-of-stock) {
+    opacity: 0.75;
+}
+p.out-of-stock {
+    color: rgb(253, 54, 54);
+    font-weight: bold;
 }
 .item > img {
     width: 100%;

@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { browser, dev } from '$app/env';
+import setupEmulatedFirestore from '$lib/firebase/firestore';
 
 const appName = import.meta.env.VITE_APP_NAME;
 
@@ -24,15 +25,16 @@ function loadFirebase() {
         app = firebase.app(appName);
     } catch (error) {
         app = firebase.initializeApp(firebaseConfig, appName);
-        if (dev) {
-            initializeDev(app);
-        }
+        if (dev) initializeDev(app);
+
         if (browser) {
             app.firestore().enablePersistence()
                 .catch((err) => {
                     console.error('Persistence failed to enable with error', err);
                 });
         }
+
+        if (dev) setupEmulatedFirestore(app.firestore());
     }
     return app;
 }

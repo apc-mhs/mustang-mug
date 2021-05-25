@@ -16,13 +16,11 @@
 }
 .footer {
     display: inline-block;
-    position: fixed;
     font-size: 10px;
-    left: 0;
     line-height: 30px;
-    bottom: 0;
     width: 100%;
     height: 30px;
+    margin-top: auto;
     background-color: rgba(43, 42, 42, 0.424);
     color: white;
     text-align: center;

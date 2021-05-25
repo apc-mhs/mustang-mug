@@ -12,22 +12,11 @@ function getAuthorization() {
     return process.env['MSB_API_KEY'];
 }
 
-/**
- * Turn a cart object received from the MSB Pay API
- * into a cart object that can be used for updating
- * a cart's data. Essentially removes all metadata.
- */
-function getCartData(cart) {
-    const { id, status, createdDate, lastUpdated, checkoutUrl, ...cartData } = cart;
-    return cartData;
-}
-
 export {
     client,
     getAuthorization,
     clientId,
     departmentId,
     storeId,
-    paymentMethodId,
-    getCartData
+    paymentMethodId
 }

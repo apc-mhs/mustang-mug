@@ -37,8 +37,6 @@ async function addToCart() {
         },
     });
     if (res.status === 200) {
-        // Add some delay so the user knows what happened
-        await sleep(500);
         await goto('/cart');
     } else {
         console.error(res);
@@ -54,15 +52,15 @@ async function addToCart() {
             <h2>Refine Menu</h2>
             <li>
                 <input type="checkbox" id="item1" />
-                <label for="item1">Selection 1</label><br />
+                <label for="item1">Selection 1</label>
             </li>
             <li>
                 <input type="checkbox" id="item2" />
-                <label for="item2">Selection 2</label><br />
+                <label for="item2">Selection 2</label>
             </li>
             <li>
                 <input type="checkbox" id="item2" />
-                <label for="item2">Selection 3</label><br />
+                <label for="item2">Selection 3</label>
             </li>
             <li>
                 <p>Scale</p>
