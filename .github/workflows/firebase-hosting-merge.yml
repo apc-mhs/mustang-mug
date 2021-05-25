@@ -26,13 +26,13 @@ jobs:
           path: |
             public
             functions
-            !src
-            !resources
-            !.svelte-kit
-            !.github
+            !src/**
+            !resources/**
+            !.svelte-kit/**
+            !.github/**
             !static
-            !node_modules
-            **/.*
+            !**/node_modules/**
+            !**/.*
           if-no-files-found: error
           retention-days: 2
   deploy:
