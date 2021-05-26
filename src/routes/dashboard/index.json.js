@@ -15,10 +15,16 @@ export async function del({ locals }) {
         return {
             status: 400,
             body: 'Can\'t manipulate a cart before signing in'
-        }
+        };
     }
 
     // TODO: Check if the user's email is the mustang mug address
+    if (!dev && !acceptedEmails.includes(user.email)) {
+        return {
+            status: 403,
+            body: 'Insufficient persmissions'
+        };
+    }
 
     // Create a utility function to accumulate the data from this endpoint's paged responses
     const carts = (await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
