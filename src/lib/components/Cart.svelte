@@ -3,7 +3,7 @@ import Icon from '$lib/components/Icon.svelte';
 import InfoBox from '$lib/components/InfoBox.svelte';
 import { numberFormatter } from '$lib/utils';
 import { createEventDispatcher } from 'svelte';
-import { fade } from 'svelte/transition';
+import { fly } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 import tippy from '$lib/tippy';
 import { getDocumentsWhere } from '$lib/query';
@@ -48,12 +48,13 @@ const outOfStockTooltipProps = {
 };
 </script>
 
-<div class="items">
+<!-- Necessary duplicated out:fly here to fly even when cartItems becomes empty, removing this outer div -->
+<div class="items" out:fly|local={{ duration: 250, x: -75 }}>
     {#each cartItems as item, i (i)}
         <div
             class="item"
-            out:fade={{ duration: 150 }}
-            animate:flip={{ duration: 150, delay: 150 }}>
+            out:fly|local={{ duration: 250, x: -75 }}
+            animate:flip={{ duration: 250, delay: 250 }}>
             <h2>
                 {#if isOutOfStock(item, outOfStockOptionIds)}
                     <span
