@@ -10,6 +10,7 @@ exports.ssrServer = functions.https.onRequest(async (request, response) => {
     // Pass the functions config variable into process.env
     // so it can be accessed by SvelteKit
     // TODO: Do this for every config variable automatically
+
     process.env['MSB_API_KEY'] = functions.config().msb.key;
     process.env['HOST_URL'] = functions.config().host.url;
     return await ssrServerServer(request, response);

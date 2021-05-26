@@ -14,6 +14,15 @@ export default function setupEmulatedFirestore(firestore) {
        lastModified: firebase.firestore.Timestamp.fromDate(new Date())
     });
 
+    firestore.collection('items').doc('free_item').set({
+        name: 'This item is free',
+        price: 0,
+        image: 'coffee.jpg',
+        stock: true,
+        options: [],
+        lastModified: firebase.firestore.Timestamp.fromDate(new Date())
+    });
+
     firestore.collection('options').doc('milk').set({
         name: 'Milk',
         price: 0.5,

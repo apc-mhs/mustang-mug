@@ -11,7 +11,7 @@ async function getCartIdFor(user) {
         .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
         .get();
 
-    if (cartSnapshot.empty) return null;
+    if (cartSnapshot.empty || !cartSnapshot.docs[0].data().cartId) return null;
 
     return cartSnapshot.docs[0].data().cartId;
 }
@@ -44,21 +44,21 @@ async function createCartWithItems(body, user, host) {
 
     const cartData = {
         cartItems: cartItems,
-        redirectUrl: 'https://' + process.env['HOST_URL'] + '/processCart',
+        redirectUrl: process.env['HOST_URL'] + '/cart/process',
         allowDuplicatePayments: 'false',
-        returnToSiteUrl: 'https://' + process.env['HOST_URL'] + '/cart',
+        returnToSiteUrl: process.env['HOST_URL'] + '/cart',
         loginPolicy: 'required',
     }
 
     /** @type {Cart} */
-    const msbCart = JSON.parse(await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
+    const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
         method: 'POST',
         headers: {
             'Authorization': getAuthorization(),
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(cartData)
-    }).then((res) => res.text()));
+    }).then((res) => res.json());
 
     /** @type {Cart} */
     // const msbCart = await new Promise(async (resolve, _) => {
@@ -71,6 +71,8 @@ async function createCartWithItems(body, user, host) {
 
     app.firestore().collection('carts').doc(user.uid).set({
         cartId: msbCart.cartId
+    }, { 
+        merge: true
     });
 
     return true;
@@ -97,12 +99,12 @@ async function updateCart(body, cartId) {
 
 async function getCart(cartId) {
     /** @type {Cart} */
-    const msbCart = JSON.parse(await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId, {
+    const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId, {
         method: 'GET',
         headers: {
             'Authorization': getAuthorization(),
         }
-    }).then((res) => res.text()));
+    }).then((res) => res.json());
 
     if (msbCart.result == 'Error') {
         return null;
