@@ -44,9 +44,9 @@ async function createCartWithItems(body, user, host) {
 
     const cartData = {
         cartItems: cartItems,
-        redirectUrl: process.env['HOST_URL'] + '/cart/process',
+        redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
         allowDuplicatePayments: 'false',
-        returnToSiteUrl: process.env['HOST_URL'] + '/cart',
+        returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
         loginPolicy: 'required',
     }
 

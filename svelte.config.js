@@ -11,9 +11,7 @@ const config = {
 		prerender: {
 			enabled: false
 		},
-		kit: {
-			hostHeader: dev ? 'X-Forwarded-Host' : undefined
-		}
+		hostHeader: !dev ? 'X-Forwarded-Host' : undefined
 	}
 };
 
