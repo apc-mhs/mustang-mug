@@ -1,7 +1,7 @@
 <script>
 import { signInAnonymously } from '$lib/auth';
-import Navbar from '$lib/components/Navbar.svelte';
-import Footer from '$lib/components/Footer.svelte';
+import Navbar from '$lib/components/layout/Navbar.svelte';
+import Footer from '$lib/components/layout/Footer.svelte';
 import '../app.css';
 
 signInAnonymously();

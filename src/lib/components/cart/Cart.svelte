@@ -1,6 +1,6 @@
 <script>
-import Icon from '$lib/components/Icon.svelte';
-import InfoBox from '$lib/components/InfoBox.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
+import InfoBox from '$lib/components/utility/InfoBox.svelte';
 import { numberFormatter } from '$lib/utils';
 import { createEventDispatcher } from 'svelte';
 import { fly } from 'svelte/transition';
@@ -18,7 +18,9 @@ const dispatch = createEventDispatcher();
 
 let outOfStockOptionIds = [];
 if (browser) {
-    getDocumentsWhere('options', (queryable) => queryable.where('stock', '==', false)).then((data) => {
+    getDocumentsWhere('options', (queryable) =>
+        queryable.where('stock', '==', false)
+    ).then((data) => {
         outOfStockOptionIds = data.map((doc) => doc.id);
     });
 }
@@ -27,12 +29,17 @@ $: outOfStockItemIds = menuItems
     .filter((item) => !item.stock)
     .map((item) => item.id);
 function isOutOfStock(cartItem, optionIds) {
-    return outOfStockItemIds.includes(cartItem.itemId)
-            || getOptionIdsFromProperties(cartItem.properties)
-                .some((optionId) => optionIds.includes(optionId));
+    return (
+        outOfStockItemIds.includes(cartItem.itemId) ||
+        getOptionIdsFromProperties(cartItem.properties).some((optionId) =>
+            optionIds.includes(optionId)
+        )
+    );
 }
 
-$: validCart = cartItems.some((cartItem) => !isOutOfStock(cartItem, outOfStockOptionIds));
+$: validCart = cartItems.some(
+    (cartItem) => !isOutOfStock(cartItem, outOfStockOptionIds)
+);
 
 const outOfStockTooltipProps = {
     content:
@@ -63,7 +70,12 @@ const outOfStockTooltipProps = {
                 {/if}
                 {item.itemName}
             </h2>
-            <h4>Price: ({numberFormatter.format(menuItems.find((menuItem) => menuItem.id == item.itemId).price)})</h4>
+            <h4>
+                Price: ({numberFormatter.format(
+                    menuItems.find((menuItem) => menuItem.id == item.itemId)
+                        .price
+                )})
+            </h4>
             {#if item.properties.length > 0}
                 <h3>Options:</h3>
                 <ul>
@@ -71,8 +83,7 @@ const outOfStockTooltipProps = {
                         <li>
                             {option.name}
                             {#if outOfStockOptionIds.includes(option.value)}
-                                <span
-                                    class="out-of-stock">Out of stock</span>
+                                <span class="out-of-stock">Out of stock</span>
                             {/if}
                         </li>
                     {/each}

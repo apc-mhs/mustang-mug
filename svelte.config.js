@@ -10,9 +10,12 @@ const config = {
 		adapter: firebaseAdapter(),
 		prerender: {
 			enabled: false
-		},
-		hostHeader: !dev ? 'X-Forwarded-Host' : undefined
+		}
 	}
 };
+
+if (!dev) {
+	config.kit.hostHeader = 'X-Forwarded-Host';
+}
 
 export default config;
