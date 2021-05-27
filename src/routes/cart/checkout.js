@@ -8,7 +8,7 @@ import app from '$lib/firebase/firebaseAdmin';
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
-export async function post({ locals }) {
+export async function post({ locals, body }) {
     const user = locals.user;
     if (!user) {
         return {
@@ -27,14 +27,15 @@ export async function post({ locals }) {
     }
 
     await removeOutOfStockItems(cart);
-    // TODO: Process the cart and set each cart item's "Student name" field to
-    // the student name given in the request body
+    for (let cartItem of cart.cartItems) {
+        cartItem.studentName = body.studentName || 'Unspecified';
+    }
 
     const success = await updateCart(getCartData(cart), cartId);
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,
-            body: 'Your cart was left in an incomplete state after processing'
+            body: 'Your cart was left in an incomplete state after processing. (Your items may have been marked out of stock)'
         }
     }
 

@@ -1,10 +1,11 @@
 import { browser } from '$app/env';
-import app from '$lib/firebase/firebase';
+import app, { firebase } from '$lib/firebase/firebase';
 import { authState } from 'rxfire/auth';
 import { writable } from 'svelte/store';
 import Cookies from 'js-cookie';
+import { goto } from '$app/navigation';
 
-
+const acceptableEmails = [];
 const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
     app.auth().onIdTokenChanged(async (user) => {
@@ -28,7 +29,24 @@ async function signInAnonymously() {
     }
 }
 
+async function signInWithGoogle() {
+    // Don't sign in on the server
+    if (!browser) {
+        return;
+    }
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
+    await app.auth().signInWithRedirect(provider);
+    const result = await app.auth().getRedirectResult();
+
+    if (!acceptableEmails.includes(result.user.email) && !dev) {
+        goto('/');
+    }
+}
+
 export {
     currentUser,
-    signInAnonymously
+    signInAnonymously,
+    signInWithGoogle
 }

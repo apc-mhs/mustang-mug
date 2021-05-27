@@ -1,8 +1,7 @@
 <script>
 import { getDocuments, getDocumentsWhere } from '$lib/query';
-import { firebase } from '$lib/firebase/firebase';
 import { slide } from 'svelte/transition';
-import Icon from './Icon.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
 import { browser } from '$app/env';
 import { numberFormatter } from '$lib/utils';

@@ -1,5 +1,5 @@
 <script>
-import Menu from '$lib/components/Menu.svelte';
+import Menu from '$lib/components/menu/Menu.svelte';
 import menuQuery from './_menuQuery';
 
 let skeleton = true;

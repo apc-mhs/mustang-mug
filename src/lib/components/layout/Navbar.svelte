@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import Icon from './Icon.svelte';
+import Icon from '$lib/components/utility/  Icon.svelte';
 
 // Show mobile icon and display menu
 let showMobileMenu = false;
@@ -81,6 +81,8 @@ nav {
     left: 0;
     width: 100vw;
     background-color: rgba(206, 44, 44, 0.85);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     height: var(--header-height);
     /* Is there a better way to do this?*/

@@ -1,10 +1,9 @@
 <script>
-import SkeletonLayout from '$lib/components/SkeletonLayout.svelte';
-import MenuItem from '$lib/components/MenuItem.svelte';
+import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
+import MenuItem from './MenuItem.svelte';
 import { goto } from '$app/navigation';
 import { fade } from 'svelte/transition';
-import Icon from './Icon.svelte';
-import { sleep } from '$lib/utils';
+import Icon from '$lib/components/utility/Icon.svelte';
 
 export let items;
 export let skeleton = false;

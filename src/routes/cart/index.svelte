@@ -1,11 +1,12 @@
 <script>
-import Cart from '$lib/components/Cart.svelte';
+import Cart from '$lib/components/cart/Cart.svelte';
 import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import menuQuery from '../_menuQuery';
 import tippy from '$lib/tippy';
 
 let validCart = false;
+let studentName = '';
 let cart;
 if (browser) {
     fetch('/cart.json')
@@ -33,7 +34,20 @@ function onRemove({ detail: item }) {
 }
 
 function checkout() {
-    fetch('/cart/checkout', { method: 'POST' })
+    if (!studentName) {
+        alert('Please enter a student name to checkout.');
+        return;
+    }
+
+    fetch('/cart/checkout', { 
+        method: 'POST', 
+        body: JSON.stringify({
+            studentName
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
     .then((res) => res.json())
     .then((json) => {
         if (json) {
@@ -82,7 +96,7 @@ menuQuery().then((data) => menuItems = data);
         </label>
         <label for="student-name-input">
             Student name:
-            <input id="student-name-input" type="text">
+            <input id="student-name-input" bind:value={studentName} type="text">
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
             <button

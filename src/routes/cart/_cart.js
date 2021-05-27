@@ -2,6 +2,7 @@ import { client, getAuthorization } from '$lib/msb';
 import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
 import { CartApi, Cart } from 'msb_pay_api';
 import app, { admin } from '$lib/firebase/firebaseAdmin';
+import { dev } from '$app/env';
 
 const cartApi = new CartApi(client);
 
