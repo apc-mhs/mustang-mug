@@ -1,6 +1,6 @@
 <script>
 import { onMount } from 'svelte';
-import Icon from '$lib/components/utility/  Icon.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
 
 // Show mobile icon and display menu
 let showMobileMenu = false;

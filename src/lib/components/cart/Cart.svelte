@@ -1,6 +1,6 @@
 <script>
-import Icon from '$lib/components/Icon.svelte';
-import InfoBox from '$lib/components/InfoBox.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
+import InfoBox from '$lib/components/utility/InfoBox.svelte';
 import { numberFormatter } from '$lib/utils';
 import { createEventDispatcher } from 'svelte';
 import { fly } from 'svelte/transition';
