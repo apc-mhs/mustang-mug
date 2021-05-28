@@ -7,6 +7,14 @@ import '../app.css';
 signInAnonymously();
 </script>
 
+
+<!-- Using svelte:head on the layout will overwrite every other page 
+Instead we use just <head> and <title> which will set the title for 
+all the pages that don't have a svelte:head (you can test it!) -->
+<head>
+    <title>You shouldn't see this text</title>
+</head>
+
 <Navbar />
 <main>
     <slot />

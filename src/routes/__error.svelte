@@ -22,6 +22,10 @@ export let error;
 export let status;
 </script>
 
+<svelte:head>
+    <title>Error {status.toString()}</title>
+</svelte:head>
+
 {#if status === 404}
     <div class="center">
         <div class="error">

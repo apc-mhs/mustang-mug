@@ -4,9 +4,13 @@ import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import menuQuery from '../_menuQuery';
 import tippy from '$lib/tippy';
+import Button from '$lib/components/utility/Button.svelte';
 
 let validCart = false;
 let studentName = '';
+
+let buttonwords = 'Checkout'; 
+
 let cart;
 if (browser) {
     fetch('/cart.json')
@@ -73,6 +77,10 @@ let menuItems = [];
 menuQuery().then((data) => menuItems = data);
 </script>
 
+<svelte:head>
+    <title>Cart</title>
+</svelte:head>
+
 <div class="cart-view">
     <div class="cart">
         <h1>View your cart</h1>
@@ -99,11 +107,7 @@ menuQuery().then((data) => menuItems = data);
             <input id="student-name-input" bind:value={studentName} type="text">
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-            <button
-                on:click={checkout} style="color: black;"
-                disabled={!validCart}>
-                Checkout
-            </button>
+        <Button on:click={checkout} style="color: black;" disabled={!validCart}>Checkout</Button>
         </div>
     </div>
 </div>
