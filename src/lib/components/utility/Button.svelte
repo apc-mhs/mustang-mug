@@ -1,5 +1,4 @@
 <script>
-    export const ButtonText = "You shouldn't see this text";
 </script>
 
 <button>

@@ -9,8 +9,6 @@ import Button from '$lib/components/utility/Button.svelte';
 let validCart = false;
 let studentName = '';
 
-let buttonwords = 'Checkout'; 
-
 let cart;
 if (browser) {
     fetch('/cart.json')
