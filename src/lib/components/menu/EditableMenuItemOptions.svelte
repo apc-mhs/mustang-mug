@@ -5,14 +5,13 @@ import { horizontalSlide } from '$lib/transition';
 import { browser } from '$app/env';
 import { numberFormatter } from '$lib/utils';
 import app, { firebase } from '$lib/firebase/firebase';
+import tippy from '$lib/tippy';
 
 export let options;
 export let noOptionsMessage = '';
 export let optionsMessage = '';
-export let selectedOptions = [];
 
 let optionsData = [];
-$: availableOptions = optionsData.filter((option) => option.stock);
 
 if (browser) {
     const validOptionIds = options.map((option) => option.id);
@@ -21,60 +20,46 @@ if (browser) {
     // Maximum 10 elements in a firestore 'in' query
     for (let i = 0; i < Math.ceil(validOptionIds.length / 10); i++) {
         const offset = i * 10;
-        queries.push(getOptionsForOptionIds(validOptionIds.slice(offset, offset + 10)));
+        queries.push(
+            getOptionsForOptionIds(validOptionIds.slice(offset, offset + 10))
+        );
     }
 
     Promise.all(queries)
         .then((snapshots) => snapshots.flatMap((snapshot) => snapshot.docs))
         .then((docs) => docs.map((doc) => doc.data()))
-        .then((data) => optionsData = data);
+        .then((data) => (optionsData = data));
 }
 
 function getOptionsForOptionIds(optionIds) {
-    return app.firestore()
+    return app
+        .firestore()
         .collection('options')
-        .where(
-            firebase.firestore.FieldPath.documentId(),
-            'in',
-            optionIds
-        )
+        .where(firebase.firestore.FieldPath.documentId(), 'in', optionIds)
         .get();
 }
 
-function toggle(option) {
-    if (!option.stock) return;
-
-    const index = selectedOptions.indexOf(option);
-    if (index === -1) {
-        selectedOptions = [option, ...selectedOptions];
-    } else {
-        selectedOptions = selectedOptions.filter(
-            (selected) => selected !== option
-        );
-    }
+function toggle(optionIndex) {
+    optionsData[optionIndex].stock = !optionsData[optionIndex].stock;
 }
 </script>
 
 <div class="item-options" transition:slide|local>
-    <p>{availableOptions.length === 0 ? noOptionsMessage : optionsMessage}</p>
+    <p>{optionsData.length === 0 ? noOptionsMessage : optionsMessage}</p>
     <div class="options-list">
-        {#each availableOptions as option}
+        {#each optionsData as option, i (i)}
             <div
                 class="option"
-                on:click={() => toggle(option)}
+                on:click={() => toggle(i)}
                 transition:slide|local
-                class:selected={selectedOptions.includes(option)}>
-                {#if selectedOptions.includes(option)}
-                    <span transition:horizontalSlide|local>
-                        <Icon name="check" width="16" height="16" />
-                    </span>
+                use:tippy={!option.stock ? { content: 'This option is marked out of stock.', maxWidth: 150 } : undefined}
+                class:out-of-stock={!option.stock}>
+                {#if option.stock}
+                    <Icon name="check" width="16" height="16" />
+                {:else}
+                    <Icon name="close" width="16" height="16" />
                 {/if}
-                <p>
-                    {option.name}
-                    {#if option.price}
-                        - {numberFormatter.format(option.price)}
-                    {/if}
-                </p>
+                <p>{option.name}</p>
             </div>
         {/each}
     </div>
@@ -124,11 +109,12 @@ function toggle(option) {
     cursor: pointer;
     /* Transition function equal to cubicOut (in horizontalSlide) */
     transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.option.selected {
     color: skyblue;
     /* Set padding left-right to take off 16 (width of checkmark) total pixels */
     padding: 5px 8px;
+}
+
+.option.out-of-stock {
+    color: red;
 }
 </style>

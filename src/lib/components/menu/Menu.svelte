@@ -1,46 +1,14 @@
 <script>
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
-import MenuItem from './MenuItem.svelte';
-import { goto } from '$app/navigation';
 import { fade } from 'svelte/transition';
-import Icon from '$lib/components/utility/Icon.svelte';
 
 export let items;
 export let skeleton = false;
 
-$: sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
+$: sortedItems = sortByRefinements(items);
 
-const cartData = new Array(items.length);
-for (let i = 0; i < cartData.length; i++) {
-    cartData[i] = {};
-}
-
-let updatingCart = false;
-
-async function addToCart() {
-    updatingCart = true;
-    const formData = {};
-    for (let menuItem of cartData) {
-        for (let cartItem in menuItem) {
-            if (!menuItem[cartItem]) continue;
-            const { id } = menuItem[cartItem];
-            formData[id + '-' + cartItem] = menuItem[cartItem];
-        }
-    }
-
-    const res = await fetch('/cart.json', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    });
-    if (res.status === 200) {
-        await goto('/cart');
-    } else {
-        console.error(res);
-    }
-    updatingCart = false;
+function sortByRefinements(items) {
+    return items.sort((a, b) => a.name.localeCompare(b.name));
 }
 </script>
 
@@ -75,27 +43,16 @@ async function addToCart() {
                     {#if skeleton}
                         <div out:fade|local={{ duration: 250 }}>
                             <SkeletonLayout>
-                                <MenuItem {item} />
+                                <slot {item} />
                             </SkeletonLayout>
                         </div>
                     {:else}
                         <div in:fade|local={{ delay: 250, duration: 250 }}>
-                            <MenuItem {item} bind:cartItems={cartData[i]} />
+                            <slot {item} />
                         </div>
                     {/if}
                 {/each}
             </div>
-            {#if !skeleton}
-                <button
-                    class="add-to-cart"
-                    on:click={addToCart}
-                    in:fade|local={{ duration: 250, delay: 250 }}
-                    disabled={updatingCart}
-                >
-                    <Icon name="add-shopping-cart" width="30" height="30" />
-                    Add items to cart
-                </button>
-            {/if}
         </div>
     </div>
 </div>
@@ -146,19 +103,6 @@ h2 {
     text-decoration: none;
     color: black;
     box-shadow: 0px 0px 3px 0px black;
-}
-.add-to-cart {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 0px 5px;
-    flex-flow: row nowrap;
-    right: 10px;
-    bottom: 10px;
-    font-size: 30px;
-    margin-top: 30px;
-    border-radius: 10px;
-    cursor: pointer;
 }
 li {
     margin-bottom: 0.5em;

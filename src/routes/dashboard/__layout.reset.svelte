@@ -1,4 +1,6 @@
 <script>
+import { browser } from '$app/env';
+
 import { page } from '$app/stores';
 
 import { signInWithGoogle } from '$lib/auth';
@@ -19,15 +21,17 @@ const navLinks = [
     },
 ];
 
-app.auth().onAuthStateChanged(function (user) {
-    if (!user) {
-        signInWithGoogle();
-    } else {
-        if (!user.email) {
-            app.auth().signOut();
+if (browser) {
+    app.auth().onAuthStateChanged(function (user) {
+        if (!user) {
+            signInWithGoogle();
+        } else {
+            if (!user.email) {
+                app.auth().signOut();
+            }
         }
-    }
-});
+    });
+}
 </script>
 
 <main>

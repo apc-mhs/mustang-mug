@@ -42,7 +42,7 @@ onMount(() => {
         </div>
         <img
             class="mug_logo"
-            src="missingimage.jpg"
+            src="/missingimage.jpg"
             alt="Mustang Mug Logo"
             height="45px"
             width="45px" />

@@ -32,7 +32,7 @@ export let status;
             <div class="number">4</div>
             <div class="coffeemug">
                 <img
-                    src="coffeemug.png"
+                    src="/coffeemug.png"
                     alt="Coffee Cup"
                     height="230px"
                     width="230px"

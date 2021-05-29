@@ -2,7 +2,7 @@
 import Cart from '$lib/components/cart/Cart.svelte';
 import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
-import menuQuery from '../_menuQuery';
+import { query } from '../_menu';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/utility/Button.svelte';
 
@@ -71,7 +71,7 @@ const invalidCartCheckoutTooltipProps = {
 };
 
 let menuItems = [];
-menuQuery().then((data) => (menuItems = data));
+query().then((data) => menuItems = data);
 </script>
 
 <svelte:head>

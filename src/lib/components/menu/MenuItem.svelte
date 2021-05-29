@@ -1,5 +1,5 @@
 <script>
-import { sleep, numberFormatter } from "$lib/utils";
+import { numberFormatter } from "$lib/utils";
 
 import MenuItemOptions from "./MenuItemOptions.svelte";
 
@@ -9,30 +9,21 @@ export let cartItems = [];
 
 const maxPurchaseQuantity = 3;
 
-let itemElem;
 $: {
     for (let i = 0; i < maxPurchaseQuantity; i++) {
         if (!cartItems[i] && i < quantity) {
             cartItems[i] = Object.assign({}, item);
-            // Must manually set options to {} after copying because its reference is copied
+            // Must manually set options to [] after copying because its reference is copied
             cartItems[i].options = [];
         } else if (i >= quantity) {
             cartItems[i] = null;
         }
     }
 }
-
-$: if (itemElem && quantity !== null) {
-    // This is essentially a delayed svelte slide transition
-    sleep(50).then(() => {
-        if (!itemElem) return;
-        itemElem.style.maxHeight = itemElem.scrollHeight + 'px';
-    });
-}
 </script>
 
-<div class="item" class:out-of-stock={!item.stock} bind:this={itemElem}>
-    <img src="{item.image}" alt="Picture of {item.name}">
+<div class="item" class:out-of-stock={!item.stock}>
+    <img src="/{item.image}" alt="Picture of {item.name}">
     <h3>{item.name}</h3>
     <p>{numberFormatter.format(item.price)}</p>
     <label>
@@ -45,7 +36,8 @@ $: if (itemElem && quantity !== null) {
     </label>
     {#each new Array(quantity).fill(0) as _, i (i)}
         <MenuItemOptions
-            message={'Item ' + (i + 1) + ' options:'}
+            optionsMessage={'Item ' + (i + 1) + ' options:'}
+            noOptionsMessage={'Item ' + (i + 1)}
             options={item.options || []}
             bind:selectedOptions={cartItems[i].options} />
     {/each}
@@ -66,9 +58,7 @@ h3 {
     border-radius: 5px;
     overflow: hidden;
     font-size: 16px;
-    max-height: 275px;
     padding-bottom: 10px;
-    transition: max-height 250ms ease;
 }
 .item.out-of-stock > :not(.out-of-stock) {
     opacity: 0.75;
