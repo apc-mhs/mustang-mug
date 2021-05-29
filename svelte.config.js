@@ -15,7 +15,7 @@ const config = {
 };
 
 if (!dev) {
-	config.kit.hostHeader = 'X-Forwarded-Host';
+	config.kit.hostHeader = 'x-forwarded-host';
 }
 
 export default config;

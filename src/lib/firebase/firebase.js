@@ -32,9 +32,9 @@ function loadFirebase() {
                 .catch((err) => {
                     console.error('Persistence failed to enable with error', err);
                 });
-        }
 
-        if (dev) setupEmulatedFirestore(app.firestore());
+            if (dev) setupEmulatedFirestore(app.firestore(), firebase.firestore.Timestamp.fromDate(new Date()));
+        }
     }
     return app;
 }
