@@ -1,7 +1,8 @@
 <script>
+	export let disabled; 
 </script>
 
-<button>
+<button on:click disabled={disabled}>
     <slot></slot>
 </button>
 
