@@ -105,7 +105,7 @@ menuQuery().then((data) => menuItems = data);
             <input id="student-name-input" bind:value={studentName} type="text">
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-        <Button on:click={checkout} style="color: black;" disabled={!validCart}>Checkout</Button>
+        <Button on:click={checkout} disabled={!validCart}>Proceed to checkout</Button>
         </div>
     </div>
 </div>

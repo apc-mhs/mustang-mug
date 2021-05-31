@@ -12,7 +12,7 @@ signInAnonymously();
 Instead we use just <head> and <title> which will set the title for 
 all the pages that don't have a svelte:head (you can test it!) -->
 <head>
-    <title>You shouldn't see this text</title>
+    <title>Dashboard</title>
 </head>
 
 <Navbar />
