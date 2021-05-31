@@ -4,6 +4,7 @@ import { browser } from '$app/env';
 import { page } from '$app/stores';
 
 import { signInWithGoogle } from '$lib/auth';
+import Button from '$lib/components/utility/Button.svelte';
 import app from '$lib/firebase/firebase';
 
 const navLinks = [
@@ -43,7 +44,7 @@ if (browser) {
                     >{link.name}</a>
             {/each}
         </nav>
-        <button on:click={() => app.auth().signOut()}>Sign out</button>
+        <Button on:click={() => app.auth().signOut()}>Sign out</Button>
     </aside>
     <div class="content">
         <slot />

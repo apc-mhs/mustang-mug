@@ -7,7 +7,7 @@
     "preview": "svelte-kit preview"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^1.0.0-next.107",
+    "@sveltejs/kit": "^1.0.0-next.111",
     "cookie": "^0.4.1",
     "dotenv": "^9.0.2",
     "firebase-admin": "^9.8.0",
@@ -16,7 +16,7 @@
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
     "svelte": "^3.38.2",
-    "svelte-adapter-firebase": "github:AndrewLester/svelte-adapter-firebase",
+    "svelte-adapter-firebase": "^0.8.4",
     "svelte-preprocess": "^4.7.3",
     "tippy.js": "^6.3.1"
   },

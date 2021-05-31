@@ -1,30 +1,34 @@
 <script>
-import tippy from '$lib/tippy';
 import { createEventDispatcher } from 'svelte';
+
+import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
+import app from '$lib/firebase/firebase';
+import tippy from '$lib/tippy';
+import Button from '../utility/Button.svelte';
 
 export let option;
 
 const dispatch = createEventDispatcher();
 
-let { name, price, stock } = option;
+let { price, name, stock } = option;
 
 $: changed =
-    item.price !== price ||
-    item.name !== name ||
-    item.stock !== stock;
-
+    option.price !== price ||
+    option.name !== name ||
+    option.stock !== stock;
 </script>
 
-<div class="item" class:out-of-stock={!stock}>
+<div class="option" class:out-of-stock={!stock}>
     <h3>
-        <label>Option name:
+        <label
+            >Option name:
             <input bind:value={name} />
         </label>
     </h3>
     <p>
         <label>
             Option Price:
-            <input bind:value={price} type="number" step="0.01" />
+            <input bind:value={price} type="number" step="0.01" min="0" />
         </label>
     </p>
 
@@ -34,7 +38,7 @@ $: changed =
     </label>
 
     <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
-        <button
+        <Button
             on:click={() =>
                 dispatch('save', {
                     ...option,
@@ -42,7 +46,7 @@ $: changed =
                     name,
                     stock,
                 })}
-            disabled={!changed}>Save</button>
+            disabled={!changed}>Save</Button>
     </span>
 </div>
 
@@ -50,7 +54,10 @@ $: changed =
 h3 {
     margin-bottom: 0px;
 }
-.item {
+.option {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
     width: 250px;
     height: auto;
     border: 1px solid rgb(71, 70, 70);
@@ -60,15 +67,12 @@ h3 {
     font-size: 16px;
     padding-bottom: 10px;
 }
-.item.out-of-stock > :not(.out-of-stock) {
+.option.out-of-stock > :not(.out-of-stock) {
     opacity: 0.75;
 }
 p.out-of-stock {
     color: rgb(253, 54, 54);
     font-weight: bold;
-}
-.item > img {
-    width: 100%;
 }
 label {
     padding: 10px;

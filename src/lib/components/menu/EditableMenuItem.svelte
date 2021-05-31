@@ -4,9 +4,11 @@ import { createEventDispatcher } from 'svelte';
 import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
 import app from '$lib/firebase/firebase';
 import tippy from '$lib/tippy';
+import Button from '../utility/Button.svelte';
 
 export let item;
 export let options;
+export let allOptions;
 
 const dispatch = createEventDispatcher();
 
@@ -47,10 +49,10 @@ $: changed =
     <p>
         <label>
             Item Price:
-            <input bind:value={price} type="number" step="0.01" />
+            <input bind:value={price} type="number" step="0.01" min="0" />
         </label>
     </p>
-    <EditableMenuItemOptions message={'Options:'} bind:options />
+    <EditableMenuItemOptions message={'Options:'} bind:selectedOptions={options} options={allOptions} />
 
     <label>
         In Stock:
@@ -58,10 +60,10 @@ $: changed =
     </label>
 
     <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
-        <button
+        <Button
             on:click={() =>
                 dispatch('save', { ...item, price, name, image, stock, options })}
-            disabled={!changed}>Save</button>
+            disabled={!changed}>Save</Button>
     </span>
 </div>
 
@@ -70,6 +72,9 @@ h3 {
     margin-bottom: 0px;
 }
 .item {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
     width: 250px;
     height: auto;
     border: 1px solid rgb(71, 70, 70);

@@ -35,43 +35,47 @@ function onRemove({ detail: item }) {
     }
 }
 
-function checkout() {
+let checkingOut = false;
+
+async function checkout() {
     if (!studentName) {
         alert('Please enter a student name to checkout.');
         return;
     }
 
-    fetch('/cart/checkout', {
-        method: 'POST',
-        body: JSON.stringify({
-            studentName,
-        }),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => res.json())
-        .then((json) => {
-            if (json) {
-                window.location.href = json.url;
-            }
-        });
+    checkingOut = true;
+
+    try {
+        const json = await fetch('/cart/checkout', {
+            method: 'POST',
+            body: JSON.stringify({
+                studentName,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => res.json());
+
+        if (json) {
+            window.location.href = json.url;
+        } else {
+            throw new Error('Got invalid json from checkout request');
+        }
+    } catch (err) {
+        console.error(err);
+        checkingOut = false;
+    }
 }
 
 const invalidCartCheckoutTooltipProps = {
     content: 'Your cart has no in-stock items and can not be checked out.',
-    placement: 'top',
-    arrow: true,
-    duration: [100, 100],
-    animation: 'shift-away-subtle',
-    touch: ['hold', 450],
-    trigger: 'mouseenter',
-    maxWidth: 150,
     allowHTML: true,
 };
 
 let menuItems = [];
-query().then((data) => menuItems = data);
+query().then(([items, _]) => {
+    menuItems = items;
+});
 </script>
 
 <svelte:head>
@@ -114,7 +118,7 @@ query().then((data) => menuItems = data);
                 type="text" />
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-            <Button on:click={checkout} disabled={!validCart}
+            <Button on:click={checkout} disabled={!validCart || checkingOut}
                 >Proceed to checkout</Button>
         </div>
     </div>
@@ -156,5 +160,6 @@ label {
     align-items: center;
     flex: 0 0 auto;
     width: 25%;
+    gap: 5px;
 }
 </style>

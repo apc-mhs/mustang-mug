@@ -5,7 +5,7 @@ export let content;
 
 </script>
 
-<span class="info-box-launcher" use:tippy={{ content }}>
+<span class="info-box-launcher" use:tippy={content}>
     <slot>?</slot>
 </span>
 

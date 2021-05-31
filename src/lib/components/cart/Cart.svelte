@@ -9,6 +9,7 @@ import tippy from '$lib/tippy';
 import { getDocumentsWhere } from '$lib/query';
 import { browser } from '$app/env';
 import { getOptionIdsFromProperties } from '$lib/msb/cart';
+import Button from '../utility/Button.svelte';
 
 export let cartItems = [];
 export let menuItems = [];
@@ -57,7 +58,7 @@ const outOfStockTooltipProps = {
 
 <!-- Necessary duplicated out:fly here to fly even when cartItems becomes empty, removing this outer div -->
 <div class="items" out:fly|local={{ duration: 250, x: -75 }}>
-    {#each cartItems as item, i (i)}
+    {#each cartItems as item (item.itemId + item.reference)}
         <div
             class="item"
             out:fly|local={{ duration: 250, x: -75 }}
@@ -91,13 +92,13 @@ const outOfStockTooltipProps = {
             {/if}
             <h4 class="item-price">
                 <InfoBox
-                    content="The item price is the cost of the item plus the cost of any of its selected options." />
+                    content="The item price is the cost of the item plus the cost of all of its selected options." />
                 Total Item Price: {numberFormatter.format(item.unitPrice)}
             </h4>
-            <button on:click={() => dispatch('remove', item)}>
-                <Icon name="remove-shopping-cart" width="16" height="16" />
+            <Button on:click={() => dispatch('remove', item)}>
+                <Icon name="remove-shopping-cart" width="20" height="20" />
                 Remove from cart
-            </button>
+            </Button>
         </div>
     {/each}
 </div>
@@ -119,29 +120,11 @@ const outOfStockTooltipProps = {
     width: 600px;
     min-height: 250px;
     padding: 10px 20px;
-}
-
-h2,
-h3,
-h4 {
-    margin-top: 15px;
+    gap: 5px;
 }
 
 .item-price {
     margin-top: auto;
-}
-
-button {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    gap: 0px 5px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:disabled {
-    cursor: default;
 }
 
 span.out-of-stock {

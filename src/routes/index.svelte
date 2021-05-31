@@ -3,6 +3,7 @@ import { goto } from '$app/navigation';
 
 import Menu from '$lib/components/menu/Menu.svelte';
 import MenuItem from '$lib/components/menu/MenuItem.svelte';
+import Button from '$lib/components/utility/Button.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
 import { fade } from 'svelte/transition';
 import { query, postCartItems } from './_menu';
@@ -26,7 +27,6 @@ async function addToCart() {
     if (success) {
         await goto('/cart');
     } else {
-        console.error(res);
         alert('Could not add items to cart. Try again later.');
     }
     updatingCart = false;
@@ -38,18 +38,21 @@ async function addToCart() {
 </svelte:head>
 
 <section>
-    <Menu {skeleton} {items} {options} let:item let:itemOptions>
+    <Menu title="Menu" {skeleton} {items} {options} let:item let:itemOptions>
         <MenuItem {item} options={itemOptions} bind:cartItems={cartItems[item.id]} />
     </Menu>
     {#if !skeleton}
-        <button
-            class="add-to-cart"
-            on:click={addToCart}
-            in:fade|local={{ duration: 250, delay: 250 }}
-            disabled={updatingCart}>
-            <Icon name="add-shopping-cart" width="30" height="30" />
-            Add items to cart
-        </button>
+        <span class="add-to-cart" in:fade|local={{ duration: 250, delay: 250 }}>
+            <Button
+                class="add-to-cart"
+                on:click={addToCart}
+                disabled={updatingCart}
+                --font-size="20px"
+                --border-radius="10px">
+                <Icon name="add-shopping-cart" width="30" height="30" />
+                Add items to cart
+            </Button>
+        </span>
     {/if}
 </section>
 
@@ -63,14 +66,5 @@ section {
     position: fixed;
     bottom: 40px;
     right: 10px;
-    display: flex;
-    align-items: center;
-    gap: 0px 5px;
-    flex-flow: row nowrap;
-    font-size: 30px;
-    border-radius: 10px;
-    cursor: pointer;
-    float: right;
-    clear: both;
 }
 </style>

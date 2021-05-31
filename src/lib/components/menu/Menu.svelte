@@ -3,6 +3,7 @@ import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import Refiner from '$lib/components/menu/Refiner.svelte';
 import { fade } from 'svelte/transition';
 
+export let title;
 export let items;
 export let options;
 export let skeleton = false;
@@ -19,6 +20,8 @@ const skeletonItems = new Array(10).fill(5).map((_) => {
 });
 
 function getOptions(item) {
+    if (!item.options) return [];
+
     const itemOptionIds = new Set(item.options.map((option) => option.id));
     return options.filter((option) => itemOptionIds.has(option.id));
 }
@@ -32,7 +35,7 @@ function getOptions(item) {
     {/if}
     <div class="flex-right">
         <div class="checkboxes">
-            <h2>Menu</h2>
+            <h2>{title}</h2>
             <div class="items">
                 {#each (skeleton ? skeletonItems : items) as item}
                     {#if skeleton}
@@ -55,15 +58,15 @@ function getOptions(item) {
 <style>
 .flex-container {
     display: flex;
-    flex-direction: row;
+    flex-flow: row nowrap;
 }
 .flex-right {
-    flex: 1 0 85%;
+    flex: auto;
     margin: 0.3em;
     padding: 0.3em;
 }
 .flex-left {
-    flex: 1 0 15%;
+    flex: 0 0 auto;
     margin: 0.3em;
     padding: 0.3em;
 }
@@ -85,7 +88,5 @@ h2 {
     justify-content: center;
     flex-flow: row wrap;
     gap: 30px 20px;
-    width: 100%;
-    height: 100%;
 }
 </style>
