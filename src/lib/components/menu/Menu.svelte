@@ -137,6 +137,8 @@ h2 {
     height: 100%;
 }
 .selection-items {
+    position: sticky;
+    top: calc(0.6em + var(--header-height));
     list-style: none;
     margin: 0.3em;
     padding: 0.3em;

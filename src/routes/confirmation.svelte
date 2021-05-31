@@ -22,6 +22,10 @@ $: if (browser && $currentUser) {
 }
 </script>
 
+<svelte:head>
+    <title>Confirmation {resultCodes}</title>
+</svelte:head>
+
 <h1>This page will be for to confirm when someone's order goes through.</h1>
 <h2>Results of your payment</h2>
 {#if resultCodes !== null}

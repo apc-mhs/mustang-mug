@@ -20,6 +20,10 @@ menuQuery()
     });
 </script>
 
+<svelte:head>
+    <title>Menu</title>
+</svelte:head>
+
 <section>
     <Menu {skeleton} items={skeleton ? skeletonItems : items} />
 </section>

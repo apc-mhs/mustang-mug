@@ -4,15 +4,17 @@ import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import menuQuery from '../_menuQuery';
 import tippy from '$lib/tippy';
+import Button from '$lib/components/utility/Button.svelte';
 
 let validCart = false;
 let studentName = '';
+
 let cart;
 if (browser) {
     fetch('/cart.json')
         .then((res) => res.json())
-        .then((json) => cart = json)
-        .catch((err) => cart = null);
+        .then((json) => (cart = json))
+        .catch((err) => (cart = null));
 }
 
 function onRemove({ detail: item }) {
@@ -27,8 +29,8 @@ function onRemove({ detail: item }) {
             method: 'PUT',
             body: JSON.stringify(getCartData(cart)),
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         });
     }
 }
@@ -39,26 +41,25 @@ function checkout() {
         return;
     }
 
-    fetch('/cart/checkout', { 
-        method: 'POST', 
+    fetch('/cart/checkout', {
+        method: 'POST',
         body: JSON.stringify({
-            studentName
+            studentName,
         }),
         headers: {
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
     })
-    .then((res) => res.json())
-    .then((json) => {
-        if (json) {
-            window.location.href = json.url;
-        }
-    });
+        .then((res) => res.json())
+        .then((json) => {
+            if (json) {
+                window.location.href = json.url;
+            }
+        });
 }
 
 const invalidCartCheckoutTooltipProps = {
-    content:
-        'Your cart has no in-stock items and can not be checked out.',
+    content: 'Your cart has no in-stock items and can not be checked out.',
     placement: 'top',
     arrow: true,
     duration: [100, 100],
@@ -70,17 +71,28 @@ const invalidCartCheckoutTooltipProps = {
 };
 
 let menuItems = [];
-menuQuery().then((data) => menuItems = data);
+menuQuery().then((data) => (menuItems = data));
 </script>
+
+<svelte:head>
+    <title>Cart</title>
+</svelte:head>
 
 <div class="cart-view">
     <div class="cart">
         <h1>View your cart</h1>
         {#if (cart || cart === null) && menuItems.length > 0}
             {#if cart !== null && cart.cartItems.length > 0}
-                <Cart bind:cartItems={cart.cartItems} bind:validCart on:remove={onRemove} {menuItems} />
+                <Cart
+                    bind:cartItems={cart.cartItems}
+                    bind:validCart
+                    on:remove={onRemove}
+                    {menuItems} />
             {:else}
-                <h2>There is nothing in your cart. Go to the <a href="/">menu</a> and add a few items.</h2>
+                <h2>
+                    There is nothing in your cart. Go to the <a href="/"
+                        >menu</a> and add a few items.
+                </h2>
             {/if}
         {:else}
             <h2>Loading cart...</h2>
@@ -96,18 +108,17 @@ menuQuery().then((data) => menuItems = data);
         </label>
         <label for="student-name-input">
             Student name:
-            <input id="student-name-input" bind:value={studentName} type="text">
+            <input
+                id="student-name-input"
+                bind:value={studentName}
+                type="text" />
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-            <button
-                on:click={checkout} style="color: black;"
-                disabled={!validCart}>
-                Checkout
-            </button>
+            <Button on:click={checkout} disabled={!validCart}
+                >Proceed to checkout</Button>
         </div>
     </div>
 </div>
-
 
 <style>
 .cart-view {
@@ -120,13 +131,15 @@ menuQuery().then((data) => menuItems = data);
     margin-top: 10px;
 }
 
-h1, h2 {
+h1,
+h2 {
     text-align: center;
     margin-bottom: 10px;
     color: white;
 }
 
-a, label {
+a,
+label {
     color: white;
 }
 
