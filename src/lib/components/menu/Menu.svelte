@@ -9,8 +9,9 @@ export let options;
 export let skeleton = false;
 export let refine = true;
 
-const skeletonItems = new Array(10).fill(5).map((_) => {
+const skeletonItems = new Array(10).fill(5).map((_, i) => {
     return {
+        id: i,
         name: Math.random().toString().substring(0, 5),
         price: 0,
         stock: false,
@@ -37,7 +38,7 @@ function getOptions(item) {
         <div class="checkboxes">
             <h2>{title}</h2>
             <div class="items">
-                {#each (skeleton ? skeletonItems : items) as item}
+                {#each (skeleton ? skeletonItems : items) as item (item.id)}
                     {#if skeleton}
                         <div out:fade|local={{ duration: 250 }}>
                             <SkeletonLayout>

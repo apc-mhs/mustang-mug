@@ -21,7 +21,7 @@ $: if (options) {
 let { price, name, image, stock } = item;
 
 function optionIdSorter(option1, option2) {
-    return option1.id.localCompare(option2.id);
+    return option1.id.localeCompare(option2.id);
 }
 
 $: options = options.sort(optionIdSorter);

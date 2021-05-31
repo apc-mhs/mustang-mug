@@ -1,8 +1,6 @@
 <script>
 import { createEventDispatcher } from 'svelte';
 
-import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
-import app from '$lib/firebase/firebase';
 import tippy from '$lib/tippy';
 import Button from '../utility/Button.svelte';
 
