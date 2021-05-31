@@ -3,7 +3,9 @@ import { getDocuments } from '$lib/query';
 
 async function query() {
     // Only run the query on the browser to support caching
-    return browser ? await getDocuments('items') : [];
+    if (!browser) return [];
+
+    return await Promise.all([getDocuments('items'), getDocuments('options')]);
 }
 
 async function postCartItems(cartItems) {

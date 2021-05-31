@@ -8,22 +8,15 @@ import { fade } from 'svelte/transition';
 import { query, postCartItems } from './_menu';
 
 let skeleton = true;
-const skeletonItems = new Array(10).fill(5).map((_) => {
-    return {
-        name: Math.random().toString().substring(0, 5),
-        price: 0,
-        stock: false,
-        image: 'menu-item-placeholder.jpg',
-    };
-});
-
 let updatingCart = false;
 let items = [];
+let options = [];
 let cartItems = {};
 
 query()
-    .then((data) => {
-        items = data;
+    .then(([ itemsData, optionsData ]) => {
+        items = itemsData;
+        options = optionsData;
         skeleton = false;
     });
 
@@ -45,8 +38,8 @@ async function addToCart() {
 </svelte:head>
 
 <section>
-    <Menu {skeleton} items={skeleton ? skeletonItems : items} let:item>
-        <MenuItem {item} cartItems={cartItems[item.id]} />
+    <Menu {skeleton} {items} {options} let:item let:itemOptions>
+        <MenuItem {item} options={itemOptions} bind:cartItems={cartItems[item.id]} />
     </Menu>
     {#if !skeleton}
         <button

@@ -8,11 +8,19 @@ import { goto } from '$app/navigation';
 const acceptableEmails = [];
 const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
-    app.auth().onIdTokenChanged(async (user) => {
+    async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
-           sameSite: 'strict', secure: true, expires: 1, path: '/'
+            sameSite: 'strict', secure: true, expires: 1, path: '/'
         });
-    })
+    }
+
+    currentUser.subscribe((user) => {
+        updateSessionCookie(user);
+    });
+
+    app.auth().onIdTokenChanged(async (user) => {
+        updateSessionCookie(user);
+    });
 }
 
 /** @returns {Promise<import('firebase/app').User | undefined>} */

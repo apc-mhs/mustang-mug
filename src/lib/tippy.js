@@ -9,9 +9,14 @@ const defaultProps = {
     animation: 'shift-away-subtle',
     touch: ['hold', 450],
     trigger: 'mouseenter',
+    maxWidth: 150
 };
 
 function mergeProps(props) {
+    if (typeof props === 'string') {
+        props = { content: props };
+    }
+
     return {...defaultProps, ...props};
 }
 

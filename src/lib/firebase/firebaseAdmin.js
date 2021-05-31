@@ -4,6 +4,7 @@ import 'firebase/auth';
 import { config } from 'dotenv';
 import path from 'path';
 import { dev } from '$app/env';
+import setupEmulatedFirestore from '$lib/firebase/firestore';
 
 // Load firebase admin environment variables
 if (dev) {
@@ -14,8 +15,6 @@ const appName = import.meta.env.VITE_APP_NAME;
 
 /** @returns {admin.app.App} */
 export function loadFirebaseAdmin() {
-    // Load admin SDK programatically so it won't appear in client
-    // const admin = await import('firebase-admin');
 
     /** @type {admin.app.App} */
     let app;
@@ -26,6 +25,9 @@ export function loadFirebaseAdmin() {
             credential: admin.credential.applicationDefault(),
             databaseURL: "https://mustang-mug-default-rtdb.firebaseio.com"
         }, appName);
+
+        if (dev) setupEmulatedFirestore(app.firestore(), admin.firestore.Timestamp.now());
+
         // The admin SDK automatically applies emulators
         // So no need to call the initializeDev method
     }

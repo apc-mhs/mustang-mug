@@ -2,7 +2,6 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { browser, dev } from '$app/env';
-import setupEmulatedFirestore from '$lib/firebase/firestore';
 
 const appName = import.meta.env.VITE_APP_NAME;
 
@@ -32,8 +31,6 @@ function loadFirebase() {
                 .catch((err) => {
                     console.error('Persistence failed to enable with error', err);
                 });
-
-            if (dev) setupEmulatedFirestore(app.firestore(), firebase.firestore.Timestamp.fromDate(new Date()));
         }
     }
     return app;

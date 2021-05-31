@@ -1,58 +1,29 @@
 <script>
 import { slide } from 'svelte/transition';
 import Icon from '$lib/components/utility/Icon.svelte';
-import { horizontalSlide } from '$lib/transition';
-import { browser } from '$app/env';
-import { numberFormatter } from '$lib/utils';
-import app, { firebase } from '$lib/firebase/firebase';
 import tippy from '$lib/tippy';
 
 export let options;
-export let noOptionsMessage = '';
-export let optionsMessage = '';
 
-let optionsData = [];
-
-if (browser) {
-    const validOptionIds = options.map((option) => option.id);
-
-    const queries = [];
-    // Maximum 10 elements in a firestore 'in' query
-    for (let i = 0; i < Math.ceil(validOptionIds.length / 10); i++) {
-        const offset = i * 10;
-        queries.push(
-            getOptionsForOptionIds(validOptionIds.slice(offset, offset + 10))
-        );
-    }
-
-    Promise.all(queries)
-        .then((snapshots) => snapshots.flatMap((snapshot) => snapshot.docs))
-        .then((docs) => docs.map((doc) => doc.data()))
-        .then((data) => (optionsData = data));
+function remove(optionIndex) {
+    options.splice(optionIndex, 1);
+    options = options;
 }
 
-function getOptionsForOptionIds(optionIds) {
-    return app
-        .firestore()
-        .collection('options')
-        .where(firebase.firestore.FieldPath.documentId(), 'in', optionIds)
-        .get();
-}
-
-function toggle(optionIndex) {
-    optionsData[optionIndex].stock = !optionsData[optionIndex].stock;
-}
+const outOfStockMessage = 'This option is marked out of stock. Click to remove it.';
+const removeOptionMessage = 'Remove this option from the item.';
 </script>
 
 <div class="item-options" transition:slide|local>
-    <p>{optionsData.length === 0 ? noOptionsMessage : optionsMessage}</p>
+    <AutocompleteChooser />
     <div class="options-list">
-        {#each optionsData as option, i (i)}
+        {#each options as option, i (i)}
             <div
                 class="option"
-                on:click={() => toggle(i)}
-                transition:slide|local
-                use:tippy={!option.stock ? { content: 'This option is marked out of stock.', maxWidth: 150 } : undefined}
+                on:click={() => remove(i)}
+                use:tippy={!option.stock
+                    ? outOfStockMessage
+                    : removeOptionMessage}
                 class:out-of-stock={!option.stock}>
                 {#if option.stock}
                     <Icon name="check" width="16" height="16" />

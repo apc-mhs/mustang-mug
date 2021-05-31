@@ -2,44 +2,14 @@
 import { slide } from 'svelte/transition';
 import Icon from '$lib/components/utility/Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
-import { browser } from '$app/env';
 import { numberFormatter } from '$lib/utils';
-import app, { firebase } from '$lib/firebase/firebase';
 
 export let options;
 export let noOptionsMessage = '';
 export let optionsMessage = '';
 export let selectedOptions = [];
 
-let optionsData = [];
-$: availableOptions = optionsData.filter((option) => option.stock);
-
-if (browser) {
-    const validOptionIds = options.map((option) => option.id);
-
-    const queries = [];
-    // Maximum 10 elements in a firestore 'in' query
-    for (let i = 0; i < Math.ceil(validOptionIds.length / 10); i++) {
-        const offset = i * 10;
-        queries.push(getOptionsForOptionIds(validOptionIds.slice(offset, offset + 10)));
-    }
-
-    Promise.all(queries)
-        .then((snapshots) => snapshots.flatMap((snapshot) => snapshot.docs))
-        .then((docs) => docs.map((doc) => doc.data()))
-        .then((data) => optionsData = data);
-}
-
-function getOptionsForOptionIds(optionIds) {
-    return app.firestore()
-        .collection('options')
-        .where(
-            firebase.firestore.FieldPath.documentId(),
-            'in',
-            optionIds
-        )
-        .get();
-}
+$: availableOptions = options.filter((option) => option.stock);
 
 function toggle(option) {
     if (!option.stock) return;
@@ -62,7 +32,6 @@ function toggle(option) {
             <div
                 class="option"
                 on:click={() => toggle(option)}
-                transition:slide|local
                 class:selected={selectedOptions.includes(option)}>
                 {#if selectedOptions.includes(option)}
                     <span transition:horizontalSlide|local>

@@ -4,12 +4,13 @@ import { numberFormatter } from "$lib/utils";
 import MenuItemOptions from "./MenuItemOptions.svelte";
 
 export let item;
+export let options = [];
 export let quantity = 0;
 export let cartItems = [];
 
 const maxPurchaseQuantity = 3;
 
-$: {
+$: if (cartItems) {
     for (let i = 0; i < maxPurchaseQuantity; i++) {
         if (!cartItems[i] && i < quantity) {
             cartItems[i] = Object.assign({}, item);
@@ -38,7 +39,7 @@ $: {
         <MenuItemOptions
             optionsMessage={'Item ' + (i + 1) + ' options:'}
             noOptionsMessage={'Item ' + (i + 1)}
-            options={item.options || []}
+            {options}
             bind:selectedOptions={cartItems[i].options} />
     {/each}
     {#if !item.stock}

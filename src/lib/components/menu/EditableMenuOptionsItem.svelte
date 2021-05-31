@@ -1,56 +1,32 @@
 <script>
+import tippy from '$lib/tippy';
 import { createEventDispatcher } from 'svelte';
 
-import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
-import app from '$lib/firebase/firebase';
-import tippy from '$lib/tippy';
-
-export let item;
-export let options;
+export let option;
 
 const dispatch = createEventDispatcher();
 
-$: if (options) {
-    item.options = options.map((option) =>
-        app.firestore().doc('options/' + option.id)
-    );
-}
-
-let { price, name, image, stock } = item;
-
-function optionIdSorter(option1, option2) {
-    return option1.id.localCompare(option2.id);
-}
-
-$: options = options.sort(optionIdSorter);
+let { name, price, stock } = option;
 
 $: changed =
     item.price !== price ||
     item.name !== name ||
-    item.image !== image ||
-    item.stock !== stock ||
-    item.options.sort(optionIdSorter).some((option, i) => option.id !== options[i].id);
+    item.stock !== stock;
+
 </script>
 
 <div class="item" class:out-of-stock={!stock}>
-    <img src="/{image}" alt="Picture of {image}" />
-    <label>
-        Item picture:
-        <input bind:value={image} />
-    </label>
     <h3>
-        <label
-            >Item name:
+        <label>Option name:
             <input bind:value={name} />
         </label>
     </h3>
     <p>
         <label>
-            Item Price:
+            Option Price:
             <input bind:value={price} type="number" step="0.01" />
         </label>
     </p>
-    <EditableMenuItemOptions message={'Options:'} bind:options />
 
     <label>
         In Stock:
@@ -60,7 +36,12 @@ $: changed =
     <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
         <button
             on:click={() =>
-                dispatch('save', { ...item, price, name, image, stock, options })}
+                dispatch('save', {
+                    ...option,
+                    price,
+                    name,
+                    stock,
+                })}
             disabled={!changed}>Save</button>
     </span>
 </div>
