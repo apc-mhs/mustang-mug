@@ -8,11 +8,19 @@ import { goto } from '$app/navigation';
 const acceptableEmails = [];
 const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
-    app.auth().onIdTokenChanged(async (user) => {
+    async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
-           sameSite: 'strict', secure: true, expires: 1, path: '/'
+            sameSite: 'strict', secure: true, expires: 1, path: '/'
         });
-    })
+    }
+
+    currentUser.subscribe((user) => {
+        updateSessionCookie(user);
+    });
+
+    app.auth().onIdTokenChanged(async (user) => {
+        updateSessionCookie(user);
+    });
 }
 
 /** @returns {Promise<import('firebase/app').User | undefined>} */
@@ -21,6 +29,9 @@ async function signInAnonymously() {
     if (!browser) {
         return;
     }
+
+    // If the current user is signed in with Google (dashboard only)
+    if (app.auth().currentUser && app.auth().currentUser.email) app.auth().signOut();
 
     try {
         return await app.auth().signInAnonymously();

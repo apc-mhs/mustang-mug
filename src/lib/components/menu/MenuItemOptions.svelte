@@ -1,35 +1,15 @@
 <script>
-import { getDocuments, getDocumentsWhere } from '$lib/query';
 import { slide } from 'svelte/transition';
 import Icon from '$lib/components/utility/Icon.svelte';
 import { horizontalSlide } from '$lib/transition';
-import { browser } from '$app/env';
 import { numberFormatter } from '$lib/utils';
 
 export let options;
-export let message = '';
+export let noOptionsMessage = '';
+export let optionsMessage = '';
 export let selectedOptions = [];
 
-let optionsData = [];
-
-// This should work but it doesn't:
-// https://stackoverflow.com/questions/55436558/using-fieldpath-documentid-equals-throws-cannot-have-inequality-filters-on
-// getDocumentsWhere('options', (queryable) => {
-//     return queryable.where(
-//         firebase.firestore.FieldPath.documentId(),
-//         'in',
-//         options.map((option) => option.id)
-//     );
-// })
-
-if (browser) {
-    getDocuments('options').then((data) => {
-        const validOptionIds = options.map((option) => option.id);
-        optionsData = data.filter((option) =>
-            validOptionIds.includes(option.id)
-        );
-    });
-}
+$: availableOptions = options.filter((option) => option.stock);
 
 function toggle(option) {
     if (!option.stock) return;
@@ -45,14 +25,13 @@ function toggle(option) {
 }
 </script>
 
-<div class="item-options" out:slide|local>
-    <p>{message}</p>
+<div class="item-options" transition:slide|local>
+    <p>{availableOptions.length === 0 ? noOptionsMessage : optionsMessage}</p>
     <div class="options-list">
-        {#each optionsData.filter((option) => option.stock) as option}
+        {#each availableOptions as option}
             <div
                 class="option"
-                on:click={toggle(option)}
-                class:out-of-stock={!option.stock}
+                on:click={() => toggle(option)}
                 class:selected={selectedOptions.includes(option)}>
                 {#if selectedOptions.includes(option)}
                     <span transition:horizontalSlide|local>
@@ -114,10 +93,6 @@ function toggle(option) {
     cursor: pointer;
     /* Transition function equal to cubicOut (in horizontalSlide) */
     transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.option.out-of-stock {
-    color: rgb(104, 104, 104);
 }
 
 .option.selected {

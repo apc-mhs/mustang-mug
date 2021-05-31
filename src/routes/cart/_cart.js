@@ -36,7 +36,7 @@ async function addItemsToCart(body, user, host) {
     const newCartItems = createCartItemsWithProperties(body, user);
     cart.cartItems = cart.cartItems.concat(newCartItems);
 
-    return await updateCart(getCartData(cart), cart.id);;
+    return await updateCart(getCartData(cart), cart.id);
 }
 
 /** @returns {Promise<boolean>} */

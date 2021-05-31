@@ -35,20 +35,24 @@ export async function get({ query }) {
                     .get();
 
                 if (!cartSnapshot.empty) {
-                    const cart = cartSnapshot.docs[0];
-                    await app.firestore().collection('carts').doc(cart.id).set({
+                    const cartDocument = cartSnapshot.docs[0];
+                    await app.firestore().collection('carts').doc(cartDocument.id).set({
                         cartId: '',
                         resultCodes: res.resultCodes
                     }, {
                         merge: true
                     });
-                }
 
-                return {
-                    status: 302,
-                    headers: {
-                        Location: '/confirmation'
-                    },
+                    await app.firestore().collection('payments').doc(cartDocument.id).set({
+                       paymentIds: res.paymentIds
+                    });
+
+                    return {
+                        status: 302,
+                        headers: {
+                            Location: '/confirmation'
+                        },
+                    }
                 }
             }
         }

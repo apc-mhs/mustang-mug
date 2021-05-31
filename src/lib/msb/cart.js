@@ -1,5 +1,6 @@
 import { clientId, departmentId, storeId, paymentMethodId } from '$lib/msb';
 import { numberFormatter } from '$lib/utils';
+import crypto from 'crypto';
 
 /**
  * Turn a cart object received from the MSB Pay API
@@ -26,7 +27,7 @@ function createCartItemsWithProperties(formData, user) {
             salesTaxAmount: 0,
             displaySalesTaxRate: 0,
             studentName: 'Test',
-            reference: user.uid + ':' + cartItem.id,
+            reference: user.uid + ':' + crypto.randomBytes(20).toString('hex'),
             properties: constructPropertiesFromOptions(cartItem.options)
         });
     }

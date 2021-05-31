@@ -1,7 +1,10 @@
 <script>
+import { browser } from '$app/env';
+
 import { page } from '$app/stores';
 
 import { signInWithGoogle } from '$lib/auth';
+import Button from '$lib/components/utility/Button.svelte';
 import app from '$lib/firebase/firebase';
 
 const navLinks = [
@@ -19,15 +22,17 @@ const navLinks = [
     },
 ];
 
-app.auth().onAuthStateChanged(function (user) {
-    if (!user) {
-        signInWithGoogle();
-    } else {
-        if (!user.email) {
-            app.auth().signOut();
+if (browser) {
+    app.auth().onAuthStateChanged(function (user) {
+        if (!user) {
+            signInWithGoogle();
+        } else {
+            if (!user.email) {
+                app.auth().signOut();
+            }
         }
-    }
-});
+    });
+}
 </script>
 
 <main>
@@ -39,7 +44,7 @@ app.auth().onAuthStateChanged(function (user) {
                     >{link.name}</a>
             {/each}
         </nav>
-        <button on:click={() => app.auth().signOut()}>Sign out</button>
+        <Button on:click={() => app.auth().signOut()}>Sign out</Button>
     </aside>
     <div class="content">
         <slot />

@@ -1,14 +1,48 @@
 <script>
+import EditableMenuItem from '$lib/components/menu/EditableMenuItem.svelte';
+import EditableMenuOptionsItem from '$lib/components/menu/EditableMenuOptionsItem.svelte';
 import Menu from "$lib/components/menu/Menu.svelte";
-import { getDocuments } from "$lib/query";
+import app, { firebase } from '$lib/firebase/firebase';
+import { query } from '../_menu';
 
 
-let menuItems = [];
-getDocuments('items')
-    .then((items) => menuItems = items);
+let items = [];
+let options = [];
+
+query()
+    .then(([ itemsData, optionsData ]) => {
+        items = itemsData;
+        options = optionsData;
+    });
+
+async function save(itemData) {
+    itemData.lastModified = firebase.firestore.Timestamp.now();
+
+    // Update the menu item in the main menuItems array
+    items = [...items.filter((i) => itemData.id !== i.id), itemData];
+    // Update the menu item + options in firestore
+    await app.firestore().collection('items').doc(itemData.id).set(itemData, { merge: true });
+    // TODO: Post a notification on save
+}
+
+async function saveOption(optionData) {
+    optionData.lastModified = firebase.firestore.Timestamp.now();
+
+    // Update the menu item in the main menuItems array
+    options = [...options.filter((i) => optionData.id !== i.id), optionData];
+    // Update the menu item + options in firestore
+    await app.firestore().collection('options').doc(optionData.id).set(optionData, { merge: true });
+    // TODO: Post a notification on save
+}
 </script>
 
+<Menu title="Menu Items" refine={false} {items} {options} skeleton={items.length < 1} let:item let:itemOptions>
+    <EditableMenuItem {item} options={itemOptions} on:save={(e) => save(e.detail)} allOptions={options} />
+</Menu>
 
+<Menu title="Menu Options" refine={false} items={options} options={[]} skeleton={options.length < 1} let:item>
+    <EditableMenuOptionsItem option={item} on:save={(e) => saveOption(e.detail)} />
+</Menu>
 
 <style>
 

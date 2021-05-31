@@ -1,101 +1,57 @@
 <script>
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
-import MenuItem from './MenuItem.svelte';
-import { goto } from '$app/navigation';
+import Refiner from '$lib/components/menu/Refiner.svelte';
 import { fade } from 'svelte/transition';
-import Icon from '$lib/components/utility/Icon.svelte';
 
+export let title;
 export let items;
+export let options;
 export let skeleton = false;
+export let refine = true;
 
-$: sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
+const skeletonItems = new Array(10).fill(5).map((_, i) => {
+    return {
+        id: i,
+        name: Math.random().toString().substring(0, 5),
+        price: 0,
+        stock: false,
+        options: [],
+        image: 'menu-item-placeholder.jpg',
+    };
+});
 
-const cartData = new Array(items.length);
-for (let i = 0; i < cartData.length; i++) {
-    cartData[i] = {};
-}
+function getOptions(item) {
+    if (!item.options) return [];
 
-let updatingCart = false;
-
-async function addToCart() {
-    updatingCart = true;
-    const formData = {};
-    for (let menuItem of cartData) {
-        for (let cartItem in menuItem) {
-            if (!menuItem[cartItem]) continue;
-            const { id } = menuItem[cartItem];
-            formData[id + '-' + cartItem] = menuItem[cartItem];
-        }
-    }
-
-    const res = await fetch('/cart.json', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    });
-    if (res.status === 200) {
-        await goto('/cart');
-    } else {
-        console.error(res);
-    }
-    updatingCart = false;
+    const itemOptionIds = new Set(item.options.map((option) => option.id));
+    return options.filter((option) => itemOptionIds.has(option.id));
 }
 </script>
 
 <div class="flex-container">
-    <div class="flex-left">
-        <ul class="selection-items">
-            <!-- I'm fairly certain these can be hard-coded and then do stuff with the script but I tried to set it up for scalability-->
-            <h2>Refine Menu</h2>
-            <li>
-                <input type="checkbox" id="item1" />
-                <label for="item1">Selection 1</label>
-            </li>
-            <li>
-                <input type="checkbox" id="item2" />
-                <label for="item2">Selection 2</label>
-            </li>
-            <li>
-                <input type="checkbox" id="item2" />
-                <label for="item2">Selection 3</label>
-            </li>
-            <li>
-                <p>Scale</p>
-                <input type="range" min="1" max="100" value="100" />
-            </li>
-        </ul>
-    </div>
+    {#if refine}
+        <div class="flex-left">
+            <Refiner bind:refinedItems={items} />
+        </div>
+    {/if}
     <div class="flex-right">
         <div class="checkboxes">
-            <h2>Menu</h2>
+            <h2>{title}</h2>
             <div class="items">
-                {#each sortedItems as item, i}
+                {#each (skeleton ? skeletonItems : items) as item (item.id)}
                     {#if skeleton}
                         <div out:fade|local={{ duration: 250 }}>
                             <SkeletonLayout>
-                                <MenuItem {item} />
+                                <slot {item} />
                             </SkeletonLayout>
                         </div>
                     {:else}
                         <div in:fade|local={{ delay: 250, duration: 250 }}>
-                            <MenuItem {item} bind:cartItems={cartData[i]} />
+                            <slot {item} itemOptions={getOptions(item)} />
                         </div>
                     {/if}
                 {/each}
             </div>
-            {#if !skeleton}
-                <button
-                    class="add-to-cart"
-                    on:click={addToCart}
-                    in:fade|local={{ duration: 250, delay: 250 }}
-                    disabled={updatingCart}
-                >
-                    <Icon name="add-shopping-cart" width="30" height="30" />
-                    Add items to cart
-                </button>
-            {/if}
         </div>
     </div>
 </div>
@@ -103,15 +59,15 @@ async function addToCart() {
 <style>
 .flex-container {
     display: flex;
-    flex-direction: row;
+    flex-flow: row nowrap;
 }
 .flex-right {
-    width: 85%;
+    flex: auto;
     margin: 0.3em;
     padding: 0.3em;
 }
 .flex-left {
-    width: 15%;
+    flex: 0 0 auto;
     margin: 0.3em;
     padding: 0.3em;
 }
@@ -133,37 +89,5 @@ h2 {
     justify-content: center;
     flex-flow: row wrap;
     gap: 30px 20px;
-    width: 100%;
-    height: 100%;
-}
-.selection-items {
-    position: sticky;
-    top: calc(0.6em + var(--header-height));
-    list-style: none;
-    margin: 0.3em;
-    padding: 0.3em;
-    background-color: rgb(175, 175, 175);
-    text-decoration: none;
-    color: black;
-    box-shadow: 0px 0px 3px 0px black;
-}
-.add-to-cart {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    gap: 0px 5px;
-    flex-flow: row nowrap;
-    right: 10px;
-    bottom: 10px;
-    font-size: 30px;
-    margin-top: 30px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-li {
-    margin-bottom: 0.5em;
-}
-.selection-items li:hover {
-    background-color: #c5c5c5;
 }
 </style>

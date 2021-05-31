@@ -2,7 +2,7 @@ import { currentUser } from '$lib/auth';
 import app from '$lib/firebase/firebaseAdmin';
 import cookie from 'cookie';
 
-export async function handle({ request, render }) {
+export async function handle({ request, resolve }) {
     const cookies = cookie.parse(request.headers.cookie || '');
     let token;
     if (cookies.__session) {
@@ -17,5 +17,5 @@ export async function handle({ request, render }) {
     currentUser.set(user);
     request.locals.user = user;
 
-    return render(request);
+    return resolve(request);
 }
