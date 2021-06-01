@@ -5,7 +5,6 @@
     <p class="inline">
         © 2021 Falls Church City Public Schools and GMHS Advanced Programming
         Club.
-        <!-- have this go to wherever FCCPS online content disclaimer is-->
         <a
             href="documentation/fccps_acceptable_use.pdf"
             target="_blank"
