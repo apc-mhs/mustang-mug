@@ -49,7 +49,7 @@ export function closeMobileMenu() {
         </div>
         <img
             class="mug_logo"
-            src="/missingimage.jpg"
+            src="/mustang-mug-logo.png"
             alt="Mustang Mug Logo"
             height="45px"
             width="45px" />
