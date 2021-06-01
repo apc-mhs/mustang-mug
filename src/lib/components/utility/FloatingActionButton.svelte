@@ -1,10 +1,14 @@
 <script>
 import Button from '$lib/components/utility/Button.svelte';
 import { horizontalSlide } from '$lib/transition';
+import { onDestroy } from 'svelte';
 import { fade } from 'svelte/transition';
 
 export let disabled;
 
+// This variable should be turned into a store or passed
+// through component context
+let mobile = false;
 let movingUp = true;
 let lastScroll = 0;
 
@@ -14,6 +18,9 @@ function onScroll() {
     movingUp = currentScroll < lastScroll;
     lastScroll = Math.max(0, currentScroll);
 }
+
+const mediaQuery = window.matchMedia('(max-width: 650px)');
+mediaQuery.addEventListener('change', (e) => mobile = e.matches);
 </script>
 
 <svelte:window on:scroll={onScroll} />
@@ -27,7 +34,7 @@ function onScroll() {
         --padding={!movingUp ? '9px' : '9px 26px'}
         --gap="0px">
         <slot name="icon" />
-        {#if movingUp}
+        {#if movingUp || !mobile}
             <span transition:horizontalSlide class="text-wrapper">
                 <slot name="text" />
             </span>
