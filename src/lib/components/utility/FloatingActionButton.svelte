@@ -35,7 +35,7 @@ mediaQuery.addEventListener('change', (e) => mobile = e.matches);
         --gap="0px">
         <slot name="icon" />
         {#if movingUp || !mobile}
-            <span transition:horizontalSlide class="text-wrapper">
+            <span transition:horizontalSlide|local class="text-wrapper">
                 <slot name="text" />
             </span>
         {/if}
