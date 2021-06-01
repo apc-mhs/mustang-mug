@@ -3,5 +3,5 @@
     "svelteIndentScriptAndStyle": false,
     "tabWidth": 4,
     "singleQuote": true,
-    "svelteBracketNewLine": false 
+    "svelteBracketNewLine": false
 }

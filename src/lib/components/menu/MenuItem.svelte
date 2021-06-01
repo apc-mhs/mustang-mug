@@ -1,7 +1,7 @@
 <script>
-import { numberFormatter } from "$lib/utils";
+import { numberFormatter } from '$lib/utils';
 
-import MenuItemOptions from "./MenuItemOptions.svelte";
+import MenuItemOptions from './MenuItemOptions.svelte';
 
 export let item;
 export let options = [];
@@ -24,7 +24,7 @@ $: if (cartItems) {
 </script>
 
 <div class="item" class:out-of-stock={!item.stock}>
-    <img src="/{item.image}" alt="Picture of {item.name}">
+    <img src="/{item.image}" alt="Picture of {item.name}" />
     <h3>{item.name}</h3>
     <p>{numberFormatter.format(item.price)}</p>
     <label>

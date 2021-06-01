@@ -1,24 +1,24 @@
 {
-  "name": "mustang-mug",
-  "version": "0.1.0",
-  "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "npx -y rimraf public/* && svelte-kit build && npx -y touch public/.gitkeep",
-    "preview": "svelte-kit preview"
-  },
-  "devDependencies": {
-    "@sveltejs/kit": "^1.0.0-next.111",
-    "cookie": "^0.4.1",
-    "dotenv": "^9.0.2",
-    "firebase-admin": "^9.8.0",
-    "js-cookie": "^2.2.1",
-    "msb_pay_api": "github:AndrewLester/msb_pay_api",
-    "rxfire": "^4.0.0",
-    "rxjs": "^6.6.7",
-    "svelte": "^3.38.2",
-    "svelte-adapter-firebase": "^0.8.4",
-    "svelte-preprocess": "^4.7.3",
-    "tippy.js": "^6.3.1"
-  },
-  "type": "module"
+    "name": "mustang-mug",
+    "version": "0.1.0",
+    "scripts": {
+        "dev": "svelte-kit dev",
+        "build": "npx -y rimraf public/* && svelte-kit build && npx -y touch public/.gitkeep",
+        "preview": "svelte-kit preview"
+    },
+    "devDependencies": {
+        "@sveltejs/kit": "^1.0.0-next.111",
+        "cookie": "^0.4.1",
+        "dotenv": "^9.0.2",
+        "firebase-admin": "^9.8.0",
+        "js-cookie": "^2.2.1",
+        "msb_pay_api": "github:AndrewLester/msb_pay_api",
+        "rxfire": "^4.0.0",
+        "rxjs": "^6.6.7",
+        "svelte": "^3.38.2",
+        "svelte-adapter-firebase": "^0.8.4",
+        "svelte-preprocess": "^4.7.3",
+        "tippy.js": "^6.3.1"
+    },
+    "type": "module"
 }

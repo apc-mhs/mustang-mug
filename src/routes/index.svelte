@@ -22,8 +22,12 @@ query().then(([itemsData, optionsData]) => {
 });
 
 async function addToCart() {
-    if (Object.values(cartItems).every((itemList) => itemList.every((item) => item === null))) {
-        alert('Select some items before adding them to your cart.')
+    if (
+        Object.values(cartItems).every((itemList) =>
+            itemList.every((item) => item === null)
+        )
+    ) {
+        alert('Select some items before adding them to your cart.');
         return;
     }
 

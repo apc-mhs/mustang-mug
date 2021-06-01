@@ -1,19 +1,19 @@
 {
-  "indexes": [
-    {
-      "collectionGroup": "options",
-      "queryScope": "COLLECTION",
-      "fields": [
+    "indexes": [
         {
-          "fieldPath": "stock",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "lastModified",
-          "order": "ASCENDING"
+            "collectionGroup": "options",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "stock",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "lastModified",
+                    "order": "ASCENDING"
+                }
+            ]
         }
-      ]
-    }
-  ],
-  "fieldOverrides": []
+    ],
+    "fieldOverrides": []
 }

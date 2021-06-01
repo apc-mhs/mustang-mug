@@ -1,7 +1,4 @@
-import {
-    getCartData,
-    getOptionIdsFromProperties,
-} from '$lib/msb/cart';
+import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { updateCart, getCart, getCartIdFor } from './_cart';
 import app from '$lib/firebase/firebaseAdmin';
 
@@ -13,8 +10,8 @@ export async function post({ locals, body }) {
     if (!user) {
         return {
             status: 400,
-            body: 'Can\'t manipulate a cart before signing in'
-        }
+            body: "Can't manipulate a cart before signing in",
+        };
     }
 
     const cartId = await getCartIdFor(user);
@@ -22,7 +19,7 @@ export async function post({ locals, body }) {
     if (!cart) {
         return {
             status: 400,
-            body: 'User does not have a cart'
+            body: 'User does not have a cart',
         };
     }
 
@@ -35,35 +32,40 @@ export async function post({ locals, body }) {
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,
-            body: 'Your cart was left in an incomplete state after processing. (Your items may have been marked out of stock)'
-        }
+            body: 'Your cart was left in an incomplete state after processing. (Your items may have been marked out of stock)',
+        };
     }
 
     return {
         status: 200,
         body: {
-            url: cart.checkoutUrl
-        }
+            url: cart.checkoutUrl,
+        },
     };
 }
 
 async function removeOutOfStockItems(cart) {
     const [outOfStockItemIds, outOfStockOptionIds] = await Promise.all([
-        app.firestore()
+        app
+            .firestore()
             .collection('items')
             .where('stock', '==', false)
             .get()
             .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
-        app.firestore()
+        app
+            .firestore()
             .collection('options')
             .where('stock', '==', false)
             .get()
-            .then((snapshot) => snapshot.docs.map((doc) => doc.id))
+            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
     ]);
 
     cart.cartItems = cart.cartItems.filter((cartItem) => {
-        return !outOfStockItemIds.includes(cartItem.itemId)
-            && !getOptionIdsFromProperties(cartItem.properties)
-                .some((optionId) => outOfStockOptionIds.includes(optionId))
+        return (
+            !outOfStockItemIds.includes(cartItem.itemId) &&
+            !getOptionIdsFromProperties(cartItem.properties).some((optionId) =>
+                outOfStockOptionIds.includes(optionId)
+            )
+        );
     });
 }

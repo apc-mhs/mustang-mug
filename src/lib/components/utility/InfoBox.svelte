@@ -2,7 +2,6 @@
 import tippy from '$lib/tippy';
 
 export let content;
-
 </script>
 
 <span class="info-box-launcher" use:tippy={content}>

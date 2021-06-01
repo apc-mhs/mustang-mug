@@ -9,7 +9,7 @@ const defaultProps = {
     animation: 'shift-away-subtle',
     touch: ['hold', 450],
     trigger: 'mouseenter',
-    maxWidth: 150
+    maxWidth: 150,
 };
 
 function mergeProps(props) {
@@ -17,10 +17,10 @@ function mergeProps(props) {
         props = { content: props };
     }
 
-    return {...defaultProps, ...props};
+    return { ...defaultProps, ...props };
 }
 
-export default function(node, props) {
+export default function (node, props) {
     if (props) tippy(node, mergeProps(props));
 
     return {
@@ -34,6 +34,6 @@ export default function(node, props) {
         },
         destroy() {
             if (node._tippy) node._tippy.destroy();
-        }
+        },
     };
 }

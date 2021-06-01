@@ -8,12 +8,12 @@ export async function handle({ request, resolve }) {
     if (cookies.__session) {
         try {
             token = await app.auth().verifyIdToken(cookies.__session);
-        } catch (error) { 
+        } catch (error) {
             console.log(error);
         }
     }
-    
-    const user = token && await app.auth().getUser(token.uid);
+
+    const user = token && (await app.auth().getUser(token.uid));
     currentUser.set(user);
     request.locals.user = user;
 

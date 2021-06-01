@@ -65,7 +65,10 @@ export function closeMobileMenu() {
                     {/if}
                 </li>
             {/each}
-            <li><a href="cart"><Icon name="cart-icon" width="30" height="30" /></a></li>
+            <li>
+                <a href="cart"
+                    ><Icon name="cart-icon" width="30" height="30" /></a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -167,11 +170,13 @@ div.lower-line {
 }
 
 .mobile-icon.active .upper-line {
-    transform: translateY(calc(calc(var(--icon-height) / 2) - 50%)) rotate(135deg);
+    transform: translateY(calc(calc(var(--icon-height) / 2) - 50%))
+        rotate(135deg);
 }
 
 .mobile-icon.active .lower-line {
-    transform: translateY(calc(-1 * calc(calc(var(--icon-height) / 2) - 50%))) rotate(-135deg);
+    transform: translateY(calc(-1 * calc(calc(var(--icon-height) / 2) - 50%)))
+        rotate(-135deg);
 }
 
 .mobile-icon.active .middle-line {

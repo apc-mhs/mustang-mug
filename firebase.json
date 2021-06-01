@@ -1,43 +1,43 @@
 {
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "hosting": {
-    "site": "mustang-mug",
-    "public": "public",
-    "rewrites": [
-      {
-        "source": "**",
-        "function": "ssrServer"
-      }
-    ],
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**",
-      "/src/",
-      "/resources/"
-    ]
-  },
-  "functions": {
-    "source": "functions"
-  },
-  "emulators": {
-    "functions": {
-      "port": 5001
-    },
-    "auth": {
-      "port": "9099"
-    },
     "firestore": {
-      "port": 8080
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
     },
     "hosting": {
-      "port": 5000
+        "site": "mustang-mug",
+        "public": "public",
+        "rewrites": [
+            {
+                "source": "**",
+                "function": "ssrServer"
+            }
+        ],
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**",
+            "/src/",
+            "/resources/"
+        ]
     },
-    "ui": {
-      "enabled": true
+    "functions": {
+        "source": "functions"
+    },
+    "emulators": {
+        "functions": {
+            "port": 5001
+        },
+        "auth": {
+            "port": "9099"
+        },
+        "firestore": {
+            "port": 8080
+        },
+        "hosting": {
+            "port": 5000
+        },
+        "ui": {
+            "enabled": true
+        }
     }
-  }
 }

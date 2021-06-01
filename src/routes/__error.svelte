@@ -35,8 +35,7 @@ export let status;
                     src="/coffeemug.png"
                     alt="Coffee Cup"
                     height="230px"
-                    width="230px"
-                />
+                    width="230px" />
             </div>
             <div class="number">4</div>
         </div>
@@ -58,8 +57,7 @@ export let status;
                             src="coffeemug.png"
                             alt="Coffee Cup"
                             height="230px"
-                            width="230px"
-                        />
+                            width="230px" />
                     </div>
                 {:else}
                     <div class="number">{char}</div>

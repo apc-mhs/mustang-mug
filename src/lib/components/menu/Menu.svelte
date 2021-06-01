@@ -38,7 +38,7 @@ function getOptions(item) {
         <div class="menu">
             <h2>{title}</h2>
             <div class="items">
-                {#each (skeleton ? skeletonItems : items) as item (item.id)}
+                {#each skeleton ? skeletonItems : items as item (item.id)}
                     <div transition:fade|local={{ duration: 250 }}>
                         {#if skeleton}
                             <SkeletonLayout>

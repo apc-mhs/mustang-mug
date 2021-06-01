@@ -20,7 +20,7 @@ function onScroll() {
 }
 
 const mediaQuery = window.matchMedia('(max-width: 650px)');
-mediaQuery.addEventListener('change', (e) => mobile = e.matches);
+mediaQuery.addEventListener('change', (e) => (mobile = e.matches));
 </script>
 
 <svelte:window on:scroll={onScroll} />

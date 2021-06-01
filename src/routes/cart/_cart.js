@@ -7,7 +7,8 @@ import { dev } from '$app/env';
 const cartApi = new CartApi(client);
 
 async function getCartIdFor(user) {
-    const cartSnapshot = await app.firestore()
+    const cartSnapshot = await app
+        .firestore()
         .collection('carts')
         .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
         .get();
@@ -30,7 +31,7 @@ async function addItemsToCart(body, user, host) {
 
     // If the user doesn't have a cart yet
     if (!cart) {
-        return await createCartWithItems(body, user, host);;
+        return await createCartWithItems(body, user, host);
     }
 
     const newCartItems = createCartItemsWithProperties(body, user);
@@ -49,17 +50,20 @@ async function createCartWithItems(body, user, host) {
         allowDuplicatePayments: 'false',
         returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
         loginPolicy: 'required',
-    }
+    };
 
     /** @type {Cart} */
-    const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
-        method: 'POST',
-        headers: {
-            'Authorization': getAuthorization(),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(cartData)
-    }).then((res) => res.json());
+    const msbCart = await fetch(
+        'https://test.www.myschoolbucks.com/msbpay/v2/carts',
+        {
+            method: 'POST',
+            headers: {
+                Authorization: getAuthorization(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cartData),
+        }
+    ).then((res) => res.json());
 
     /** @type {Cart} */
     // const msbCart = await new Promise(async (resolve, _) => {
@@ -70,11 +74,14 @@ async function createCartWithItems(body, user, host) {
         return false;
     }
 
-    app.firestore().collection('carts').doc(user.uid).set({
-        cartId: msbCart.cartId
-    }, { 
-        merge: true
-    });
+    app.firestore().collection('carts').doc(user.uid).set(
+        {
+            cartId: msbCart.cartId,
+        },
+        {
+            merge: true,
+        }
+    );
 
     return true;
 }
@@ -82,14 +89,17 @@ async function createCartWithItems(body, user, host) {
 /** @returns {Promise<boolean>} */
 async function updateCart(body, cartId) {
     /** @type {Cart} */
-    const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId, {
-        method: 'PUT',
-        headers: {
-            'Authorization': getAuthorization(),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    }).then((res) => res.json());
+    const msbCart = await fetch(
+        'https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId,
+        {
+            method: 'PUT',
+            headers: {
+                Authorization: getAuthorization(),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        }
+    ).then((res) => res.json());
 
     if (msbCart.result === 'Error') {
         return false;
@@ -100,12 +110,15 @@ async function updateCart(body, cartId) {
 
 async function getCart(cartId) {
     /** @type {Cart} */
-    const msbCart = await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId, {
-        method: 'GET',
-        headers: {
-            'Authorization': getAuthorization(),
+    const msbCart = await fetch(
+        'https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: getAuthorization(),
+            },
         }
-    }).then((res) => res.json());
+    ).then((res) => res.json());
 
     if (msbCart.result == 'Error') {
         return null;
@@ -120,5 +133,5 @@ export {
     addItemsToCart,
     createCartWithItems,
     updateCart,
-    getCart
-}
+    getCart,
+};
