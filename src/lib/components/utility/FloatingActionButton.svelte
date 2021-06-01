@@ -31,7 +31,7 @@ mediaQuery.addEventListener('change', (e) => mobile = e.matches);
         {disabled}
         --font-size="20px"
         --border-radius="200px"
-        --padding={!movingUp ? '9px' : '9px 26px'}
+        --padding={!movingUp && mobile ? '9px' : '9px 26px'}
         --gap="0px">
         <slot name="icon" />
         {#if movingUp || !mobile}
