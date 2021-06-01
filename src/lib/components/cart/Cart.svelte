@@ -135,5 +135,6 @@ span.out-of-stock {
     border-radius: 5px;
     vertical-align: middle;
     cursor: default;
+    white-space: nowrap;
 }
 </style>
