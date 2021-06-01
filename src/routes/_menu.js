@@ -22,13 +22,19 @@ async function postCartItems(cartItems) {
         }
     }
 
-    const res = await fetch('/cart.json', {
-        method: 'POST',
-        body: JSON.stringify(cartData),
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    });
+    let res;
+    try {
+        res = await fetch('/cart.json', {
+            method: 'POST',
+            body: JSON.stringify(cartData),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+    } catch (err) {
+        // Probably no internet connection
+        res = { status: 500 };
+    }
 
     return res.status >= 200 && res.status < 400;
 }

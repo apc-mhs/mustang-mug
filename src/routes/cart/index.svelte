@@ -5,6 +5,7 @@ import { getCartData } from '$lib/msb/cart';
 import { query } from '../_menu';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/utility/Button.svelte';
+import { fade } from 'svelte/transition';
 
 let validCart = false;
 let studentName = '';
@@ -17,6 +18,7 @@ if (browser) {
         .catch((err) => (cart = null));
 }
 
+let noItemsMessageFadeInDelay = 0;
 function onRemove({ detail: item }) {
     if (!cart) return;
 
@@ -32,6 +34,8 @@ function onRemove({ detail: item }) {
                 'Content-Type': 'application/json',
             },
         });
+
+        noItemsMessageFadeInDelay = 250;
     }
 }
 
@@ -93,7 +97,7 @@ query().then(([items, _]) => {
                     on:remove={onRemove}
                     {menuItems} />
             {:else}
-                <h2>
+                <h2 in:fade={{ delay: noItemsMessageFadeInDelay }}>
                     There is nothing in your cart. Go to the <a href="/"
                         >menu</a> and add a few items.
                 </h2>
@@ -127,8 +131,10 @@ query().then(([items, _]) => {
 <style>
 .cart-view {
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     align-items: flex-start;
+    gap: 15px 0px;
+    padding: 10px;
 }
 
 .cart-view > div {
@@ -148,8 +154,9 @@ label {
 }
 
 .cart {
-    flex: 0 0 auto;
+    flex: auto;
     width: 75%;
+    margin: 0px auto;
 }
 
 .checkout {
@@ -158,8 +165,8 @@ label {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    flex: 0 0 auto;
-    width: 25%;
+    flex: 1 0 auto;
+    min-width: 250px;
     gap: 5px;
 }
 </style>

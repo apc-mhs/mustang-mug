@@ -35,21 +35,19 @@ function getOptions(item) {
         </div>
     {/if}
     <div class="flex-right">
-        <div class="checkboxes">
+        <div class="menu">
             <h2>{title}</h2>
             <div class="items">
                 {#each (skeleton ? skeletonItems : items) as item (item.id)}
-                    {#if skeleton}
-                        <div out:fade|local={{ duration: 250 }}>
+                    <div transition:fade|local={{ duration: 250 }}>
+                        {#if skeleton}
                             <SkeletonLayout>
                                 <slot {item} />
                             </SkeletonLayout>
-                        </div>
-                    {:else}
-                        <div in:fade|local={{ delay: 250, duration: 250 }}>
+                        {:else}
                             <slot {item} itemOptions={getOptions(item)} />
-                        </div>
-                    {/if}
+                        {/if}
+                    </div>
                 {/each}
             </div>
         </div>
@@ -60,29 +58,30 @@ function getOptions(item) {
 .flex-container {
     display: flex;
     flex-flow: row nowrap;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
 }
 .flex-right {
     flex: auto;
-    margin: 0.3em;
-    padding: 0.3em;
 }
 .flex-left {
     flex: 0 0 auto;
-    margin: 0.3em;
-    padding: 0.3em;
+    position: sticky;
+    top: calc(15px + var(--header-height));
 }
 h2 {
     text-align: center;
+    margin-bottom: 10px;
 }
-.checkboxes {
+.menu {
     position: relative;
     color: black;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     background: rgb(175, 175, 175);
-    margin: 0.3em;
-    padding: 0.3em;
     text-align: center;
     box-shadow: 0px 0px 3px 0px black;
+    padding: 10px 0px;
 }
 .items {
     display: flex;

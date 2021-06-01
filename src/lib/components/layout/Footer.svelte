@@ -19,7 +19,6 @@
     font-size: 10px;
     line-height: 30px;
     width: 100%;
-    height: 30px;
     margin-top: auto;
     background-color: rgba(43, 42, 42, 0.424);
     color: white;
