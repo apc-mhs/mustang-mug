@@ -117,7 +117,16 @@ export let status;
     text-shadow: 10px 10px 4px rgba(0, 0, 0, 0.2);
 }
 .coffeemug {
-    margin-top: 20px;
     margin-left: 20px;
+}
+
+@media (max-width: 767px) {
+    .number {
+        font-size: 40vw;
+    }
+    img {
+        max-width: 35vw;
+        max-height: 35vw;
+    }
 }
 </style>
