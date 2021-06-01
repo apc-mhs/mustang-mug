@@ -34,7 +34,7 @@ function toggle(option) {
                 on:click={() => toggle(option)}
                 class:selected={selectedOptions.includes(option)}>
                 {#if selectedOptions.includes(option)}
-                    <span transition:horizontalSlide|local>
+                    <span transition:horizontalSlide|local class="icon">
                         <Icon name="check" width="16" height="16" />
                     </span>
                 {/if}
@@ -82,7 +82,6 @@ function toggle(option) {
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
-    gap: 0px 2px;
     border: 2px solid currentColor;
     border-radius: 20px;
     height: 16px;
@@ -93,6 +92,10 @@ function toggle(option) {
     cursor: pointer;
     /* Transition function equal to cubicOut (in horizontalSlide) */
     transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.option .icon {
+    margin-right: 2px;
 }
 
 .option.selected {

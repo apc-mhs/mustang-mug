@@ -29,16 +29,23 @@ const mediaQueryHandler = (e) => {
 onMount(() => {
     const mediaListener = window.matchMedia('(max-width: 767px)');
 
-    mediaListener.addListener(mediaQueryHandler);
+    mediaListener.addEventListener('change', mediaQueryHandler);
 });
+
+export function closeMobileMenu() {
+    showMobileMenu = false;
+}
 </script>
 
 <nav>
     <div class="inner">
         <div
             on:click={handleMobileIconClick}
-            class={`mobile-icon${showMobileMenu ? ' active' : ''}`}>
+            class="mobile-icon"
+            class:active={showMobileMenu}>
+            <div class="upper-line" />
             <div class="middle-line" />
+            <div class="lower-line" />
         </div>
         <img
             class="mug_logo"
@@ -47,7 +54,7 @@ onMount(() => {
             height="45px"
             width="45px" />
         <p class="mug-text">Mustang Mug</p>
-        <ul class={`navbar-list${showMobileMenu ? ' mobile' : ''}`}>
+        <ul class="navbar-list" class:mobile={showMobileMenu}>
             {#each navItems as item}
                 <li>
                     {#if item.label == 'My School Bucks Account Creation'}
@@ -58,9 +65,7 @@ onMount(() => {
                     {/if}
                 </li>
             {/each}
-            <a href="cart">
-                <Icon name="cart-icon" width="30" height="30" />
-            </a>
+            <li><a href="cart"><Icon name="cart-icon" width="30" height="30" /></a></li>
         </ul>
     </div>
 </nav>
@@ -73,6 +78,10 @@ onMount(() => {
     display: flex;
     align-items: center;
     height: 100%;
+}
+
+.inner > * {
+    margin-right: 5px;
 }
 
 nav {
@@ -91,9 +100,8 @@ nav {
 }
 .navbar-list {
     display: none;
-    width: 100%;
     justify-content: flex-end;
-    margin: 0;
+    margin-left: auto;
     padding: 0 40px;
 }
 
@@ -101,23 +109,15 @@ nav {
     background-color: rgba(0, 0, 0, 0.8);
     position: fixed;
     display: block;
-    height: calc(100% - var(--header-height));
-    bottom: 0;
+    height: calc(100vh - var(--header-height));
+    width: 100vw;
+    top: var(--header-height);
     left: 0;
 }
 
 .navbar-list li {
     list-style-type: none;
     position: relative;
-}
-
-.navbar-list li:before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
 }
 
 .navbar-list a {
@@ -127,20 +127,18 @@ nav {
     height: 45px;
     align-items: center;
     padding: 0 10px;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .mobile-icon {
     width: 25px;
-    height: 14px;
+    --icon-height: 14px;
+    height: var(--icon-height);
     position: relative;
     cursor: pointer;
 }
 
-.mobile-icon:after,
-.mobile-icon:before,
-.middle-line {
-    content: '';
+.mobile-icon > div {
     position: absolute;
     width: 100%;
     height: 2px;
@@ -149,44 +147,35 @@ nav {
     transform-origin: center;
 }
 
-.mobile-icon:before,
-.middle-line {
+div.upper-line {
     top: 0;
-}
-
-.mobile-icon:after,
-.middle-line {
-    bottom: 0;
-}
-
-.mobile-icon:before {
     width: 66%;
 }
 
-.mobile-icon:after {
+.middle-line {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+div.lower-line {
+    bottom: 0;
     width: 33%;
 }
 
-.middle-line {
-    margin: auto;
-}
-
-.mobile-icon:hover:before,
-.mobile-icon:hover:after,
-.mobile-icon.active:before,
-.mobile-icon.active:after,
-.mobile-icon.active .middle-line {
+.mobile-icon.active > div {
     width: 100%;
 }
 
-.mobile-icon.active:before,
-.mobile-icon.active:after {
-    top: 50%;
-    transform: rotate(-45deg);
+.mobile-icon.active .upper-line {
+    transform: translateY(calc(calc(var(--icon-height) / 2) - 50%)) rotate(135deg);
+}
+
+.mobile-icon.active .lower-line {
+    transform: translateY(calc(-1 * calc(calc(var(--icon-height) / 2) - 50%))) rotate(-135deg);
 }
 
 .mobile-icon.active .middle-line {
-    transform: rotate(45deg);
+    opacity: 0;
 }
 
 .mug-text {

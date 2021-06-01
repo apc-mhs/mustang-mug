@@ -4,18 +4,14 @@ import Navbar from '$lib/components/layout/Navbar.svelte';
 import Footer from '$lib/components/layout/Footer.svelte';
 import '../app.css';
 
+let navbar;
+
 signInAnonymously();
 </script>
 
+<svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
 
-<!-- Using svelte:head on the layout will overwrite every other page 
-Instead we use just <head> and <title> which will set the title for 
-all the pages that don't have a svelte:head (you can test it!) -->
-<head>
-    <title>Dashboard</title>
-</head>
-
-<Navbar />
+<Navbar bind:this={navbar} />
 <main>
     <slot />
     <Footer />
