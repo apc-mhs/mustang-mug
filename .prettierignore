@@ -1,4 +1,3 @@
-# Ignore:
 .github/workflows/*.yml
 functions/*.json
 firebase.json
