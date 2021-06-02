@@ -3,5 +3,6 @@
 functions/*.json
 firebase.json
 firestore.indexes.json
+jsconfig.json
 package-lock.json
 package.json
