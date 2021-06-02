@@ -2,5 +2,6 @@
 .github/workflows/*.yml
 functions/*.json
 firebase.json
+firestore.indexes.json
 package-lock.json
 package.json
