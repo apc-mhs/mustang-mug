@@ -1,3 +1,6 @@
+import { browser } from "$app/env";
+import { readable } from "svelte/store";
+
 function navigateBack(e) {
     if (e) {
         e.preventDefault();
@@ -14,4 +17,37 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
-export { navigateBack, sleep, numberFormatter };
+const mediaQueries = {};
+
+function useMediaQuery(mediaQuery) {
+    if (!browser) {
+        return readable(false, () => {});
+    }
+
+    if (mediaQuery in mediaQueries) {
+        return mediaQueries[mediaQuery];
+    }
+
+    const mediaQueryListener = window.matchMedia(mediaQuery);
+    const store = readable(mediaQueryListener.matches, (set) => {
+        function queryListener(e) {
+            set(e.matches);
+        }
+
+        mediaQueryListener.addEventListener('change', queryListener);
+
+        return () => {
+            mediaQueryListener.removeEventListener('change', queryListener);
+        }
+    });
+    mediaQueries[mediaQuery] = store;
+
+    return store;
+}
+
+export {
+    navigateBack,
+    sleep,
+    numberFormatter,
+    useMediaQuery
+}

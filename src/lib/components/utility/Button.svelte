@@ -20,7 +20,7 @@ button {
     color: white;
     font-size: var(--font-size, 16px);
     padding: var(--padding, 8px 22px);
-    box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--box-shadow, 0px 0px 0px 0px rgba(0, 0, 0, 0.2));
     /* Border radius transition comes from horizontalSlide defaults */
     transition: background-color 250ms ease, box-shadow 250ms ease,
         color 250ms ease, padding 250ms ease;
