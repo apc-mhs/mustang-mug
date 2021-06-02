@@ -34,7 +34,7 @@ button:active {
     background-color: rgb(82, 23, 23);
 }
 button:disabled {
-    cursor: default;
+    cursor: not-allowed;
     color: rgb(201, 201, 201);
     background-color: rgb(90, 47, 47);
 }

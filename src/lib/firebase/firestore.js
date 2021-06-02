@@ -16,7 +16,7 @@ export default function setupEmulatedFirestore(firestore, timestamp) {
         name: 'This item is free',
         price: 0,
         image: 'coffee.jpg',
-        stock: true,
+        stock: false,
         options: [],
         lastModified: timestamp,
     });
