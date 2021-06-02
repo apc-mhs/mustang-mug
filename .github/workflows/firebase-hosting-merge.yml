@@ -1,57 +1,57 @@
 name: Deploy to Firebase Hosting on merge
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v2
-            - name: Setup Node
-              uses: actions/setup-node@v2
-              with:
-                  node-version: '15'
-            - name: Install Dependencies
-              run: npm install && npm install --prefix functions
-            - name: Build
-              run: npm run build
-            - name: Archive Production Artifact
-              uses: actions/upload-artifact@v2
-              with:
-                  name: artifact
-                  path: |
-                      public
-                      functions
-                      !src/**
-                      !resources/**
-                      !.svelte-kit/**
-                      !.github/**
-                      !static
-                      !**/node_modules/**
-                      !**/.*
-                  if-no-files-found: error
-                  retention-days: 2
-    deploy:
-        name: Deploy
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v2
-            - name: Download Artifact
-              uses: actions/download-artifact@v2
-              with:
-                  name: artifact
-            - name: Install Firebase Functions Dependencies
-              run: npm install --prefix functions
-            - name: Deploy to Firebase
-              uses: w9jds/firebase-action@master
-              with:
-                  args: deploy --message \"${{ github.event.head_commit.message }}\"
-              env:
-                  FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-                  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - name: Install Dependencies
+        run: npm install && npm install --prefix functions
+      - name: Build
+        run: npm run build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: |
+            public
+            functions
+            !src/**
+            !resources/**
+            !.svelte-kit/**
+            !.github/**
+            !static
+            !**/node_modules/**
+            !**/.*
+          if-no-files-found: error
+          retention-days: 2
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+      - name: Install Firebase Functions Dependencies
+        run: npm install --prefix functions
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --message \"${{ github.event.head_commit.message }}\"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}

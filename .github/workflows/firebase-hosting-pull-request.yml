@@ -3,21 +3,21 @@
 
 name: Deploy to Firebase Hosting on PR
 on:
-    pull_request:
-        branches:
-            - main
+  pull_request:
+    branches:
+      - main
 jobs:
-    build_and_preview:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
-              with:
-                  node-version: '15'
-            - run: npm install && npm install --prefix functions && npm run build
-            - uses: FirebaseExtended/action-hosting-deploy@v0
-              with:
-                  repoToken: '${{ secrets.GITHUB_TOKEN }}'
-                  firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUSTANG_MUG }}'
-                  expires: 30d
-                  projectId: mustang-mug
+  build_and_preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - run: npm install && npm install --prefix functions && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MUSTANG_MUG }}'
+          expires: 30d
+          projectId: mustang-mug
