@@ -15,18 +15,24 @@ const appName = import.meta.env.VITE_APP_NAME;
 
 /** @returns {admin.app.App} */
 export function loadFirebaseAdmin() {
-
     /** @type {admin.app.App} */
     let app;
     try {
         app = admin.app(appName);
     } catch (error) {
-        app = admin.initializeApp({
-            credential: admin.credential.applicationDefault(),
-            databaseURL: "https://mustang-mug-default-rtdb.firebaseio.com"
-        }, appName);
+        app = admin.initializeApp(
+            {
+                credential: admin.credential.applicationDefault(),
+                databaseURL: 'https://mustang-mug-default-rtdb.firebaseio.com',
+            },
+            appName
+        );
 
-        if (dev) setupEmulatedFirestore(app.firestore(), admin.firestore.Timestamp.now());
+        if (dev)
+            setupEmulatedFirestore(
+                app.firestore(),
+                admin.firestore.Timestamp.now()
+            );
 
         // The admin SDK automatically applies emulators
         // So no need to call the initializeDev method
@@ -70,7 +76,4 @@ async function deleteQueryBatch(db, query, resolve) {
 
 export default loadFirebaseAdmin();
 
-export {
-    admin,
-    deleteCollection
-}
+export { admin, deleteCollection };

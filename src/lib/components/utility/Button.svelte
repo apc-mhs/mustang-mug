@@ -22,11 +22,8 @@ button {
     padding: var(--padding, 8px 22px);
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2);
     /* Border radius transition comes from horizontalSlide defaults */
-    transition:
-        background-color 250ms ease,
-        box-shadow 250ms ease,
-        color 250ms ease,
-        padding 250ms ease;
+    transition: background-color 250ms ease, box-shadow 250ms ease,
+        color 250ms ease, padding 250ms ease;
     -webkit-tap-highlight-color: transparent;
 }
 button:hover {

@@ -18,5 +18,5 @@ export {
     clientId,
     departmentId,
     storeId,
-    paymentMethodId
-}
+    paymentMethodId,
+};

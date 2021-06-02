@@ -9,10 +9,9 @@ function sleep(millis) {
     return new Promise((resolve, _) => setTimeout(resolve, millis));
 }
 
-const numberFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const numberFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
 
-export {
-    navigateBack,
-    sleep,
-    numberFormatter
-}
+export { navigateBack, sleep, numberFormatter };

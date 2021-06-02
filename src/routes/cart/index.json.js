@@ -1,9 +1,4 @@
-import {
-    getCartIdFor,
-    getCartFor,
-    addItemsToCart,
-    updateCart
-} from './_cart';
+import { getCartIdFor, getCartFor, addItemsToCart, updateCart } from './_cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -14,14 +9,14 @@ export async function post({ locals, body, host }) {
     if (!user) {
         return {
             status: 400,
-            body: 'Can\'t manipulate a cart before signing in'
-        }
+            body: "Can't manipulate a cart before signing in",
+        };
     }
 
     const success = await addItemsToCart(body, user, host);
     return {
         status: success ? 200 : 500,
-        body: success ? 'Added items to cart' : 'Failed'
+        body: success ? 'Added items to cart' : 'Failed',
     };
 }
 
@@ -34,7 +29,7 @@ export async function put({ locals, body }) {
     if (!user) {
         return {
             status: 400,
-            body: 'Can\'t manipulate a cart before signing in'
+            body: "Can't manipulate a cart before signing in",
         };
     }
 
@@ -44,13 +39,13 @@ export async function put({ locals, body }) {
         const success = await updateCart(body, cartId);
         return {
             status: success ? 200 : 500,
-            body: success ? 'Cart updated' : 'Failed'
+            body: success ? 'Cart updated' : 'Failed',
         };
     }
 
     return {
         status: 400,
-        body: 'User does not have a cart'
+        body: 'User does not have a cart',
     };
 }
 
@@ -63,8 +58,8 @@ export async function get({ locals }) {
     if (!user) {
         return {
             status: 400,
-            body: 'Can\'t manipulate a cart before signing in'
-        }
+            body: "Can't manipulate a cart before signing in",
+        };
     }
 
     const cart = await getCartFor(user);
@@ -75,12 +70,12 @@ export async function get({ locals }) {
 
         return {
             status: 200,
-            body: cart
-        }
+            body: cart,
+        };
     }
 
     return {
         status: 400,
-        body: 'User does not have a cart'
-    }
+        body: 'User does not have a cart',
+    };
 }

@@ -10,7 +10,10 @@ const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
     async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
-            sameSite: 'strict', secure: true, expires: 1, path: '/'
+            sameSite: 'strict',
+            secure: true,
+            expires: 1,
+            path: '/',
         });
     }
 
@@ -31,7 +34,8 @@ async function signInAnonymously() {
     }
 
     // If the current user is signed in with Google (dashboard only)
-    if (app.auth().currentUser && app.auth().currentUser.email) app.auth().signOut();
+    if (app.auth().currentUser && app.auth().currentUser.email)
+        app.auth().signOut();
 
     try {
         return await app.auth().signInAnonymously();
@@ -56,8 +60,4 @@ async function signInWithGoogle() {
     }
 }
 
-export {
-    currentUser,
-    signInAnonymously,
-    signInWithGoogle
-}
+export { currentUser, signInAnonymously, signInWithGoogle };

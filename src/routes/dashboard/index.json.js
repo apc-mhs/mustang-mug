@@ -14,7 +14,7 @@ export async function del({ locals }) {
     if (!user || !(user.email || dev)) {
         return {
             status: 400,
-            body: 'Can\'t manipulate a cart before signing in'
+            body: "Can't manipulate a cart before signing in",
         };
     }
 
@@ -22,30 +22,37 @@ export async function del({ locals }) {
     if (!dev && !acceptedEmails.includes(user.email)) {
         return {
             status: 403,
-            body: 'Insufficient persmissions'
+            body: 'Insufficient persmissions',
         };
     }
 
     // Create a utility function to accumulate the data from this endpoint's paged responses
-    const carts = (await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
-        headers: {
-            Authorization: getAuthorization()
-        }
-    }).then((res) => res.json())).carts;
-    
-    await Promise.all(carts.map((cart) => {
-        return fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cart.id, {
-            method: 'DELETE',
+    const carts = (
+        await fetch('https://test.www.myschoolbucks.com/msbpay/v2/carts', {
             headers: {
-                Authorization: getAuthorization()
-            }
+                Authorization: getAuthorization(),
+            },
+        }).then((res) => res.json())
+    ).carts;
+
+    await Promise.all(
+        carts.map((cart) => {
+            return fetch(
+                'https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cart.id,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: getAuthorization(),
+                    },
+                }
+            );
         })
-    }));
+    );
 
     await deleteCollection(app.firestore(), 'carts', 200);
 
     return {
         status: 200,
-        body: 'Success'
+        body: 'Success',
     };
 }

@@ -8,14 +8,14 @@ const appName = import.meta.env.VITE_APP_NAME;
 /** @returns {firebase.app.App} */
 function loadFirebase() {
     const firebaseConfig = {
-        apiKey: "AIzaSyCV6ig53QY9iBGj8evOZ5ZpAwuWKoaN1-w",
-        authDomain: "mustang-mug.firebaseapp.com",
-        databaseURL: "https://mustang-mug-default-rtdb.firebaseio.com",
-        projectId: "mustang-mug",
-        storageBucket: "mustang-mug.appspot.com",
-        messagingSenderId: "11873316849",
-        appId: "1:11873316849:web:1ce59140f262d724cd5e50",
-        measurementId: "G-ZZP44VZMJH"
+        apiKey: 'AIzaSyCV6ig53QY9iBGj8evOZ5ZpAwuWKoaN1-w',
+        authDomain: 'mustang-mug.firebaseapp.com',
+        databaseURL: 'https://mustang-mug-default-rtdb.firebaseio.com',
+        projectId: 'mustang-mug',
+        storageBucket: 'mustang-mug.appspot.com',
+        messagingSenderId: '11873316849',
+        appId: '1:11873316849:web:1ce59140f262d724cd5e50',
+        measurementId: 'G-ZZP44VZMJH',
     };
 
     /** @type {firebase.app.App} */
@@ -27,15 +27,18 @@ function loadFirebase() {
         if (dev) initializeDev(app);
 
         if (browser) {
-            app.firestore().enablePersistence()
+            app.firestore()
+                .enablePersistence()
                 .catch((err) => {
-                    console.error('Persistence failed to enable with error', err);
+                    console.error(
+                        'Persistence failed to enable with error',
+                        err
+                    );
                 });
         }
     }
     return app;
 }
-
 
 /** @param {firebase.app.App} app */
 function initializeDev(app) {
@@ -46,6 +49,4 @@ function initializeDev(app) {
 
 export default loadFirebase();
 
-export {
-    firebase
-}
+export { firebase };

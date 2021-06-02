@@ -28,7 +28,7 @@ async function postCartItems(cartItems) {
             method: 'POST',
             body: JSON.stringify(cartData),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
         });
     } catch (err) {
@@ -39,7 +39,4 @@ async function postCartItems(cartItems) {
     return res.status >= 200 && res.status < 400;
 }
 
-export {
-    query,
-    postCartItems
-};
+export { query, postCartItems };

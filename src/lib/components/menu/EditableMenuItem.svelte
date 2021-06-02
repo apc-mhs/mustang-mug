@@ -31,7 +31,9 @@ $: changed =
     item.name !== name ||
     item.image !== image ||
     item.stock !== stock ||
-    item.options.sort(optionIdSorter).some((option, i) => option.id !== options[i].id);
+    item.options
+        .sort(optionIdSorter)
+        .some((option, i) => option.id !== options[i].id);
 </script>
 
 <div class="item" class:out-of-stock={!stock}>
@@ -52,7 +54,10 @@ $: changed =
             <input bind:value={price} type="number" step="0.01" min="0" />
         </label>
     </p>
-    <EditableMenuItemOptions message={'Options:'} bind:selectedOptions={options} options={allOptions} />
+    <EditableMenuItemOptions
+        message={'Options:'}
+        bind:selectedOptions={options}
+        options={allOptions} />
 
     <label>
         In Stock:
@@ -62,7 +67,14 @@ $: changed =
     <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
         <Button
             on:click={() =>
-                dispatch('save', { ...item, price, name, image, stock, options })}
+                dispatch('save', {
+                    ...item,
+                    price,
+                    name,
+                    image,
+                    stock,
+                    options,
+                })}
             disabled={!changed}>Save</Button>
     </span>
 </div>

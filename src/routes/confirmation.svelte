@@ -18,7 +18,7 @@ $: if (browser && $currentUser) {
                 resultCodes = [];
             }
         })
-        .catch((err) => resultCodes = []);
+        .catch((err) => (resultCodes = []));
 }
 </script>
 

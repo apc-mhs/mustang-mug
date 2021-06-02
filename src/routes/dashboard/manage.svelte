@@ -1,5 +1,5 @@
 <script>
-import Button from "$lib/components/utility/Button.svelte";
+import Button from '$lib/components/utility/Button.svelte';
 
 let deleting = false;
 async function deleteAllCarts() {
@@ -9,4 +9,5 @@ async function deleteAllCarts() {
 }
 </script>
 
-<Button disabled={deleting} on:click={deleteAllCarts}>{deleting ? 'Deleting...' : 'Delete all carts'}</Button>
+<Button disabled={deleting} on:click={deleteAllCarts}
+    >{deleting ? 'Deleting...' : 'Delete all carts'}</Button>

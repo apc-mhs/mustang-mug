@@ -6,9 +6,8 @@ let value = '';
 </script>
 
 <div class="autocomplete-wrapper">
-    <input bind:value placeholder="Search options">
+    <input bind:value placeholder="Search options" />
 </div>
 
 <style>
-
 </style>

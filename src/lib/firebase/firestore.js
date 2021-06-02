@@ -1,15 +1,16 @@
 /** @param {import("firebase/app").default.firestore.Firestore} firestore */
 export default function setupEmulatedFirestore(firestore, timestamp) {
-    firestore.collection('items').doc('mustang_brew').set({
-       name: 'Mustang Brew',
-       price: 2.75,
-       image: 'coffee.jpg',
-       stock: true,
-       options: [
-           firestore.doc('/options/milk')
-       ],
-       lastModified: timestamp
-    });
+    firestore
+        .collection('items')
+        .doc('mustang_brew')
+        .set({
+            name: 'Mustang Brew',
+            price: 2.75,
+            image: 'coffee.jpg',
+            stock: true,
+            options: [firestore.doc('/options/milk')],
+            lastModified: timestamp,
+        });
 
     firestore.collection('items').doc('free_item').set({
         name: 'This item is free',
@@ -17,7 +18,7 @@ export default function setupEmulatedFirestore(firestore, timestamp) {
         image: 'coffee.jpg',
         stock: true,
         options: [],
-        lastModified: timestamp
+        lastModified: timestamp,
     });
 
     // Uncomment to load a large number of items in firestore
@@ -36,6 +37,6 @@ export default function setupEmulatedFirestore(firestore, timestamp) {
         name: 'Milk',
         price: 0.5,
         stock: true,
-        lastModified: timestamp
+        lastModified: timestamp,
     });
 }

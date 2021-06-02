@@ -11,9 +11,7 @@ const dispatch = createEventDispatcher();
 let { price, name, stock } = option;
 
 $: changed =
-    option.price !== price ||
-    option.name !== name ||
-    option.stock !== stock;
+    option.price !== price || option.name !== name || option.stock !== stock;
 </script>
 
 <div class="option" class:out-of-stock={!stock}>
