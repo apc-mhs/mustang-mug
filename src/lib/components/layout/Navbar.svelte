@@ -53,7 +53,7 @@ export function closeMobileMenu() {
             alt="Mustang Mug Logo"
             height="45px"
             width="45px" />
-        <p class="mug-text">Mustang Mug</p>
+        <a href="/" class="mug-text">Mustang Mug</a>
         <ul class="navbar-list" class:mobile={showMobileMenu}>
             {#each navItems as item}
                 <li>
@@ -188,7 +188,7 @@ div.lower-line {
     color: white;
     font-size: 2em;
     text-decoration: none;
-    margin-left: 1vw;
+    margin-left: 0.5vw;
     /* this is a very hacky solution to not make the text stack on top of itself -- better fix anyone?*/
     min-width: 20vw;
 }

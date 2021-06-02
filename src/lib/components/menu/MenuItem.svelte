@@ -62,7 +62,8 @@ h3 {
     padding-bottom: 10px;
 }
 .item.out-of-stock > :not(.out-of-stock) {
-    opacity: 0.75;
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
 }
 p.out-of-stock {
     color: rgb(253, 54, 54);

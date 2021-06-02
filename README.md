@@ -94,6 +94,10 @@ Then, add your service account JSON file to the `admin` directory inside `src`. 
 
     firebase emulators:start
 
+Alternatively, if you're having issues with running all the emulators you can run a limited number of emulators, which should be enough to do local development: 
+
+    firebase emulators:start --only firestore,auth
+
 In a separate shell tab, start the dev server.
 
     npm run dev
