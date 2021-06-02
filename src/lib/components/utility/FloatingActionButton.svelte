@@ -1,26 +1,31 @@
 <script>
 import Button from '$lib/components/utility/Button.svelte';
 import { horizontalSlide } from '$lib/transition';
-import { onDestroy } from 'svelte';
+import { useMediaQuery } from '$lib/utils';
 import { fade } from 'svelte/transition';
 
 export let disabled;
 
-// This variable should be turned into a store or passed
-// through component context
-let mobile = false;
+const mobile = useMediaQuery('(max-width: 650px)');
 let movingUp = true;
-let lastScroll = 0;
+let lastScroll = null;
 
 function onScroll() {
     const currentScroll =
         window.pageYOffset || document.documentElement.scrollTop;
-    movingUp = currentScroll < lastScroll;
+
+    if (lastScroll === null) {
+        lastScroll = currentScroll;
+    }
+
+    const scrollDifference = Math.abs(currentScroll - lastScroll);
+
+    if (scrollDifference > 12) {
+        movingUp = currentScroll < lastScroll;
+    }
+
     lastScroll = Math.max(0, currentScroll);
 }
-
-const mediaQuery = window.matchMedia('(max-width: 650px)');
-mediaQuery.addEventListener('change', (e) => (mobile = e.matches));
 </script>
 
 <svelte:window on:scroll={onScroll} />
@@ -31,10 +36,11 @@ mediaQuery.addEventListener('change', (e) => (mobile = e.matches));
         {disabled}
         --font-size="20px"
         --border-radius="200px"
-        --padding={!movingUp && mobile ? '9px' : '9px 26px'}
+        --box-shadow="none"
+        --padding={!movingUp && $mobile ? '9px' : '9px 26px'}
         --gap="0px">
         <slot name="icon" />
-        {#if movingUp || !mobile}
+        {#if movingUp || !$mobile}
             <span transition:horizontalSlide|local class="text-wrapper">
                 <slot name="text" />
             </span>
@@ -47,6 +53,8 @@ mediaQuery.addEventListener('change', (e) => (mobile = e.matches));
     position: fixed;
     right: 25px;
     bottom: 25px;
+    border-radius: 200px;
+    box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 50%);
 }
 
 .text-wrapper {
