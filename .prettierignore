@@ -1,6 +1,6 @@
 # Ignore:
 .github/workflows/*.yml
-functions/package-lock.json
+functions/*.json
 firebase.json
 package-lock.json
 package.json
