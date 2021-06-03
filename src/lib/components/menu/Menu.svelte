@@ -1,13 +1,18 @@
 <script>
-import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import Refiner from '$lib/components/menu/Refiner.svelte';
 import { fade } from 'svelte/transition';
+import { useMediaQuery } from '$lib/utils';
+import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
+import Drawer from '$lib/components/utility/Drawer.svelte';
 
 export let title;
 export let items;
 export let options;
 export let skeleton = false;
 export let refine = true;
+
+const mobile = useMediaQuery('(max-width: 650px)');
 
 const skeletonItems = new Array(10).fill(5).map((_, i) => {
     return {
@@ -20,6 +25,10 @@ const skeletonItems = new Array(10).fill(5).map((_, i) => {
     };
 });
 
+$: menuItems = skeleton ? skeletonItems : items;
+
+let mobileRefinerShown = false;
+
 function getOptions(item) {
     if (!item.options) return [];
 
@@ -31,22 +40,27 @@ function getOptions(item) {
 <div class="flex-container">
     {#if refine}
         <div class="flex-left">
-            <Refiner bind:refinedItems={items} />
+            {#if $mobile}
+                <Drawer visible={mobileRefinerShown} on:close={() => mobileRefinerShown = false}>
+                    <Refiner bind:refinedItems={items} />
+                </Drawer>
+            {:else}
+                <Refiner bind:refinedItems={items} />
+            {/if}
         </div>
+    {/if}
+    {#if $mobile && !mobileRefinerShown}
+        <FloatingActionButton --top="20%" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
+            <Icon slot="icon" name="filter" width="30" height="30" />
+        </FloatingActionButton>
     {/if}
     <div class="flex-right">
         <div class="menu">
-            <h2>{title}</h2>
+            <h2>{title}</h2>  
             <div class="items">
-                {#each skeleton ? skeletonItems : items as item (item.id)}
+                {#each menuItems as item (item.id)}
                     <div transition:fade|local={{ duration: 250 }}>
-                        {#if skeleton}
-                            <SkeletonLayout>
-                                <slot {item} />
-                            </SkeletonLayout>
-                        {:else}
-                            <slot {item} itemOptions={getOptions(item)} />
-                        {/if}
+                        <slot {item} itemOptions={getOptions(item)} />
                     </div>
                 {/each}
             </div>
@@ -56,6 +70,7 @@ function getOptions(item) {
 
 <style>
 .flex-container {
+    position: relative;
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
@@ -88,5 +103,10 @@ h2 {
     justify-content: center;
     flex-flow: row wrap;
     gap: 30px 20px;
+}
+@media (max-width: 650px) {
+    .flex-left {
+        position: absolute;
+    }
 }
 </style>

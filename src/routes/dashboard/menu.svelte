@@ -2,6 +2,7 @@
 import EditableMenuItem from '$lib/components/menu/EditableMenuItem.svelte';
 import EditableMenuOptionsItem from '$lib/components/menu/EditableMenuOptionsItem.svelte';
 import Menu from '$lib/components/menu/Menu.svelte';
+import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import app, { firebase } from '$lib/firebase/firebase';
 import { query } from '../_menu';
 
@@ -50,11 +51,17 @@ async function saveOption(optionData) {
     skeleton={items.length < 1}
     let:item
     let:itemOptions>
-    <EditableMenuItem
-        {item}
-        options={itemOptions}
-        on:save={(e) => save(e.detail)}
-        allOptions={options} />
+    {#if !items.length < 1}
+        <EditableMenuItem
+            {item}
+            options={itemOptions}
+            on:save={(e) => save(e.detail)}
+            allOptions={options} />
+    {:else}
+        <SkeletonLayout>
+            <EditableMenuItem {item} />
+        </SkeletonLayout>
+    {/if}
 </Menu>
 
 <Menu
@@ -64,9 +71,11 @@ async function saveOption(optionData) {
     options={[]}
     skeleton={options.length < 1}
     let:item>
-    <EditableMenuOptionsItem
-        option={item}
-        on:save={(e) => saveOption(e.detail)} />
+    {#if !options.length < 1}
+        <EditableMenuOptionsItem
+            option={item}
+            on:save={(e) => saveOption(e.detail)} />
+    {/if}
 </Menu>
 
 <style>

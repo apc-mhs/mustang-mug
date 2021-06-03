@@ -56,6 +56,7 @@ function alphabetize() {
     color: black;
     box-shadow: 0px 0px 3px 0px black;
     padding: 5px;
+    min-height: 100%;
 }
 .selection-items {
     list-style: none;
