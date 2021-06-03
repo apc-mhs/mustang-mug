@@ -56,7 +56,7 @@ function getOptions(item) {
     {/if}
     <div class="flex-right">
         <div class="menu">
-            <h2>{title}</h2>  
+            <h2>{title}</h2>
             <div class="items">
                 {#each menuItems as item (item.id)}
                     <div transition:fade|local={{ duration: 250 }}>
