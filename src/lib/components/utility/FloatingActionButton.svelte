@@ -33,21 +33,21 @@ function onScroll() {
 <svelte:window on:scroll={onScroll} />
 
 <div class="fab-wrapper" transition:fade|local={{ duration: 250 }}>
-    <div class="styles" style="--padding: {(!movingUp && $mobile) || !$$slots.text ? '9px' : '9px 26px'};">
-        <Button
+    <Button
         on:click
         --font-size="20px"
+        --border-radius="200px"
+        --box-shadow="none"
+        --padding= "{(!movingUp && $mobile) || !$$slots.text ? '9px' : '9px 26px'}"
+        --gap="0px"
         {disabled}>
         <slot name="icon" />
-        {#if $$slots.text}
-            {#if movingUp || !$mobile}
-                <span transition:horizontalSlide|local class="text-wrapper">
-                    <slot name="text"></slot>
-                </span>
-            {/if}
+        {#if $$slots.text && (movingUp || !$mobile)}
+            <span transition:horizontalSlide|local class="text-wrapper">
+                <slot name="text"></slot>
+            </span>
         {/if}
     </Button>
-    </div>
 </div>
 
 <style>
@@ -65,13 +65,5 @@ function onScroll() {
 .text-wrapper {
     white-space: nowrap;
     margin-left: 5px;
-}
-
-.styles {
-    display: contents;
-    --font-size: 20px;
-    --border-radius: 200px;
-    --box-shadow: none;
-    --gap: 0px;
 }
 </style>

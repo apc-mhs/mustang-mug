@@ -41,6 +41,11 @@ function getOptions(item) {
     {#if refine}
         <div class="flex-left">
             {#if $mobile}
+                {#if !mobileRefinerShown}
+                    <FloatingActionButton --top="20%" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
+                        <Icon slot="icon" name="filter" width="30" height="30" />
+                    </FloatingActionButton>
+                {/if}
                 <Drawer visible={mobileRefinerShown} on:close={() => mobileRefinerShown = false}>
                     <Refiner bind:refinedItems={items} />
                 </Drawer>
@@ -48,11 +53,6 @@ function getOptions(item) {
                 <Refiner bind:refinedItems={items} />
             {/if}
         </div>
-    {/if}
-    {#if $mobile && !mobileRefinerShown}
-        <FloatingActionButton --top="20%" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
-            <Icon slot="icon" name="filter" width="30" height="30" />
-        </FloatingActionButton>
     {/if}
     <div class="flex-right">
         <div class="menu">
