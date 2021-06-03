@@ -6,6 +6,7 @@ import MenuItem from '$lib/components/menu/MenuItem.svelte';
 import Button from '$lib/components/utility/Button.svelte';
 import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
+import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import { fade } from 'svelte/transition';
 import { query, postCartItems } from './_menu';
 
@@ -48,17 +49,25 @@ async function addToCart() {
 
 <section>
     <Menu title="Menu" {skeleton} {items} {options} let:item let:itemOptions>
-        <MenuItem
-            {item}
-            options={itemOptions}
-            bind:cartItems={cartItems[item.id]} />
+        {#if !skeleton}
+            <MenuItem
+                {item}
+                options={itemOptions}
+                bind:cartItems={cartItems[item.id]} />
+        {:else}
+            <SkeletonLayout>
+                <MenuItem {item} />
+            </SkeletonLayout>
+        {/if}
     </Menu>
     {#if !skeleton}
         <FloatingActionButton
             on:click={addToCart}
             disabled={updatingCart}
             --font-size="20px"
-            --border-radius="10px">
+            --border-radius="10px"
+            --right="25px"
+            --bottom="25px">
             <Icon slot="icon" name="add-shopping-cart" width="30" height="30" />
             <p slot="text">Add to cart</p>
         </FloatingActionButton>
