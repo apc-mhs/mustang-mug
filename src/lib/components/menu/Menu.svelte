@@ -42,7 +42,7 @@ function getOptions(item) {
         <div class="flex-left">
             {#if $mobile}
                 {#if !mobileRefinerShown}
-                    <FloatingActionButton --top="20%" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
+                    <FloatingActionButton --top="125px" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
                         <Icon slot="icon" name="filter" width="30" height="30" />
                     </FloatingActionButton>
                 {/if}
