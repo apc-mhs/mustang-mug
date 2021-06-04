@@ -122,7 +122,8 @@ firebase functions:config:get > .runtimeconfig.json
     -   [SvelteKit Documentation](https://kit.svelte.dev/docs)
     -   [Svelte Tutorial](https://svelte.dev/tutorial/)
 -   Firebase
-    -   Declan put stuff here
+    -   [Complete, non-specific Firebase documentation](https://firebase.google.com/docs)
+    -   [Complete, non-specific Fire*store* documentation](https://cloud.google.com/firestore/docs)
 
 ## Selected Administration-Sourced Information for Website
 
@@ -142,6 +143,8 @@ Page graph:
 
 Menu tree:
 ![menu tree](resources/readme/menu_hierarchy.jpg)
+
+[Menu filter items](https://docs.google.com/spreadsheets/d/1InzGctsj30p7wKCqgGVjR5_RQ6NoXWVfi0eBXdTgsXw/edit#gid=0)
 
 ### Current Mustang-Mug Order Procedure
 
