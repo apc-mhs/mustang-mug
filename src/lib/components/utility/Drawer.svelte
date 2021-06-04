@@ -10,6 +10,8 @@ const dispatch = createEventDispatcher();
 $: {
     document.body.style.overflow = visible ? 'hidden' : 'unset';
 }
+
+onDestroy(() => document.body.style.overflow = 'unset');
 </script>
 
 <div class="drawer-wrapper" class:visible>
