@@ -3,6 +3,7 @@ import { slide } from 'svelte/transition';
 import Icon from '$lib/components/utility/Icon.svelte';
 import tippy from '$lib/tippy';
 import AutocompleteInput from '../utility/AutocompleteInput.svelte';
+import { fade } from 'svelte/transition';
 
 export let selectedOptions;
 export let options = [];
@@ -12,12 +13,12 @@ $: unselectedOptions = options.filter(
 );
 
 function remove(optionIndex) {
-    options.splice(optionIndex, 1);
-    options = options;
+    selectedOptions.splice(optionIndex, 1);
+    selectedOptions = selectedOptions;
 }
 const outOfStockMessage =
     'This option is marked out of stock. Click to remove it.';
-const removeOptionMessage = 'Remove this option from the item.';
+const removeOptionMessage = 'Remove this option';
 </script>
 
 <div class="item-options" transition:slide|local>
@@ -34,24 +35,29 @@ const removeOptionMessage = 'Remove this option from the item.';
             <p>{option.name}</p>
         </div>
     </AutocompleteInput>
-    <div class="options-list">
-        {#each options as option, i (i)}
-            <div
-                class="option"
-                on:click={() => remove(i)}
-                use:tippy={!option.stock
-                    ? outOfStockMessage
-                    : removeOptionMessage}
-                class:out-of-stock={!option.stock}>
-                {#if option.stock}
-                    <Icon name="check" width="16" height="16" />
-                {:else}
-                    <Icon name="close" width="16" height="16" />
-                {/if}
-                <p>{option.name}</p>
-            </div>
-        {/each}
-    </div>
+    {#if selectedOptions.length > 0}
+        <div class="options-list">
+            {#each selectedOptions as option, i (i)}
+                <div
+                    class="option"
+                    on:click={() => remove(i)}
+                    transition:fade|local={{ duration: 250 }}
+                    use:tippy={!option.stock
+                        ? outOfStockMessage
+                        : removeOptionMessage}
+                    class:out-of-stock={!option.stock}>
+                    {#if option.stock}
+                        <Icon name="check" width="16" height="16" />
+                    {:else}
+                        <Icon name="close" width="16" height="16" />
+                    {/if}
+                    <p>{option.name}</p>
+                </div>
+            {/each}
+        </div>
+    {:else}
+        <p transition:fade|local={{ duration: 250, delay: 250 }}>No options selected</p>
+    {/if}
 </div>
 
 <style>

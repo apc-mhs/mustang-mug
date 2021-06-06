@@ -42,7 +42,7 @@ async function addToCart() {
 </script>
 
 <svelte:head>
-    <title>Menu</title>
+    <title>Menu - Mustang Mug</title>
 </svelte:head>
 
 <section>

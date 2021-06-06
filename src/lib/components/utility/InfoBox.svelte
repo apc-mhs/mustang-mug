@@ -20,5 +20,8 @@ export let content;
     border-radius: 50%;
     width: 2ch;
     padding: 2px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 </style>

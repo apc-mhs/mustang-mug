@@ -7,7 +7,7 @@ import getFirebase from '$lib/firebase';
 let deleting = false;
 async function deleteAllCarts() {
     deleting = true;
-    await fetch('/dashboard.json', { method: 'DELETE' });
+    await fetch('/dashboard/manage.json', { method: 'DELETE' });
     deleting = false;
 }
 

@@ -28,7 +28,7 @@ $: if (browser) {
 
 <h1>
     Your order failed to go through :(. There are a number of reasons this could
-    have occured. Check the result codes below and
+    have occured. Check the result codes below and try again.
 </h1>
 <h2>Results of your payment</h2>
 {#if resultCodes !== null}

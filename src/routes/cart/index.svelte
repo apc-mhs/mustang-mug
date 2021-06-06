@@ -83,7 +83,7 @@ query().then(([items, _]) => {
 </script>
 
 <svelte:head>
-    <title>Cart</title>
+    <title>Cart - Mustang Mug</title>
 </svelte:head>
 
 <div class="cart-view">

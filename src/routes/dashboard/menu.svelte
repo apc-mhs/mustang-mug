@@ -33,7 +33,8 @@ async function saveOption(optionData) {
     optionData.lastModified = firebase.firestore.Timestamp.now();
 
     // Update the menu item in the main menuItems array
-    options = [...options.filter((i) => optionData.id !== i.id), optionData];
+    options.splice(options.indexOf(options.find((option) => optionData.id === option.id)), 1, optionData);
+    options = options;
     // Update the menu item + options in firestore
     const { app } = await getFirebase();
 

@@ -33,9 +33,9 @@ $: changed =
     item.name !== name ||
     item.image !== image ||
     item.stock !== stock ||
-    item.options
+    !item.options
         .sort(optionIdSorter)
-        .some((option, i) => option.id !== options[i].id);
+        .every((option, i) => option.id === (options[i] && options[i].id));
 </script>
 
 <div class="item" class:out-of-stock={!stock}>
