@@ -5,7 +5,7 @@ import tippy from '$lib/tippy';
 import AutocompleteInput from '../utility/AutocompleteInput.svelte';
 
 export let selectedOptions;
-export let options;
+export let options = [];
 
 $: unselectedOptions = options.filter(
     (option) => !selectedOptions.includes(option)

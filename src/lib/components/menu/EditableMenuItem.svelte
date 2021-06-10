@@ -7,7 +7,7 @@ import tippy from '$lib/tippy';
 import Button from '../utility/Button.svelte';
 
 export let item;
-export let options;
+export let options = [];
 export let allOptions;
 
 const dispatch = createEventDispatcher();
