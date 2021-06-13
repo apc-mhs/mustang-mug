@@ -1,8 +1,10 @@
-import app from '$lib/firebase/firebase';
+import getFirebase from '$lib/firebase';
 import { CurrentPurchaseWindow, PurchaseWindow } from './window';
 
 async function getCurrentPurchaseWindow() {
-    let currentPurchaseWindow = await app
+    const { app } = await getFirebase();
+
+    let currentPurchaseWindow = app
         .firestore()
         .doc('purchase_windows/current')
         .withConverter(CurrentPurchaseWindow.converter)
@@ -16,7 +18,9 @@ async function getCurrentPurchaseWindow() {
 }
 
 async function updateCurrentPurchaseWindow() {
-    const purchaseWindows = await app
+    const { app } = await getFirebase();
+
+    const purchaseWindows = app
         .firestore()
         .collection('purchase_windows')
         .withConverter(PurchaseWindow.converter)

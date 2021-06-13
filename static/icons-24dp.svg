@@ -19,6 +19,10 @@
 		<path d="M0 0h24v24H0V0z" fill="none"/>
 		<path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
 	</symbol>
+	<symbol id="plus" style="fill: var(--icon-color, currentColor);" viewBox="0 0 24 24">
+		<path d="M0 0h24v24H0V0z" fill="none"/>
+		<path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+	</symbol>
 	<symbol id="cart-icon" style="fill: var(--icon-color, currentColor);" viewBox="0 0 512.002 512.002">
 		<path d="M194.59,382.711c-35.646,0-64.646,29-64.646,64.646s29,64.646,64.646,64.646c35.646,0,64.646-29,64.646-64.646
 				S230.235,382.711,194.59,382.711z M194.59,473.215c-14.261,0-25.858-11.597-25.858-25.858c0-14.261,11.597-25.858,25.858-25.858

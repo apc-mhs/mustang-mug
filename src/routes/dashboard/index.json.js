@@ -1,7 +1,8 @@
 import { dev } from '$app/env';
+import getFirebase from '$lib/firebase';
+import { deleteCollection } from '$lib/firebase/firestore';
 import { getAuthorization, client } from '$lib/msb';
 import { CartApi, Cart } from 'msb_pay_api';
-import app, { deleteCollection } from '$lib/firebase/firebaseAdmin';
 
 const cartApi = new CartApi(client);
 
@@ -49,6 +50,7 @@ export async function del({ locals }) {
         })
     );
 
+    const { app } = await getFirebase();
     await deleteCollection(app.firestore(), 'carts', 200);
 
     return {

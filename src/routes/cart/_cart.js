@@ -1,16 +1,18 @@
 import { client, getAuthorization } from '$lib/msb';
 import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
 import { CartApi, Cart } from 'msb_pay_api';
-import app, { admin } from '$lib/firebase/firebaseAdmin';
 import { dev } from '$app/env';
+import getFirebase from '$lib/firebase';
 
 const cartApi = new CartApi(client);
 
 async function getCartIdFor(user) {
+    const { app, firebase } = await getFirebase();
+
     const cartSnapshot = await app
         .firestore()
         .collection('carts')
-        .where(admin.firestore.FieldPath.documentId(), '==', user.uid)
+        .where(firebase.firestore.FieldPath.documentId(), '==', user.uid)
         .get();
 
     if (cartSnapshot.empty || !cartSnapshot.docs[0].data().cartId) return null;
@@ -42,6 +44,7 @@ async function addItemsToCart(body, user, host) {
 
 /** @returns {Promise<boolean>} */
 async function createCartWithItems(body, user, host) {
+    const { app } = await getFirebase();
     const cartItems = createCartItemsWithProperties(body, user);
 
     const cartData = {

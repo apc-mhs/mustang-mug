@@ -1,8 +1,8 @@
 <script>
 import Button from '$lib/components/utility/Button.svelte';
-import app, { firebase } from '$lib/firebase/firebase';
 import { PurchaseWindow } from '$lib/purchase/window';
 import PurchaseSchedule from '$lib/components/purchase/PurchaseSchedule.svelte';
+import getFirebase from '$lib/firebase';
 
 let deleting = false;
 async function deleteAllCarts() {
@@ -13,22 +13,37 @@ async function deleteAllCarts() {
 
 /** @type {Array<PurchaseWindow>} */
 let purchaseWindows = [];
-app.firestore().collection('purchase_windows')
-    // .where(firebase.firestore.FieldPath.documentId, '!=', 'current')
-    .withConverter(PurchaseWindow.converter)
-    .get()
-    .then((snapshot) => {
-        for (let doc of snapshot.docs) {
-            purchaseWindows.push({ id: doc.id, ...doc.data() });
-        }
-    });
+let currentPurchaseWindow;
+getFirebase().then(({ app, firebase }) => {
+    app.firestore().collection('purchase_windows')
+        // .where(firebase.firestore.FieldPath.documentId, '!=', 'current')
+        .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
+        .get()
+        .then((snapshot) => {
+            for (let doc of snapshot.docs) {
+                if (doc.id === 'current') {
+                    const window = doc.data();
+                    window.id = doc.id;
+                    currentPurchaseWindow = window;
+                    continue;
+                }
+
+                const window = doc.data();
+                window.id = doc.id;
+                purchaseWindows.push(window);
+            }
+            purchaseWindows = purchaseWindows;
+        });
+});
 </script>
 
-<section class="purchase-windows">
+<section class="purchase">
     <h1>Purchase Windows by Day</h1>
-    {#each new Array(7).fill(0) as _, i (i)}
-        <PurchaseSchedule dayOfWeek={i} purchaseWindows={purchaseWindows.filter((window) => window.dayOfWeek === i)} />
-    {/each}
+    <div class="purchase-schedules">
+        {#each new Array(7).fill(null) as _, i (i)}
+            <PurchaseSchedule dayOfWeek={i} purchaseWindows={purchaseWindows.filter((window) => window.dayOfWeek == i)} />
+        {/each}
+    </div>
 </section>
 <section class="actions">
     <h1>Actions</h1>
@@ -47,10 +62,22 @@ section {
     max-width: 100%;
 }
 
+h1 {
+    text-align: center;
+}
+
 .actions-list {
     display: flex;
     flex-flow: row wrap;
     gap: 15px 25px;
     margin-top: 15px;
+}
+
+.purchase-schedules {
+    display: flex;
+    flex-flow: column nowrap;
+    max-width: 10in;
+    margin: 0px auto;
+    gap: 50px 0px;
 }
 </style>

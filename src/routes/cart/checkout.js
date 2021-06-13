@@ -1,6 +1,5 @@
 import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { updateCart, getCart, getCartIdFor } from './_cart';
-import app from '$lib/firebase/firebaseAdmin';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -45,6 +44,8 @@ export async function post({ locals, body }) {
 }
 
 async function removeOutOfStockItems(cart) {
+    const { app } = await getFirebase();
+
     const [outOfStockItemIds, outOfStockOptionIds] = await Promise.all([
         app
             .firestore()

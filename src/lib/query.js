@@ -1,4 +1,4 @@
-import app, { firebase } from '$lib/firebase/firebase';
+import getFirebase from "./firebase";
 
 function getDocuments(collection) {
     return getDocumentsWhere(collection, (queryable) => queryable);
@@ -9,12 +9,14 @@ async function getDocumentsWhere(collection, queryOnQueryable) {
         setLastModified(collection, firebase.firestore.Timestamp.fromMillis(0));
     }
 
+    const { app } = await getFirebase();
+
     const [modified, cached] = await Promise.all([
         queryOnQueryable(
             app
                 .firestore()
                 .collection(collection)
-                .where('lastModified', '>', getLastModified(collection))
+                .where('lastModified', '>', await getLastModified(collection))
         ).get(),
         queryOnQueryable(app.firestore().collection(collection)).get({
             source: 'cache',
@@ -49,7 +51,9 @@ function setLastModified(collection, lastModified) {
     localStorage.setItem(collection, lastModified.toMillis());
 }
 
-function getLastModified(collection) {
+async function getLastModified(collection) {
+    const { firebase } = await getFirebase();
+
     return localStorage.getItem(collection)
         ? firebase.firestore.Timestamp.fromMillis(
               localStorage.getItem(collection)

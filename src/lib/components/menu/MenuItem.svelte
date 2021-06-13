@@ -10,6 +10,8 @@ export let cartItems = [];
 
 const maxPurchaseQuantity = 3;
 
+$: availableOptions = options.filter((option) => option.stock);
+
 $: if (cartItems) {
     for (let i = 0; i < maxPurchaseQuantity; i++) {
         if (!cartItems[i] && i < quantity) {
@@ -35,13 +37,14 @@ $: if (cartItems) {
             {/each}
         </select>
     </label>
-    {#each new Array(quantity).fill(0) as _, i (i)}
-        <MenuItemOptions
-            optionsMessage={'Item ' + (i + 1) + ' options:'}
-            noOptionsMessage={'Item ' + (i + 1)}
-            {options}
-            bind:selectedOptions={cartItems[i].options} />
-    {/each}
+    {#if availableOptions.length > 0}
+        {#each new Array(quantity).fill(0) as _, i (i)}
+            <MenuItemOptions
+                optionsMessage={'Item ' + (i + 1) + ' options:'}
+                options={availableOptions}
+                bind:selectedOptions={cartItems[i].options} />
+        {/each}
+    {/if}
     {#if !item.stock}
         <p class="out-of-stock">Out of stock</p>
     {/if}

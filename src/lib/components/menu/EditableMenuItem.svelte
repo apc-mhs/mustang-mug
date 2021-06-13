@@ -2,9 +2,9 @@
 import { createEventDispatcher } from 'svelte';
 
 import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
-import app from '$lib/firebase/firebase';
 import tippy from '$lib/tippy';
 import Button from '../utility/Button.svelte';
+import getFirebase from '$lib/firebase';
 
 export let item;
 export let options = [];
@@ -13,9 +13,11 @@ export let allOptions;
 const dispatch = createEventDispatcher();
 
 $: if (options) {
-    item.options = options.map((option) =>
-        app.firestore().doc('options/' + option.id)
-    );
+    item.options = options.map((option) => {
+        getFirebase().then(({ app }) => {
+            app.firestore().doc('options/' + option.id)
+        });
+    });
 }
 
 let { price, name, image, stock } = item;
