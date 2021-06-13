@@ -1,8 +1,9 @@
 <script>
-import { onMount } from 'svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
+import { useMediaQuery } from '$lib/utils';
 
 // Show mobile icon and display menu
+const mobile = useMediaQuery('(max-width: 767px)');
 let showMobileMenu = false;
 
 // List of navigation items
@@ -17,20 +18,7 @@ const navItems = [
 // Mobile menu click event handler
 const handleMobileIconClick = () => (showMobileMenu = !showMobileMenu);
 
-// Media match query handler
-const mediaQueryHandler = (e) => {
-    // Reset mobile state
-    if (!e.matches) {
-        showMobileMenu = false;
-    }
-};
-
-// Attach media query listener on mount hook
-onMount(() => {
-    const mediaListener = window.matchMedia('(max-width: 767px)');
-
-    mediaListener.addEventListener('change', mediaQueryHandler);
-});
+$: if (!$mobile) closeMobileMenu();
 
 export function closeMobileMenu() {
     showMobileMenu = false;

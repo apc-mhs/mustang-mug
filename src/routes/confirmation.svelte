@@ -2,23 +2,26 @@
 import { browser } from '$app/env';
 
 import { currentUser } from '$lib/auth';
-
-import app from '$lib/firebase/firebase';
+import getFirebase from '$lib/firebase';
 
 let resultCodes = null;
-$: if (browser && $currentUser) {
-    app.firestore()
-        .collection('carts')
-        .doc($currentUser.uid)
-        .get()
-        .then((snapshot) => {
-            if (snapshot.exists) {
-                resultCodes = snapshot.data().resultCodes;
-            } else {
-                resultCodes = [];
-            }
-        })
-        .catch((err) => (resultCodes = []));
+$: if (browser) {
+    getFirebase().then(({ app }) => {
+        if (!app.auth().currentUser) return;
+
+        app.firestore()
+            .collection('carts')
+            .doc(app.auth().currentUser.uid)
+            .get()
+            .then((snapshot) => {
+                if (snapshot.exists) {
+                    resultCodes = snapshot.data().resultCodes;
+                } else {
+                    resultCodes = [];
+                }
+            })
+            .catch((err) => (resultCodes = []));
+    });
 }
 </script>
 

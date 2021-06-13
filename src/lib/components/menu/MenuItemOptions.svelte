@@ -5,11 +5,9 @@ import { horizontalSlide } from '$lib/transition';
 import { numberFormatter } from '$lib/utils';
 
 export let options;
-export let noOptionsMessage = '';
 export let optionsMessage = '';
 export let selectedOptions = [];
 
-$: availableOptions = options.filter((option) => option.stock);
 
 function toggle(option) {
     if (!option.stock) return;
@@ -26,9 +24,9 @@ function toggle(option) {
 </script>
 
 <div class="item-options" transition:slide|local>
-    <p>{availableOptions.length === 0 ? noOptionsMessage : optionsMessage}</p>
+    <p>{optionsMessage}</p>
     <div class="options-list">
-        {#each availableOptions as option}
+        {#each options as option}
             <div
                 class="option"
                 on:click={() => toggle(option)}
@@ -38,7 +36,7 @@ function toggle(option) {
                         <Icon name="check" width="16" height="16" />
                     </span>
                 {/if}
-                <p>
+                <p class="option-text">
                     {option.name}
                     {#if option.price}
                         - {numberFormatter.format(option.price)}
@@ -102,5 +100,11 @@ function toggle(option) {
     color: skyblue;
     /* Set padding left-right to take off 16 (width of checkmark) total pixels */
     padding: 5px 8px;
+}
+
+.option-text {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 </style>

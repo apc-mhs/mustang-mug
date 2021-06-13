@@ -3,11 +3,9 @@ import { goto } from '$app/navigation';
 
 import Menu from '$lib/components/menu/Menu.svelte';
 import MenuItem from '$lib/components/menu/MenuItem.svelte';
-import Button from '$lib/components/utility/Button.svelte';
 import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
-import { fade } from 'svelte/transition';
 import { query, postCartItems } from './_menu';
 
 let skeleton = true;

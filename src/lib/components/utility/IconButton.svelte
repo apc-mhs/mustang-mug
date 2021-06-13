@@ -10,8 +10,7 @@ export let disabled = false;
     --font-size="20px"
     --border-radius="200px"
     --box-shadow="none"
-    --padding="9px"
-    --background-color="gray">
+    --padding="9px">
     <slot />
 </Button>
 

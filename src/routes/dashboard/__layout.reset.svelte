@@ -3,9 +3,9 @@ import { browser } from '$app/env';
 
 import { page } from '$app/stores';
 
-import { signInWithGoogle } from '$lib/auth';
+import { signInWithGoogle, signOut } from '$lib/auth';
 import Button from '$lib/components/utility/Button.svelte';
-import app from '$lib/firebase/firebase';
+import getFirebase from '$lib/firebase';
 
 const navLinks = [
     {
@@ -23,14 +23,17 @@ const navLinks = [
 ];
 
 if (browser) {
-    app.auth().onAuthStateChanged(function (user) {
-        if (!user) {
-            signInWithGoogle();
-        } else {
-            if (!user.email) {
-                app.auth().signOut();
+    getFirebase().then(({ app }) => {
+        app.auth().onAuthStateChanged(function (user) {
+            if (!user) {
+                signInWithGoogle();
+            } else {
+                // User is still anonymously signed in, sign them out first
+                if (!user.email) {
+                    signOut();
+                }
             }
-        }
+        });
     });
 }
 </script>
@@ -44,7 +47,7 @@ if (browser) {
                     >{link.name}</a>
             {/each}
         </nav>
-        <Button on:click={() => app.auth().signOut()}>Sign out</Button>
+        <Button on:click={() => signOut()}>Sign out</Button>
     </aside>
     <div class="content">
         <slot />

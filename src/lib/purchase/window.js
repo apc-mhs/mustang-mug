@@ -1,5 +1,3 @@
-import 'firebase/firestore';
-
 class PurchaseWindow {
     constructor(dayOfWeek, start, end, maxOrders) {
         this.dayOfWeek = dayOfWeek;
@@ -11,6 +9,10 @@ class PurchaseWindow {
     get current() {
         const now = new Date();
         return this.start <= now && now <= this.end && this.dayOfWeek === now.getDay();
+    }
+
+    get duration() {
+        return this.end.toDate() - this.start.toDate();
     }
 
     toCurrent() {
@@ -29,19 +31,23 @@ class PurchaseWindow {
         return true;
     }
 
-    static converter = {
-        toFirestore: function (purchaseWindow) {
-            return {
-                dayOfWeek: purchaseWindow.dayOfWeek,
-                start: purchaseWindow.start.toTimestamp(),
-                end: purchaseWindow.end.toTimestamp(),
-                maxOrders: purchaseWindow.maxOrders
-            };
-        },
-        fromFirestore: function (snapshot, options) {
-            const data = snapshot.data(options);
-            return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders);
-        }
+    /** @param {typeof import("firebase/app").default.firestore.Timestamp} timestampClass */
+    static converter(timestampClass) {
+        return {
+            /** @returns {import("firebase/app").default.firestore.DocumentData} */
+            toFirestore: function (purchaseWindow) {
+                return {
+                    dayOfWeek: purchaseWindow.dayOfWeek,
+                    start: purchaseWindow.start.toTimestamp(timestampClass),
+                    end: purchaseWindow.end.toTimestamp(timestampClass),
+                    maxOrders: purchaseWindow.maxOrders
+                };
+            },
+            fromFirestore: function (snapshot, options) {
+                const data = snapshot.data(options);
+                return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders);
+            }
+        };
     }
 }
 
@@ -55,17 +61,20 @@ class CurrentPurchaseWindow extends PurchaseWindow {
         return this.orders >= this.maxOrders;
     }
 
-    static converter = {
-        toFirestore: function (currentPurchaseWindow) {
-            return {
-                ...PurchaseWindow.converter.toFirestore(currentPurchaseWindow),
-                orders: currentPurchaseWindow.orders
-            };
-        },
-        fromFirestore: function (snapshot, options) {
-            const data = snapshot.data(options);
-            return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders);
-        }
+    /** @param {typeof import("firebase/app").default.firestore.Timestamp} timestampClass */
+    static converter(timestampClass) {
+        return {
+            toFirestore: function (currentPurchaseWindow) {
+                return {
+                    ...PurchaseWindow.converter(timestampClass).toFirestore(currentPurchaseWindow),
+                    orders: currentPurchaseWindow.orders
+                };
+            },
+            fromFirestore: function (snapshot, options) {
+                const data = snapshot.data(options);
+                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders);
+            }
+        };
     }
 }
 
@@ -77,8 +86,9 @@ class Time {
         this.milliseconds = milliseconds || 0;
     }
 
-    toTimestamp() {
-        return firestore.Timestamp.fromDate(this.toDate());
+    /** @param {typeof import("firebase/app").default.firestore.Timestamp} timestampClass */
+    toTimestamp(timestampClass) {
+        return timestampClass.fromDate(this.toDate());
     }
 
     toDate() {
@@ -93,7 +103,7 @@ class Time {
         );
     }
 
-    /** @param timestamp {firestore.Timestamp} */
+    /** @param timestamp {firebase.firestore.Timestamp} */
     static fromTimestamp(timestamp) {
         const date = timestamp.toDate();
         return new Time(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());

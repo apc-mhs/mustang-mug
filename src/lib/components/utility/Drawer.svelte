@@ -16,7 +16,7 @@ onDestroy(() => document.body.style.overflow = 'unset');
 
 <div class="drawer-wrapper" class:visible>
     <div class="close-wrapper">
-        <IconButton on:click={() => dispatch('close')}>
+        <IconButton on:click={() => dispatch('close')} --background-color="gray">
             <Icon name="close" width="25" height="25" />
         </IconButton>
     </div>

@@ -1,5 +1,4 @@
 import { getAuthorization } from '$lib/msb';
-import app from '$lib/firebase/firebaseAdmin';
 import { getCart } from './_cart';
 
 /**
@@ -37,6 +36,7 @@ export async function get({ query }) {
                     .get();
 
                 if (!cartSnapshot.empty) {
+                    const { app } = await getFirebase();
                     const cartDocument = cartSnapshot.docs[0];
                     await app
                         .firestore()

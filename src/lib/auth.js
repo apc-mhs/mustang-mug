@@ -1,12 +1,9 @@
 import { browser } from '$app/env';
-import app, { firebase } from '$lib/firebase/firebase';
-import { authState } from 'rxfire/auth';
-import { writable } from 'svelte/store';
 import Cookies from 'js-cookie';
 import { goto } from '$app/navigation';
+import getFirebase from './firebase';
 
 const acceptableEmails = [];
-const currentUser = browser ? authState(app.auth()) : writable(undefined);
 if (browser) {
     async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
@@ -17,12 +14,9 @@ if (browser) {
         });
     }
 
-    currentUser.subscribe((user) => {
-        updateSessionCookie(user);
-    });
-
-    app.auth().onIdTokenChanged(async (user) => {
-        updateSessionCookie(user);
+    getFirebase().then(({ app }) => {
+        app.auth().onIdTokenChanged(updateSessionCookie);
+        app.auth().onAuthStateChanged(updateSessionCookie);
     });
 }
 
@@ -32,6 +26,8 @@ async function signInAnonymously() {
     if (!browser) {
         return;
     }
+
+    const { app } = await getFirebase();
 
     // If the current user is signed in with Google (dashboard only)
     if (app.auth().currentUser && app.auth().currentUser.email)
@@ -50,6 +46,8 @@ async function signInWithGoogle() {
         return;
     }
 
+    const { app, firebase } = await getFirebase();
+    
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('email');
     await app.auth().signInWithRedirect(provider);
@@ -60,4 +58,9 @@ async function signInWithGoogle() {
     }
 }
 
-export { currentUser, signInAnonymously, signInWithGoogle };
+async function signOut() {
+    const { app } = await getFirebase();
+    await app.auth().signOut();
+}
+
+export { signInAnonymously, signInWithGoogle, signOut };

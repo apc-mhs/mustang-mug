@@ -19,6 +19,7 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
 
 const mediaQueries = {};
 
+/** @returns {import("svelte/store").Readable<boolean>} */
 function useMediaQuery(mediaQuery) {
     if (!browser) {
         return readable(false, () => {});

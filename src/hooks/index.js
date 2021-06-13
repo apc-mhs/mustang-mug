@@ -1,8 +1,8 @@
-import { currentUser } from '$lib/auth';
-import app from '$lib/firebase/firebaseAdmin';
+import getFirebase from '$lib/firebase';
 import cookie from 'cookie';
 
 export async function handle({ request, resolve }) {
+    const { app } = await getFirebase();
     const cookies = cookie.parse(request.headers.cookie || '');
     let token;
     if (cookies.__session) {
@@ -14,7 +14,6 @@ export async function handle({ request, resolve }) {
     }
 
     const user = token && (await app.auth().getUser(token.uid));
-    currentUser.set(user);
     request.locals.user = user;
 
     return resolve(request);
