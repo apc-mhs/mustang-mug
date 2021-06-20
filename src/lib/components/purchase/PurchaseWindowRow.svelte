@@ -1,35 +1,48 @@
 <script>
 import tippy from '$lib/tippy';
+import { onMount } from 'svelte';
 
-export let rowNum;
 export let rowStartTime;
 export let rowEndTime;
-export let purchaseWindow;
-export let color;
+export let purchaseWindows;
+export let colors;
 export let numCells;
+export let rowNum = 0;
+
+let purchaseWindowBoxes = [];
 
 /** @type {HTMLElement} */
 let rowWidth = 0;
-let left = 0;
-let width = 0;
 
 // Must use useableRowWidth because there is one extra cell
 // From the table time row
 $: useableRowWidth = rowWidth - (rowWidth / numCells);
 
 $: if (rowWidth) {
-    console.log('Row', rowEndTime, rowStartTime);
-    console.log('Window', purchaseWindow.end, purchaseWindow.start);
-    const scheduleLength = rowEndTime.toDate() - rowStartTime.toDate();
-    const purchaseWindowLength = purchaseWindow.duration;
+    purchaseWindowBoxes = [];
 
-    width = (purchaseWindowLength / scheduleLength) * useableRowWidth;
-    left =
-        ((purchaseWindow.start.toDate() - rowStartTime.toDate()) /
-            1000 /
-            60 /
-            30) *
-        (rowWidth / numCells);
+    for (let i = 0; i < purchaseWindows.length; i++) {
+        const purchaseWindow = purchaseWindows[i];
+        const scheduleLength = rowEndTime.toDate() - rowStartTime.toDate();
+        const purchaseWindowLength = purchaseWindow.duration;
+
+        const width = (purchaseWindowLength / scheduleLength) * useableRowWidth;
+        const left =
+            ((purchaseWindow.start.toDate() - rowStartTime.toDate()) /
+                1000 /
+                60 /
+                30) *
+            (rowWidth / numCells);
+
+        purchaseWindowBoxes.push({
+            id: purchaseWindow.id,
+            width,
+            left,
+            color: colors[i % colors.length],
+        });
+    }
+
+    purchaseWindowBoxes = purchaseWindowBoxes;
 }
 </script>
 
@@ -38,10 +51,12 @@ $: if (rowWidth) {
     {#each new Array(numCells - 1).fill(null) as _}
         <td></td>
     {/each}
-    <div
-        class="purchase-window-row"
-        style="width: {width}px; left: {left}px; background-color: {color};"
-        use:tippy={'Purchase window ' + (rowNum + 1)} />
+    {#each purchaseWindowBoxes as {id, width, left, color}, i (id)}
+        <div
+            class="purchase-window"
+            style="width: {width}px; left: {left}px; background-color: {color};"
+            use:tippy={'Purchase window ' + ((i || rowNum) + 1)} />
+    {/each}
 </tr>
 
 <style>
@@ -58,7 +73,7 @@ td {
     /* outline: 1px solid black; */
 }
 
-.purchase-window-row {
+.purchase-window {
     position: absolute;
     left: 0;
     top: 50%;
