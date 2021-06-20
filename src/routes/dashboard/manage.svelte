@@ -15,7 +15,8 @@ async function deleteAllCarts() {
 let purchaseWindows = [];
 let currentPurchaseWindow;
 getFirebase().then(({ app, firebase }) => {
-    app.firestore().collection('purchase_windows')
+    app.firestore()
+        .collection('purchase_windows')
         // .where(firebase.firestore.FieldPath.documentId, '!=', 'current')
         .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
         .get()
@@ -41,7 +42,12 @@ getFirebase().then(({ app, firebase }) => {
     <h1>Purchase Windows by Day</h1>
     <div class="purchase-schedules">
         {#each new Array(7).fill(null) as _, i (i)}
-            <PurchaseSchedule dayOfWeek={i} purchaseWindows={purchaseWindows.filter((window) => window.dayOfWeek == i)} />
+            <PurchaseSchedule
+                dayOfWeek={i}
+                purchaseWindows={purchaseWindows.filter(
+                    (window) => window.dayOfWeek == i
+                )}
+                open={i === 0} />
         {/each}
     </div>
 </section>
@@ -79,5 +85,6 @@ h1 {
     max-width: 10in;
     margin: 0px auto;
     gap: 50px 0px;
+    padding: 25px 10px;
 }
 </style>

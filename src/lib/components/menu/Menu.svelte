@@ -1,6 +1,7 @@
 <script>
 import Refiner from '$lib/components/menu/Refiner.svelte';
 import { fade } from 'svelte/transition';
+import { flip } from 'svelte/animate';
 import { useMediaQuery } from '$lib/utils';
 import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
@@ -59,7 +60,7 @@ function getOptions(item) {
             <h2>{title}</h2>
             <div class="items">
                 {#each menuItems as item (item.id)}
-                    <div transition:fade|local={{ duration: 250 }}>
+                    <div transition:fade|local={{ duration: 250 }} animate:flip>
                         <slot {item} itemOptions={getOptions(item)} />
                     </div>
                 {/each}

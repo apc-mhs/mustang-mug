@@ -5,11 +5,11 @@ function getDocuments(collection) {
 }
 
 async function getDocumentsWhere(collection, queryOnQueryable) {
-    if (!getLastModified(collection)) {
+    const { app, firebase } = await getFirebase();
+
+    if (!(await getLastModified(collection))) {
         setLastModified(collection, firebase.firestore.Timestamp.fromMillis(0));
     }
-
-    const { app } = await getFirebase();
 
     const [modified, cached] = await Promise.all([
         queryOnQueryable(

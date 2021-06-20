@@ -103,6 +103,13 @@ class Time {
         );
     }
 
+    subtract(other) {
+        if (other.toDate) {
+            return this.toDate() - other.toDate();
+        }
+        return null;
+    }
+
     /** @param timestamp {firebase.firestore.Timestamp} */
     static fromTimestamp(timestamp) {
         const date = timestamp.toDate();

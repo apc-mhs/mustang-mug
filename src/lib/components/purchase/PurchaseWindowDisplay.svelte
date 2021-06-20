@@ -1,7 +1,6 @@
 <script>
 import { Time } from '$lib/purchase/window';
 import PurchaseWindowRow from './PurchaseWindowRow.svelte';
-import { fade } from 'svelte/transition';
 
 export let colors;
 export let purchaseWindows;
@@ -10,25 +9,32 @@ export let collapsed;
 
 // Turn milliseconds between start and end into array of length
 // of number of 30 min increments between start and end
-console.log((hours.end.toDate() - hours.start.toDate())/ 1000 / 60 / 30);
 const times = new Array(
     ((hours.end.toDate() - hours.start.toDate()) / 1000 / 60 / 30) + 1
 )
     .fill(null)
     .map((_, i) => new Time(hours.start.hours, i * 30));
-console.log(times.map((time) => time.toDate()));
 </script>
 
-<table in:fade|local>
-    {#each purchaseWindows as purchaseWindow, i (purchaseWindow.id)}
+<table>
+    {#if !collapsed}
+        {#each purchaseWindows as purchaseWindow, i (purchaseWindow.id)}
+            <PurchaseWindowRow
+                purchaseWindows={[purchaseWindow]}
+                rowStartTime={hours.start}
+                rowEndTime={hours.end}
+                colors={[colors[i % colors.length]]}
+                numCells={times.length}
+                rowNum={i} />
+        {/each}
+    {:else}
         <PurchaseWindowRow
-            {purchaseWindow}
-            rowNum={i}
+            {purchaseWindows}
             rowStartTime={hours.start}
             rowEndTime={hours.end}
-            color={colors[i % colors.length]}
+            {colors}
             numCells={times.length} />
-    {/each}
+    {/if}
     <tr class="times">
         {#each times as time, i (i)}
             <td
@@ -45,6 +51,7 @@ table {
     border-collapse: collapse;
     table-layout: fixed;
     width: 550px;
+    align-self: flex-start;
 }
 
 tr.times > td {

@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { goto } from '$app/navigation';
 import getFirebase from './firebase';
 
-const acceptableEmails = [];
+const acceptableEmails = ['mustangmug@fccps.org'];
 if (browser) {
     async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {

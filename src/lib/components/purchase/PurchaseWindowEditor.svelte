@@ -4,21 +4,33 @@ import { createEventDispatcher } from "svelte";
 import Icon from "../utility/Icon.svelte";
 import IconButton from "../utility/IconButton.svelte";
 import Input from "../utility/Input.svelte";
+import TimeInput from "../utility/TimeInput.svelte";
+
 
 export let purchaseWindow;
-
-let { start, end } = purchaseWindow;
+export let hours;
 
 const dispatch = createEventDispatcher();
 
-const dateFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric' });
+let start = purchaseWindow.start;
+let end = purchaseWindow.end;
+
+$: purchaseWindow.start = clamp(start);
+$: purchaseWindow.end = clamp(end);
+
+function clamp(time) {
+    const timeDate = time.toDate();
+    if (timeDate < hours.start.toDate()) return hours.start;
+    else if (timeDate > hours.end.toDate()) return hours.end;
+    else return time;
+}
 </script>
 
-<Input placeholder="7:00 AM" value={dateFormatter.format(purchaseWindow.start.toDate())} />
+<TimeInput placeholder="Start time" bind:time={start} />
 <p>&rarr;</p>
-<Input placeholder="8:50 AM" value={dateFormatter.format(purchaseWindow.end.toDate())} />
+<TimeInput placeholder="End time" bind:time={end} />
 <p>|</p>
-<Input placeholder="Max purchases" bind:value={purchaseWindow.maxOrders} />
+<Input label="Max purchases:" bind:value={purchaseWindow.maxOrders} --width="50px" />
 <IconButton on:click={() => dispatch('remove')}><Icon name="close" width="20" height="20" /></IconButton>
 
 <style>
