@@ -59,7 +59,7 @@ export async function get({ query }) {
                 if (res.resultCodes.every((code) => /confirmation code/.test(code))) {
                     await app
                         .firestore()
-                        .collection('payments')
+                        .collection('orders')
                         .doc(res.cartId)
                         .set({
                             pickUpTime: admin.firestore.Timestamp.fromDate(new Date(2021, 8, 31, 7, 30))

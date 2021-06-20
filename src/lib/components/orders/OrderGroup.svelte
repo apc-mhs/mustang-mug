@@ -1,15 +1,17 @@
 <script>
 export let key;
 export let orders;
-
+$: console.log(orders);
 </script>
 
 <div class="order-group">
     <h2>Orders to be picked up at {key}</h2>
     <hr>
-    {#each orders as order (order.id)}
-        <slot {order} />
-    {/each}
+    <div class="orders">
+        {#each orders as order (order.id)}
+            <slot {order} />
+        {/each}
+    </div>
 </div>
 
 
@@ -24,5 +26,11 @@ hr {
         rgba(0, 0, 0, 0)
     );
     margin-bottom: 5px; 
+}
+
+.orders {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
 }
 </style>

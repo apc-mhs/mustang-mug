@@ -1,3 +1,5 @@
+import { getAuthorization } from '$lib/msb';
+
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
