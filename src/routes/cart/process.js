@@ -6,6 +6,8 @@ import { getCart } from './_cart';
  * @type {import('@sveltejs/kit').RequestHandler}
  */
 export async function get({ query }) {
+    const { app, firebase } = await getFirebase();
+
     const cartId = query.get('cartID');
     if (cartId) {
         const [cart, cartSnapshot] = await Promise.all([
@@ -17,6 +19,7 @@ export async function get({ query }) {
         ]);
 
         if (!cartSnapshot.empty) {
+
             const cartDocument = cartSnapshot.docs[0];
 
             // TODO: Get cart items and make sure they are all in stock
@@ -40,7 +43,6 @@ export async function get({ query }) {
                     .get();
 
                 if (!cartSnapshot.empty) {
-                    const { app } = await getFirebase();
                     const cartDocument = cartSnapshot.docs[0];
                     await app
                         .firestore()
@@ -62,7 +64,7 @@ export async function get({ query }) {
                         .collection('orders')
                         .doc(res.cartId)
                         .set({
-                            pickUpTime: admin.firestore.Timestamp.fromDate(new Date(2021, 8, 31, 7, 30))
+                            pickUpTime: firebase.firestore.Timestamp.fromDate(new Date(2021, 8, 31, 7, 30))
                         });
                     
                     return {

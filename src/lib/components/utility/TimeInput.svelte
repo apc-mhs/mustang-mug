@@ -1,12 +1,11 @@
 <script>
 import Input from './Input.svelte';
 import { Time } from '$lib/purchase/window';
-import { loop_guard } from 'svelte/internal';
 
 export let time;
 export let placeholder = '';
 export let label = '';
-export let pattern = /(\d{1,2}):(\d{1,2}) (AM|PM)/;
+export let pattern = /(\d{1,2}):(\d{2}) (AM|PM)/;
 
 let timeComponents = {
     hour: time.hours % 12,
@@ -19,7 +18,7 @@ let timeComponents = {
     }),
     toTime() {
         return new Time(
-            this.hour + ((this.period === 'PM' ? 12 : 0) % 24),
+            this.hour + (this.period === 'PM' ? 12 : 0),
             this.minute
         );
     },
@@ -54,7 +53,7 @@ function makeTimeComponents(rawValue) {
     const [_, hour, minute, period] = match;
     timeComponents = {
         ...timeComponents,
-        hour: parseInt(hour),
+        hour: parseInt(hour) % 12,
         minute: parseInt(minute),
         period,
     };

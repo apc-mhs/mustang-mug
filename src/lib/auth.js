@@ -2,6 +2,7 @@ import { browser } from '$app/env';
 import Cookies from 'js-cookie';
 import { goto } from '$app/navigation';
 import getFirebase from './firebase';
+import { readable } from 'svelte/store';
 
 const acceptableEmails = ['mustangmug@fccps.org'];
 if (browser) {
@@ -19,6 +20,17 @@ if (browser) {
         app.auth().onAuthStateChanged(updateSessionCookie);
     });
 }
+
+const currentUser = readable(null, (set) => {
+    let unsubscribe = () => {};
+    if (browser) {
+        getFirebase().then(({ app }) => {
+            unsubscribe = app.auth().onAuthStateChanged(set);
+        });
+    }
+    // Must use an arrow function to create a closure
+    return () => unsubscribe();
+});
 
 /** @returns {Promise<import('firebase/app').User | undefined>} */
 async function signInAnonymously() {
@@ -63,4 +75,4 @@ async function signOut() {
     await app.auth().signOut();
 }
 
-export { signInAnonymously, signInWithGoogle, signOut };
+export { currentUser, signInAnonymously, signInWithGoogle, signOut };

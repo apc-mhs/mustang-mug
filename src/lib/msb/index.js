@@ -2,7 +2,7 @@ import { ApiClient } from 'msb_pay_api';
 
 const clientId = 'CP_5101290_test';
 const departmentId = 'msbpay_api_dept';
-const storeId = 'msbpay_api_store';
+const storeId = 'food_service_store';
 const paymentMethodId = 'msbpay_api';
 const baseURL = 'https://test.www.myschoolbucks.com/msbpay/v2';
 const client = new ApiClient();
