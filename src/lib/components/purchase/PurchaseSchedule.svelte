@@ -108,7 +108,7 @@ async function saveSchedule() {
         </div>
     </div>
     {#if open}
-        <div transition:slide>
+        <div transition:slide|local>
             <div class="purchase-windows">
                 {#each purchaseWindows as purchaseWindow, i (purchaseWindow.id)}
                     <div class="purchase-window" transition:slide|local>
