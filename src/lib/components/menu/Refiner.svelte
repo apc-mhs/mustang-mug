@@ -8,8 +8,8 @@ function alphabetize() {
 
 <div class="refiner">
     <h2>Refine Menu</h2>
+    <h4>Filter</h4>
     <ul class="selection-items">
-        <!-- I'm fairly certain these can be hard-coded and then do stuff with the script but I tried to set it up for scalability-->
         <li>
             <input type="radio" id="hot" name="temperature" />
             <label for="hot">Hot</label><br />
@@ -41,7 +41,9 @@ function alphabetize() {
             <p>Price Filter</p>
             <input type="range" min="1" max="100" value="100" />
         </li>
-        <hr />
+    </ul>
+    <h4>Sort</h4>
+    <ul class="selection-items">
         <li>
             <input type="checkbox" id="item1" on:click={alphabetize} />
             <label for="item1">Alphabetize</label>
@@ -63,6 +65,10 @@ function alphabetize() {
     padding: 0px;
     text-decoration: none;
 }
+h4 {
+    text-align: center;
+    margin-bottom: 5px;
+}
 li {
     margin-bottom: 0.5em;
 }
@@ -75,7 +81,7 @@ hr {
         rgba(0, 0, 0, 0.75),
         rgba(0, 0, 0, 0)
     );
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
 }
 .selection-items li:hover {
     background-color: #c5c5c5;
