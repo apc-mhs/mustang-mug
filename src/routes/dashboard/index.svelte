@@ -9,11 +9,12 @@ let groupedOrders = {};
 
 $: {
     for (let order of Object.values(orders)) {
-        if (!groupedOrders[order.pickUpTime]) {
-            groupedOrders[order.pickUpTime] = [order];
+        const pickUpTimeSeconds = order.pickUpTime.toMillis()
+        if (!groupedOrders[pickUpTimeSeconds]) {
+            groupedOrders[pickUpTimeSeconds] = [order];
         } else {
-            groupedOrders[order.pickUpTime] = [
-                ...groupedOrders[order.pickUpTime],
+            groupedOrders[pickUpTimeSeconds] = [
+                ...groupedOrders[pickUpTimeSeconds],
                 order,
             ];
         }

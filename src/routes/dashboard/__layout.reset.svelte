@@ -41,7 +41,7 @@ if (browser) {
 <main>
     <aside class="menu">
         <nav>
-            <p>Dashboard</p>
+            <h3>Dashboard</h3>
             {#each navLinks as link}
                 <a href={link.href} class:current={link.href === $page.path}
                     >{link.name}</a>
@@ -64,6 +64,9 @@ main {
 }
 
 aside.menu {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
     position: sticky;
     top: 0px;
     min-width: 200px;
@@ -72,6 +75,7 @@ aside.menu {
     color: white;
     overflow-y: auto;
     height: 100%;
+    gap: 5px;
 }
 
 .content {
@@ -84,6 +88,7 @@ aside.menu {
 }
 
 nav {
+    align-self: stretch;
     box-sizing: content-box;
     display: flex;
     flex-flow: column nowrap;
@@ -94,10 +99,17 @@ nav {
     text-align: center;
 }
 
+nav > h3 {
+    border-bottom: 1px solid gray;
+    padding: 5px 0px;
+}
+
 nav > a {
     text-decoration: none;
-    height: 75px;
     color: inherit;
+    vertical-align: middle;
+    line-height: 1;
+    padding: 20px 0px;
 }
 
 nav > a:not(:last-child) {

@@ -1,5 +1,9 @@
 <script>
 import { getOptionIdsFromProperties } from "$lib/msb/cart";
+import { cubicOut } from "svelte/easing";
+import { scale } from 'svelte/transition';
+import Button from "../utility/Button.svelte";
+import Icon from '$lib/components/utility/Icon.svelte';
 
 
 export let cartPayments;
@@ -9,7 +13,7 @@ $: payment = cartPayments[0];
 $: paymentItems = cartPayments[0].cartPaymentItems;
 </script>
 
-<div class="order">
+<div class="order" in:scale|local={{ duration: 250, start: 0.75, easing: cubicOut }}>
     <h2>Order for {paymentItems[0].studentName}</h2>
     <h3>Items</h3>
     <div class="items">
@@ -29,10 +33,14 @@ $: paymentItems = cartPayments[0].cartPaymentItems;
         {/each}
     </div>
     <p>Confirmation code: {payment.orderId}</p>
+    <Button><Icon name="check"/>Complete</Button>
 </div>
 
 <style>
 .order {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px 0px;
     background-color: white;
     padding: 10px 20px;
     border-radius: 5px;

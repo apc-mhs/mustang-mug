@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function admin() {
-      return request.auth.token.email === 'mustangmug@fccps.org' && request.auth.token.firebase.sign_in_provider === 'google.com';
+      return request.auth.token.email == 'mustangmug@fccps.org' && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
     match /{document=**} {
       allow read, write: if admin() || request.time < timestamp.date(2021, 7, 15);

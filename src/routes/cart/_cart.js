@@ -74,6 +74,7 @@ async function createCartWithItems(body, user, host) {
     // });
 
     if (msbCart.result == 'Error') {
+        console.error(msbCart);
         return false;
     }
 

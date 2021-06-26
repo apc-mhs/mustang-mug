@@ -1,11 +1,21 @@
 <script>
+import getFirebase from "$lib/firebase";
+
+
 export let key;
 export let orders;
-$: console.log(orders);
+
+const formatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+let date;
+$: getFirebase()
+    .then(({ firebase }) => {
+        date = firebase.firestore.Timestamp.fromMillis(key).toDate();
+    });
 </script>
 
 <div class="order-group">
-    <h2>Orders to be picked up at {key}</h2>
+    <h2>Orders to be picked up at {date ? formatter.format(date) : 'Loading...'}</h2>
     <hr>
     <div class="orders">
         {#each orders as order (order.id)}
@@ -32,5 +42,6 @@ hr {
     display: flex;
     flex-flow: row nowrap;
     align-items: flex-start;
+    gap: 15px 10px;
 }
 </style>

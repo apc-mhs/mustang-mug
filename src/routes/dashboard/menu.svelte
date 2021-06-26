@@ -3,6 +3,7 @@ import EditableMenuItem from '$lib/components/menu/EditableMenuItem.svelte';
 import EditableMenuOptionsItem from '$lib/components/menu/EditableMenuOptionsItem.svelte';
 import Menu from '$lib/components/menu/Menu.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
+import getFirebase from '$lib/firebase';
 import { query } from '../_menu';
 
 let items = [];
@@ -18,9 +19,11 @@ async function save(itemData) {
     itemData.lastModified = firebase.firestore.Timestamp.now();
 
     // Update the menu item in the main menuItems array
-    items = [...items.filter((i) => itemData.id !== i.id), itemData];
-    // Update the menu item + options in firestore
+    const index = items.findIndex((item) => item.id === itemData.id);
+    items.splice(index, 1, itemData);
+    items = items;
 
+    // Update the menu item + options in firestore
     await app
         .firestore()
         .collection('items')
