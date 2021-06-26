@@ -18,14 +18,13 @@ if (browser) {
         .catch((err) => (cart = null));
 }
 
-let noItemsMessageFadeInDelay = 0;
 function onRemove({ detail: item }) {
     if (!cart) return;
 
     const index = cart.cartItems.indexOf(item);
     if (index !== -1) {
         cart.cartItems.splice(index, 1);
-        cart = cart;
+        cart.cartItems = cart.cartItems;
         // Don't post inherent data that belongs to the cart and can't be changed
         fetch('/cart.json', {
             method: 'PUT',
@@ -34,8 +33,6 @@ function onRemove({ detail: item }) {
                 'Content-Type': 'application/json',
             },
         });
-
-        noItemsMessageFadeInDelay = 250;
     }
 }
 
@@ -90,18 +87,13 @@ query().then(([items, _]) => {
     <div class="cart">
         <h1>View your cart</h1>
         {#if (cart || cart === null) && menuItems.length > 0}
-            {#if cart !== null && cart.cartItems.length > 0}
+            {#if cart !== null}
                 <Cart
                     bind:cartItems={cart.cartItems}
                     bind:validCart
                     on:remove={onRemove}
                     {menuItems} />
-            {:else}
-                <h2 in:fade={{ delay: noItemsMessageFadeInDelay }}>
-                    There is nothing in your cart. Go to the <a href="/"
-                        >menu</a> and add a few items.
-                </h2>
-            {/if}
+                {/if}
         {:else}
             <h2>Loading cart...</h2>
         {/if}
@@ -148,7 +140,6 @@ h2 {
     color: white;
 }
 
-a,
 label {
     color: white;
 }

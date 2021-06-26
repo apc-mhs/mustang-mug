@@ -15,7 +15,7 @@ let options = [];
 let cartItems = {};
 
 query().then(([itemsData, optionsData]) => {
-    items = itemsData;
+    items = itemsData.sort((a, b) => a.name.localeCompare(b.name));
     options = optionsData;
     skeleton = false;
 });
