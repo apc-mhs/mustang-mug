@@ -4,6 +4,10 @@ export let refinedItems;
 function alphabetize() {
     refinedItems = refinedItems.sort((a, b) => a.name.localeCompare(b.name));
 }
+
+function sortByPrice() {
+    refinedItems = refinedItems.sort((a, b) => a.price - b.price);
+}
 </script>
 
 <div class="refiner">
@@ -11,42 +15,79 @@ function alphabetize() {
     <h4>Filter</h4>
     <ul class="selection-items">
         <li>
-            <input type="radio" id="hot" name="temperature" />
-            <label for="hot">Hot</label><br />
-            <input type="radio" id="cold" name="temperature" />
-            <label for="cold">Cold</label><br />
+            <label>
+                <input type="radio" name="temperature" />
+                Hot
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="temperature" />
+                Cold
+            </label>
         </li>
         <hr />
         <li>
-            <input type="radio" id="food" name="consumable-type" />
-            <label for="food">Food</label><br />
-            <input type="radio" id="beverage" name="consumable-type" />
-            <label for="beverage">Beverage</label><br />
+            <label>
+                <input type="radio" name="consumable-type" />
+                Food
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" name="consumable-type" />
+                Beverage
+            </label>
         </li>
         <hr />
         <li>
-            <input type="checkbox" id="gluten" />
-            <label for="gluten">Gluten Free</label>
+            <label>
+                <input type="checkbox" />
+                Gluten Free
+            </label>
         </li>
         <li>
-            <input type="checkbox" id="lactose" />
-            <label for="lactose">Lactose Free</label>
+            <label>
+                <input type="checkbox" />
+                Lactose Free
+            </label>
         </li>
         <li>
-            <input type="checkbox" id="nut" />
-            <label for="nut">Nut Free</label>
+            <label>
+                <input type="checkbox" />
+                Nut Free
+            </label>
         </li>
         <hr />
         <li>
-            <p>Price Filter</p>
+            <label>
+                <input type="checkbox" />
+                In Stock
+            </label>
+        </li>
+        <hr />
+        <li>
+            <p class="label">Price Filter</p>
             <input type="range" min="1" max="100" value="100" />
         </li>
     </ul>
     <h4>Sort</h4>
     <ul class="selection-items">
         <li>
-            <input type="checkbox" id="item1" on:click={alphabetize} />
-            <label for="item1">Alphabetize</label>
+            <label>
+                <input
+                    type="radio"
+                    on:click={alphabetize}
+                    checked
+                    name="sort" />
+                Alphabetical
+            </label>
+        </li>
+        <li>
+            <label>
+                <input type="radio" on:click={sortByPrice} name="sort" />
+                Price
+            </label>
         </li>
     </ul>
 </div>
@@ -70,7 +111,7 @@ h4 {
     margin-bottom: 5px;
 }
 li {
-    margin-bottom: 0.5em;
+    margin-bottom: 2px;
 }
 hr {
     border: 0;
@@ -85,5 +126,12 @@ hr {
 }
 .selection-items li:hover {
     background-color: #c5c5c5;
+}
+label,
+.label {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    padding: 3px 5px;
 }
 </style>
