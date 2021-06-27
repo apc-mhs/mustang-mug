@@ -32,18 +32,17 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
         lastModified: timestamp,
     });
 
-    // Uncomment to load a large number of items in firestore (delete the /* and */)
-    
-    /* for (let i = 0; i < 10; i++) {
-       firestore.collection('items').doc('free_item' + i).set({
-           name: 'This item is free',
-            price: 0,
-           image: 'coffee.jpg',
-           stock: true,
-             options: [],
-          lastModified: timestamp
-       });
-     } */
+    // Uncomment to load a large number of items in firestore
+    // for (let i = 0; i < 10; i++) {
+    //    firestore.collection('items').doc('free_item' + i).set({
+    //        name: 'This item is free',
+    //         price: 0,
+    //        image: 'coffee.jpg',
+    //        stock: true,
+    //          options: [],
+    //       lastModified: timestamp
+    //    });
+    //  }
 
     await firestore.collection('options').doc('milk').set({
         name: 'Milk',

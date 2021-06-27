@@ -6,6 +6,8 @@ import { query } from '../_menu';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/utility/Button.svelte';
 import { fade } from 'svelte/transition';
+import {goto} from '$app/navigation';
+
 
 let validCart = false;
 let studentName = '';
@@ -79,7 +81,7 @@ query().then(([items, _]) => {
 });
 
 function goToMenu() {
-    window.location.replace('/');
+    goto('/');
 }
 </script>
 

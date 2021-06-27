@@ -55,7 +55,7 @@ function showInStock() {
             <label>
                 <input
                     type="radio"
-                    on:click={temperatureRadioChoice('hot')}
+                    on:click={() => temperatureRadioChoice('hot')}
                     name="temperature" />
                 Hot
             </label>
@@ -64,7 +64,7 @@ function showInStock() {
             <label>
                 <input
                     type="radio"
-                    on:click={temperatureRadioChoice('cold')}
+                    on:click={() => temperatureRadioChoice('cold')}
                     name="temperature" />
                 Cold
             </label>
@@ -74,7 +74,7 @@ function showInStock() {
             <label>
                 <input
                     type="radio"
-                    on:click={stateRadioChoice('food')}
+                    on:click={() => stateRadioChoice('food')}
                     name="consumable-type" />
                 Food
             </label>
@@ -83,7 +83,7 @@ function showInStock() {
             <label>
                 <input
                     type="radio"
-                    on:click={stateRadioChoice('beverage')}
+                    on:click={() => stateRadioChoice('beverage')}
                     name="consumable-type" />
                 Beverage
             </label>
@@ -91,26 +91,26 @@ function showInStock() {
         <hr />
         <li>
             <label>
-                <input type="checkbox" on:click={showGF()} />
+                <input type="checkbox" on:click={showGF} />
                 Gluten Free
             </label>
         </li>
         <li>
             <label>
-                <input type="checkbox" on:click={showLF()} />
+                <input type="checkbox" on:click={showLF} />
                 Lactose Free
             </label>
         </li>
         <li>
             <label>
-                <input type="checkbox" on:click={showNF()} />
+                <input type="checkbox" on:click={showNF} />
                 Nut Free
             </label>
         </li>
         <hr />
         <li>
             <label>
-                <input type="checkbox" on:click={showInStock()} />
+                <input type="checkbox" on:click={showInStock} />
                 In Stock
             </label>
         </li>
@@ -124,7 +124,7 @@ function showInStock() {
     <ul class="selection-items">
         <li>
             <label>
-                <input type="radio" on:click={alphabetize} name="sort" />
+                <input type="radio" checked on:click={alphabetize} name="sort" />
                 Alphabetical
             </label>
         </li>
