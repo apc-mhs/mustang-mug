@@ -43,11 +43,21 @@ function getOptions(item) {
         <div class="flex-left">
             {#if $mobile}
                 {#if !mobileRefinerShown}
-                    <FloatingActionButton --top="125px" --left="-10px" on:click={() => mobileRefinerShown = !mobileRefinerShown}>
-                        <Icon slot="icon" name="filter" width="30" height="30" />
+                    <FloatingActionButton
+                        --top="125px"
+                        --left="-10px"
+                        on:click={() =>
+                            (mobileRefinerShown = !mobileRefinerShown)}>
+                        <Icon
+                            slot="icon"
+                            name="filter"
+                            width="30"
+                            height="30" />
                     </FloatingActionButton>
                 {/if}
-                <Drawer visible={mobileRefinerShown} on:close={() => mobileRefinerShown = false}>
+                <Drawer
+                    visible={mobileRefinerShown}
+                    on:close={() => (mobileRefinerShown = false)}>
                     <Refiner bind:refinedItems={items} />
                 </Drawer>
             {:else}
@@ -60,7 +70,9 @@ function getOptions(item) {
             <h2>{title}</h2>
             <div class="items">
                 {#each menuItems as item (item.id)}
-                    <div transition:fade|local={{ duration: 250 }} animate:flip={{ duration: 400 }}>
+                    <div
+                        transition:fade|local={{ duration: 250 }}
+                        animate:flip={{ duration: 600 }}>
                         <slot {item} itemOptions={getOptions(item)} />
                     </div>
                 {/each}

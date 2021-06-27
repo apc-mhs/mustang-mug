@@ -38,13 +38,13 @@ function onScroll() {
         --font-size="20px"
         --border-radius="200px"
         --box-shadow="none"
-        --padding= "{(!movingUp && $mobile) || !$$slots.text ? '9px' : '9px 26px'}"
+        --padding={(!movingUp && $mobile) ? '18px' : '9px 26px' || !$$slots.text ? '9px' : '9px 26px'}
         --gap="0px"
         {disabled}>
         <slot name="icon" />
         {#if $$slots.text && (movingUp || !$mobile)}
             <span transition:horizontalSlide|local class="text-wrapper">
-                <slot name="text"></slot>
+                <slot name="text" />
             </span>
         {/if}
     </Button>
