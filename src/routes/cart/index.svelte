@@ -80,7 +80,7 @@ query().then(([items, _]) => {
 </script>
 
 <svelte:head>
-    <title>Cart</title>
+    <title>Cart - Mustang Mug</title>
 </svelte:head>
 
 <div class="cart-view">
@@ -152,7 +152,7 @@ label {
 
 .checkout {
     position: sticky;
-    top: var(--header-height);
+    top: calc(var(--header-height) + 20px);
     display: flex;
     flex-flow: column nowrap;
     align-items: center;

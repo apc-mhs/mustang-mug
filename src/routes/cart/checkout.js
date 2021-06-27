@@ -1,3 +1,4 @@
+import getFirebase from '$lib/firebase';
 import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { updateCart, getCart, getCartIdFor } from './_cart';
 

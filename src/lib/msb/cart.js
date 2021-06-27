@@ -53,7 +53,9 @@ function constructPropertiesFromOptions(options) {
 }
 
 function getOptionIdsFromProperties(properties) {
-    return properties.map((property) => property.value);
+    return properties
+        .filter((property) => property.name)
+        .map((property) => property.value);
 }
 
 export {

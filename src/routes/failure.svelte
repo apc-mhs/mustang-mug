@@ -1,14 +1,13 @@
 <script>
 import { browser } from '$app/env';
+import { currentUser } from '$lib/auth';
 
 let resultCodes = null;
-$: if (browser) {
+$: if (browser && $currentUser) {
     getFirebase().then(({ app }) => {
-        if (!app.auth().currentUser) return;
-
         app.firestore()
             .collection('carts')
-            .doc(app.auth().currentUser.uid)
+            .doc($currentUser.uid)
             .get()
             .then((snapshot) => {
                 if (snapshot.exists) {
@@ -28,7 +27,7 @@ $: if (browser) {
 
 <h1>
     Your order failed to go through :(. There are a number of reasons this could
-    have occured. Check the result codes below and
+    have occured. Check the result codes below and try again.
 </h1>
 <h2>Results of your payment</h2>
 {#if resultCodes !== null}

@@ -1,17 +1,15 @@
 <script>
 import { browser } from '$app/env';
-
 import { currentUser } from '$lib/auth';
+
 import getFirebase from '$lib/firebase';
 
 let resultCodes = null;
-$: if (browser) {
+$: if (browser && $currentUser) {
     getFirebase().then(({ app }) => {
-        if (!app.auth().currentUser) return;
-
         app.firestore()
             .collection('carts')
-            .doc(app.auth().currentUser.uid)
+            .doc($currentUser.uid)
             .get()
             .then((snapshot) => {
                 if (snapshot.exists) {
@@ -26,10 +24,10 @@ $: if (browser) {
 </script>
 
 <svelte:head>
-    <title>Confirmation {resultCodes}</title>
+    <title>Payment Confirmation - Mustang Mug</title>
 </svelte:head>
 
-<h1>This page will be for to confirm when someone's order goes through.</h1>
+<h1>Your order is being processed. Thanks for shopping at the Mustang Mug!</h1>
 <h2>Results of your payment</h2>
 {#if resultCodes !== null}
     <ul>
@@ -40,7 +38,7 @@ $: if (browser) {
         {/each}
     </ul>
 {:else}
-    <p>Loading resultCodes...</p>
+    <p>Loading results...</p>
 {/if}
 
 <style>

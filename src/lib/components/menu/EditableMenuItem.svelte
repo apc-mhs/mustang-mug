@@ -4,21 +4,12 @@ import { createEventDispatcher } from 'svelte';
 import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
 import tippy from '$lib/tippy';
 import Button from '../utility/Button.svelte';
-import getFirebase from '$lib/firebase';
 
 export let item;
 export let options = [];
 export let allOptions;
 
 const dispatch = createEventDispatcher();
-
-$: if (options) {
-    item.options = options.map((option) => {
-        getFirebase().then(({ app }) => {
-            app.firestore().doc('options/' + option.id)
-        });
-    });
-}
 
 let { price, name, image, stock } = item;
 
@@ -33,9 +24,10 @@ $: changed =
     item.name !== name ||
     item.image !== image ||
     item.stock !== stock ||
-    item.options
+    item.options.length !== options.length ||
+    !item.options
         .sort(optionIdSorter)
-        .some((option, i) => option.id !== options[i].id);
+        .every((option, i) => option.id === (options[i] && options[i].id));
 </script>
 
 <div class="item" class:out-of-stock={!stock}>

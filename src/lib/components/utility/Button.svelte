@@ -38,4 +38,9 @@ button:disabled {
     color: rgb(201, 201, 201);
     background-color: var(--background-color, rgb(90, 47, 47));
 }
+button :global(*) {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
 </style>

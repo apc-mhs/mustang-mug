@@ -1,9 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function admin() {
+      return request.auth.token.email == 'mustangmug@fccps.org' && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
     match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 6, 28);
+      allow read, write: if admin() || request.time < timestamp.date(2021, 7, 15);
+    }
+    match /carts/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+    match /payments/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+    match /items/{item} {
+      allow read: if request.auth != null;
+    }
+    match /options/{option} {
+      allow read: if request.auth != null;
     }
   }
 }
