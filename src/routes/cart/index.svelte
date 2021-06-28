@@ -6,6 +6,8 @@ import { query } from '../_menu';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/utility/Button.svelte';
 import { fade } from 'svelte/transition';
+import {goto} from '$app/navigation';
+
 
 let validCart = false;
 let studentName = '';
@@ -77,6 +79,10 @@ let menuItems = [];
 query().then(([items, _]) => {
     menuItems = items;
 });
+
+function goToMenu() {
+    goto('/');
+}
 </script>
 
 <svelte:head>
@@ -93,7 +99,7 @@ query().then(([items, _]) => {
                     bind:validCart
                     on:remove={onRemove}
                     {menuItems} />
-                {/if}
+            {/if}
         {:else}
             <h2>Loading cart...</h2>
         {/if}
@@ -117,6 +123,7 @@ query().then(([items, _]) => {
             <Button on:click={checkout} disabled={!validCart || checkingOut}
                 >Proceed to checkout</Button>
         </div>
+        <Button on:click={goToMenu}>Reurn to menu</Button>
     </div>
 </div>
 
