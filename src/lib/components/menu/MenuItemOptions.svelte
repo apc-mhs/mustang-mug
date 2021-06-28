@@ -98,8 +98,8 @@ function toggle(option) {
 
 .option.selected {
     color: skyblue;
-    /* Set padding left-right to take off 16 (width of checkmark) total pixels */
-    padding: 5px 8px;
+    /* Set padding left-right to take off 18 (width of checkmark + 2px margin-right) total pixels */
+    padding: 5px 7px;
 }
 
 .option-text {
