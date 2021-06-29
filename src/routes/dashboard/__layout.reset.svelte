@@ -4,7 +4,7 @@ import { browser } from '$app/env';
 import { page } from '$app/stores';
 
 import { signInWithGoogle, signOut } from '$lib/auth';
-import Button from '$lib/components/utility/Button.svelte';
+import Button from '$lib/components/input/Button.svelte';
 import getFirebase from '$lib/firebase';
 
 const navLinks = [

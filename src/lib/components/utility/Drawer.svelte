@@ -1,7 +1,7 @@
 <script>
-import IconButton from './IconButton.svelte';
+import IconButton from '$lib/components/input/IconButton.svelte';
 import Icon from './Icon.svelte';
-import { createEventDispatcher, onDestroy, onMount } from "svelte";
+import { createEventDispatcher, onDestroy } from "svelte";
 
 export let visible = false;
 

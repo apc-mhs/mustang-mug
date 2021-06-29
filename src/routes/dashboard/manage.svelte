@@ -1,5 +1,5 @@
 <script>
-import Button from '$lib/components/utility/Button.svelte';
+import Button from '$lib/components/input/Button.svelte';
 import { PurchaseWindow } from '$lib/purchase/window';
 import PurchaseSchedule from '$lib/components/purchase/PurchaseSchedule.svelte';
 import getFirebase from '$lib/firebase';

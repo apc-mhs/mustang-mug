@@ -2,7 +2,7 @@
 import { slide } from 'svelte/transition';
 import Icon from '$lib/components/utility/Icon.svelte';
 import tippy from '$lib/tippy';
-import AutocompleteInput from '../utility/AutocompleteInput.svelte';
+import AutocompleteInput from '$lib/components/input/AutocompleteInput.svelte';
 import { fade } from 'svelte/transition';
 
 export let selectedOptions;

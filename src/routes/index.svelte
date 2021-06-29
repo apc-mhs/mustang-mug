@@ -3,10 +3,11 @@ import { goto } from '$app/navigation';
 
 import Menu from '$lib/components/menu/Menu.svelte';
 import MenuItem from '$lib/components/menu/MenuItem.svelte';
-import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
+import FloatingActionButton from '$lib/components/input/FloatingActionButton.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import { query, postCartItems } from './_menu';
+import { startLoading, stopLoading } from '$lib/components/loading';
 
 let skeleton = true;
 let updatingCart = false;
@@ -31,7 +32,9 @@ async function addToCart() {
     }
 
     updatingCart = true;
+    startLoading();
     const success = await postCartItems(cartItems);
+    stopLoading();
     if (success) {
         await goto('/cart');
     } else {
