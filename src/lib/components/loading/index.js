@@ -25,6 +25,7 @@ async function stopLoading() {
     progress.set(0, { duration: 0 });
 }
 
+// Don't export progress's write or update methods
 export default { subscribe: progress.subscribe };
 
 export {
