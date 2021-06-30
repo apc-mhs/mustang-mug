@@ -2,7 +2,7 @@
 import { getOptionIdsFromProperties } from "$lib/msb/cart";
 import { cubicOut } from "svelte/easing";
 import { scale } from 'svelte/transition';
-import Button from "../utility/Button.svelte";
+import Button from "$lib/components/input/Button.svelte";
 import Icon from '$lib/components/utility/Icon.svelte';
 
 
