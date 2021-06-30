@@ -1,9 +1,9 @@
 <script>
 import { createEventDispatcher } from "svelte";
 
-import Icon from "$lib/components/input/Icon.svelte";
+import Icon from "$lib/components/utility/Icon.svelte";
 import IconButton from "$lib/components/input/IconButton.svelte";
-import Input from "$lib/components/inputy/Input.svelte";
+import Input from "$lib/components/input/Input.svelte";
 import TimeInput from "$lib/components/input/TimeInput.svelte";
 
 
