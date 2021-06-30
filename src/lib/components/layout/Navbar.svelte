@@ -1,6 +1,7 @@
 <script>
 import Icon from '$lib/components/utility/Icon.svelte';
 import { useMediaQuery } from '$lib/utils';
+import TopLoadingBar from '$lib/components/loading/TopLoadingBar.svelte';
 
 // Show mobile icon and display menu
 const mobile = useMediaQuery('(max-width: 767px)');
@@ -59,6 +60,7 @@ export function closeMobileMenu() {
             </li>
         </ul>
     </div>
+    <TopLoadingBar />
 </nav>
 
 <style>

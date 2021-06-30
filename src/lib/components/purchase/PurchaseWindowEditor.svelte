@@ -1,10 +1,10 @@
 <script>
 import { createEventDispatcher } from "svelte";
 
-import Icon from "../utility/Icon.svelte";
-import IconButton from "../utility/IconButton.svelte";
-import Input from "../utility/Input.svelte";
-import TimeInput from "../utility/TimeInput.svelte";
+import Icon from "$lib/components/input/Icon.svelte";
+import IconButton from "$lib/components/input/IconButton.svelte";
+import Input from "$lib/components/inputy/Input.svelte";
+import TimeInput from "$lib/components/input/TimeInput.svelte";
 
 
 export let purchaseWindow;

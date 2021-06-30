@@ -3,7 +3,7 @@ import { createEventDispatcher } from 'svelte';
 
 import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
 import tippy from '$lib/tippy';
-import Button from '../utility/Button.svelte';
+import Button from '$lib/components/input/Button.svelte';
 
 export let item;
 export let options = [];

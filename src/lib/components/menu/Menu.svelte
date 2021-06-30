@@ -3,7 +3,7 @@ import Refiner from '$lib/components/menu/Refiner.svelte';
 import { fade } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 import { useMediaQuery } from '$lib/utils';
-import FloatingActionButton from '$lib/components/utility/FloatingActionButton.svelte';
+import FloatingActionButton from '$lib/components/input/FloatingActionButton.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
 import Drawer from '$lib/components/utility/Drawer.svelte';
 

@@ -1,5 +1,5 @@
 <script>
-import Button from '$lib/components/utility/Button.svelte';
+import Button from './Button.svelte';
 import { horizontalSlide } from '$lib/transition';
 import { useMediaQuery } from '$lib/utils';
 import { fade } from 'svelte/transition';

@@ -9,7 +9,7 @@ import tippy from '$lib/tippy';
 import { getDocumentsWhere } from '$lib/query';
 import { browser } from '$app/env';
 import { getOptionIdsFromProperties } from '$lib/msb/cart';
-import Button from '../utility/Button.svelte';
+import Button from '$lib/components/input/Button.svelte';
 import { fade } from 'svelte/transition';
 
 export let cartItems = [];

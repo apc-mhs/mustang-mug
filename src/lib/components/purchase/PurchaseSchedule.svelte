@@ -1,9 +1,9 @@
 <script>
 import { Time } from '$lib/purchase/window';
-import Button from '../utility/Button.svelte';
+import Button from '$lib/components/input/Button.svelte';
 import PurchaseWindowEditor from './PurchaseWindowEditor.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
-import IconButton from '$lib/components/utility/IconButton.svelte';
+import IconButton from '$lib/components/input/IconButton.svelte';
 import PurchaseWindowDisplay from './PurchaseWindowDisplay.svelte';
 import getFirebase from '$lib/firebase';
 import { PurchaseWindow } from '$lib/purchase/window';

@@ -1,6 +1,7 @@
 <script>
 import { browser } from '$app/env';
 import { currentUser } from '$lib/auth';
+import getFirebase from '$lib/firebase';
 
 let resultCodes = null;
 $: if (browser && $currentUser) {

@@ -4,9 +4,9 @@ import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import { query } from '../_menu';
 import tippy from '$lib/tippy';
-import Button from '$lib/components/utility/Button.svelte';
-import { fade } from 'svelte/transition';
+import Button from '$lib/components/input/Button.svelte';
 import {goto} from '$app/navigation';
+import { startLoading, stopLoading } from '$lib/components/loading';
 
 
 let validCart = false;
@@ -17,7 +17,7 @@ if (browser) {
     fetch('/cart.json')
         .then((res) => res.json())
         .then((json) => (cart = json))
-        .catch((err) => (cart = null));
+        .catch(() => (cart = { cartItems: [] }));
 }
 
 function onRemove({ detail: item }) {
@@ -49,6 +49,7 @@ async function checkout() {
     checkingOut = true;
 
     try {
+        startLoading();
         const json = await fetch('/cart/checkout', {
             method: 'POST',
             body: JSON.stringify({
@@ -58,7 +59,7 @@ async function checkout() {
                 'Content-Type': 'application/json',
             },
         }).then((res) => res.json());
-
+        stopLoading();
         if (json) {
             window.location.href = json.url;
         } else {
@@ -93,13 +94,11 @@ function goToMenu() {
     <div class="cart">
         <h1>View your cart</h1>
         {#if (cart || cart === null) && menuItems.length > 0}
-            {#if cart !== null}
-                <Cart
-                    bind:cartItems={cart.cartItems}
-                    bind:validCart
-                    on:remove={onRemove}
-                    {menuItems} />
-            {/if}
+            <Cart
+                bind:cartItems={cart.cartItems}
+                bind:validCart
+                on:remove={onRemove}
+                {menuItems} />
         {:else}
             <h2>Loading cart...</h2>
         {/if}
