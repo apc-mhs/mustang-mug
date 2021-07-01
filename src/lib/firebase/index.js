@@ -17,7 +17,9 @@ const firebaseConfig = {
 
 /** @returns {Promise<{app: import("firebase/app").default.app.App, firebase: import("firebase/app").default}>} */
 async function getFirebase() {
-    const firebase = browser ? (await import('firebase/app')).default : (await import('firebase-admin')).default;
+    const firebase = browser
+        ? (await import('firebase/app')).default
+        : (await import('firebase-admin')).default;
     await import('firebase/firestore');
     await import('firebase/auth');
 
@@ -28,12 +30,16 @@ async function getFirebase() {
     } catch (error) {
         if (!browser && dev) {
             // Load firebase admin environment variables
-            loadConfig({ path: path.resolve(process.cwd(), '.env.development.local') });
+            loadConfig({
+                path: path.resolve(process.cwd(), '.env.development.local'),
+            });
         }
 
-        const config = browser ? firebaseConfig : {
-            credential: firebase.credential.applicationDefault()
-        };
+        const config = browser
+            ? firebaseConfig
+            : {
+                  credential: firebase.credential.applicationDefault(),
+              };
         app = firebase.initializeApp(config, appName);
 
         if (browser) {
@@ -46,15 +52,24 @@ async function getFirebase() {
                         'Persistence failed to enable with error',
                         err
                     );
+                    if (err.code == 'failed-precondition') {
+                        while (true) {
+                            alert(`You currently have more than one tab open! The menu and site will not function properly with more than one tab open. Please close the additional tabs and refresh the page.`);
+                        }
+                    }
                 });
         } else {
-            if (dev) setupEmulatedFirestore(app.firestore(), firebase.firestore.Timestamp);
+            if (dev)
+                setupEmulatedFirestore(
+                    app.firestore(),
+                    firebase.firestore.Timestamp
+                );
         }
     }
 
     return {
         app,
-        firebase
+        firebase,
     };
 }
 
