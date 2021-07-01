@@ -53,9 +53,7 @@ async function getFirebase() {
                         err
                     );
                     if (err.code == 'failed-precondition') {
-                        while (true) {
-                            alert(`You currently have more than one tab open! The menu and site will not function properly with more than one tab open. Please close the additional tabs and refresh the page.`);
-                        }
+                        alert(`You currently have more than one tab open! The menu and site will not function properly with more than one tab open. Please close the additional tabs and refresh the page.`);
                     }
                 });
         } else {
