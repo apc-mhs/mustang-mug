@@ -36,13 +36,14 @@ export function closeMobileMenu() {
             <div class="middle-line" />
             <div class="lower-line" />
         </div>
-        <img
-            class="mug_logo"
-            src="/mustang-mug-logo.png"
-            alt="Mustang Mug Logo"
-            height="45px"
-            width="45px" />
-        <a href="/" class="mug-text">Mustang Mug</a>
+        <a href="/" class="mug-text">
+            <img class="mug_logo"
+                src="/mustang-mug-logo.png"
+                alt="Mustang Mug Logo"
+                height="45px"
+                width="45px">
+            Mustang Mug
+        </a>
         <ul class="navbar-list" class:mobile={showMobileMenu}>
             {#each navItems as item}
                 <li>
@@ -174,13 +175,13 @@ div.lower-line {
 }
 
 .mug-text {
-    display: initial;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 10px;
     color: white;
     font-size: 2em;
     text-decoration: none;
-    margin-left: 0.5vw;
-    /* this is a very hacky solution to not make the text stack on top of itself -- better fix anyone?*/
-    min-width: 20vw;
 }
 
 @media only screen and (min-width: 767px) {

@@ -8,9 +8,6 @@ import { fade } from 'svelte/transition';
 export let selectedOptions;
 export let options = [];
 
-$: unselectedOptions = options.filter(
-    (option) => !selectedOptions.includes(option)
-);
 
 function remove(optionIndex) {
     selectedOptions.splice(optionIndex, 1);
@@ -23,7 +20,7 @@ const removeOptionMessage = 'Remove this option';
 
 <div class="item-options" transition:slide|local>
     <AutocompleteInput
-        options={unselectedOptions}
+        options={options}
         bind:selectedOptions
         let:option>
         <div class="option" class:out-of-stock={!option.stock}>

@@ -9,6 +9,8 @@ export let placeholder = '';
 export let label = '';
 export let pattern = undefined;
 export let input;
+export let maxlength;
+export let required = false;
 
 const dispatch = createEventDispatcher();
 
@@ -27,9 +29,12 @@ function handleInput(e) {
             {disabled}
             {value}
             {pattern}
+            {maxlength}
+            {required}
             bind:this={input}
             on:input={handleInput}
             on:focus
+            on:blur
             on:keydown />
     </label>
 {:else}
@@ -39,26 +44,29 @@ function handleInput(e) {
         {disabled}
         {value}
         {pattern}
+        {maxlength}
+        {required}
         bind:this={input}
         on:input={handleInput}
         on:focus
+        on:blur
         on:keydown />
 {/if}
 
 <style>
 input {
-    font-size: 18px;
+    font-size: var(--font-size, 18px);
     padding: 5px 10px;
     border-radius: 3px;
     border: none;
     outline: none;
     width: var(--width, 150px);
     --input-status-color: gray;
-    box-shadow: 0px 0px 0px 1px var(--input-status-color, gray);
+    box-shadow: 0px 0px 0px 2px var(--input-status-color, gray);
 }
 
 input:focus {
-    --input-status-color: blue;
+    --input-status-color: rgba(114, 170, 233, 0.85);
 }
 
 input:invalid {

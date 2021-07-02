@@ -4,13 +4,16 @@ import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import { query } from '../_menu';
 import tippy from '$lib/tippy';
-import Button from '$lib/components/input/Button.svelte';
-import {goto} from '$app/navigation';
+import SubmitButton from '$lib/components/input/SubmitButton.svelte';
 import { startLoading, stopLoading } from '$lib/components/loading';
-
+import Input from '$lib/components/input/Input.svelte';
+import AutocompleteInput from '$lib/components/input/AutocompleteInput.svelte';
+import LinkButton from '$lib/components/utility/LinkButton.svelte';
 
 let validCart = false;
 let studentName = '';
+let pickUpTimes = ['10:00am', '12:00pm'];
+let selectedPickUpTime = [];
 
 let cart;
 if (browser) {
@@ -40,14 +43,10 @@ function onRemove({ detail: item }) {
 
 let checkingOut = false;
 
-async function checkout() {
-    if (!studentName) {
-        alert('Please enter a student name to checkout.');
-        return;
-    }
+async function checkout(e) {
+    if (e) e.preventDefault();
 
     checkingOut = true;
-
     try {
         startLoading();
         const json = await fetch('/cart/checkout', {
@@ -80,10 +79,6 @@ let menuItems = [];
 query().then(([items, _]) => {
     menuItems = items;
 });
-
-function goToMenu() {
-    goto('/');
-}
 </script>
 
 <svelte:head>
@@ -103,27 +98,35 @@ function goToMenu() {
             <h2>Loading cart...</h2>
         {/if}
     </div>
-    <div class="checkout">
+    <form class="checkout" on:submit={checkout}>
         <h1>Checkout</h1>
         <label for="pick-up-input">
             Pick-up time:
-            <select id="pick-up-input">
-                <option>1</option>
-            </select>
+            <AutocompleteInput
+                placeholder={'Choose time'}
+                options={pickUpTimes}
+                required
+                bind:selectedOption={selectedPickUpTime}
+                let:option>
+                <div>{option}</div>
+            </AutocompleteInput>
         </label>
         <label for="student-name-input">
             Student name:
-            <input
-                id="student-name-input"
+            <Input
                 bind:value={studentName}
-                type="text" />
+                required
+                pattern="[a-zA-Z ]+"
+                maxlength="10"
+                --font-size="16px" />
         </label>
         <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-            <Button on:click={checkout} disabled={!validCart || checkingOut}
-                >Proceed to checkout</Button>
+            <SubmitButton
+                value={'Proceed to checkout'}
+                disabled={!validCart || checkingOut} />
         </div>
-        <Button on:click={goToMenu}>Reurn to menu</Button>
-    </div>
+        <LinkButton href="/">Return to menu</LinkButton>
+    </form>
 </div>
 
 <style>

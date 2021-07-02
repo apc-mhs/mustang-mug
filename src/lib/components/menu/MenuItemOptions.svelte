@@ -97,7 +97,7 @@ function toggle(option) {
 }
 
 .option.selected {
-    color: skyblue;
+    color: rgba(114, 170, 233, 0.85);
     /* Set padding left-right to take off 18 (width of checkmark + 2px margin-right) total pixels */
     padding: 5px 7px;
 }
