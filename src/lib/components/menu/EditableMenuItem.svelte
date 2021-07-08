@@ -58,19 +58,25 @@ $: changed =
         <input type="checkbox" bind:checked={stock} />
     </label>
 
-    <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
+    <div class="button-row">
+        <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
+            <Button
+                on:click={() =>
+                    dispatch('save', {
+                        ...item,
+                        price,
+                        name,
+                        image,
+                        stock,
+                        options,
+                    })}
+                disabled={!changed}>Save</Button>
+        </span>
         <Button
-            on:click={() =>
-                dispatch('save', {
-                    ...item,
-                    price,
-                    name,
-                    image,
-                    stock,
-                    options,
-                })}
-            disabled={!changed}>Save</Button>
-    </span>
+            onclick={() => dispatch('delete', item.id)}>
+            Delete
+        </Button>
+    </div>
 </div>
 
 <style>
@@ -108,5 +114,10 @@ label {
 }
 label:hover {
     cursor: pointer;
+}
+.button-row {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
 }
 </style>

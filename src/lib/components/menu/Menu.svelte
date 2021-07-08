@@ -1,20 +1,24 @@
 <script>
-import Refiner from '$lib/components/menu/Refiner.svelte';
-import { fade } from 'svelte/transition';
-import { flip } from 'svelte/animate';
-import { useMediaQuery } from '$lib/utils';
 import FloatingActionButton from '$lib/components/input/FloatingActionButton.svelte';
-import Icon from '$lib/components/utility/Icon.svelte';
+import Refiner from '$lib/components/menu/Refiner.svelte';
 import Drawer from '$lib/components/utility/Drawer.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
+import { useMediaQuery } from '$lib/utils';
+import { createEventDispatcher } from 'svelte';
+import { flip } from 'svelte/animate';
+import { fade } from 'svelte/transition';
+import Button from '../input/Button.svelte';
+
 
 export let title;
 export let items;
 export let options;
 export let skeleton = false;
 export let refine = true;
+export let modify = false;
 
 const mobile = useMediaQuery('(max-width: 650px)');
-
+const dispatch = createEventDispatcher();
 const skeletonItems = new Array(10).fill(5).map((_, i) => {
     return {
         id: i,
@@ -76,6 +80,16 @@ function getOptions(item) {
                         <slot {item} itemOptions={getOptions(item)} />
                     </div>
                 {/each}
+                {#if modify}
+                    <div style="align-self: center;">
+                        <Button
+                            on:click={() => dispatch('addItem')}
+                            --padding="15px"
+                            --border-radius="200px">
+                            <Icon name="plus" width="40" height="40" />
+                        </Button>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
@@ -113,8 +127,8 @@ h2 {
 }
 .items {
     display: flex;
-    justify-content: center;
     flex-flow: row wrap;
+    justify-content: center;
     gap: 30px 20px;
 }
 @media (max-width: 650px) {
