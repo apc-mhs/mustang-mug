@@ -53,6 +53,7 @@ async function checkout(e) {
             method: 'POST',
             body: JSON.stringify({
                 studentName,
+                pickUpTime: selectedPickUpTime
             }),
             headers: {
                 'Content-Type': 'application/json',

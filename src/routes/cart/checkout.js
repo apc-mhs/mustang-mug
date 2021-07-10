@@ -6,7 +6,7 @@ import { updateCart, getCart, getCartIdFor } from './_cart';
  * @type {import('@sveltejs/kit').RequestHandler}
  */
 export async function post({ locals, body }) {
-    const user = locals.user;
+    const { user } = locals;
     if (!user) {
         return {
             status: 400,
@@ -23,10 +23,13 @@ export async function post({ locals, body }) {
         };
     }
 
+    const { studentName, pickUpTime } = body;
+    
+
     await removeOutOfStockItems(cart);
     // TODO: Remove deleted items. Not sure how to get these...
     for (let cartItem of cart.cartItems) {
-        cartItem.studentName = body.studentName || 'Unspecified';
+        cartItem.studentName = studentName || 'Unspecified';
     }
 
     const success = await updateCart(getCartData(cart), cartId);
