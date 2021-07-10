@@ -4,23 +4,47 @@
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "npx -y rimraf public/* && svelte-kit build && npx -y touch public/.gitkeep",
-    "preview": "svelte-kit preview"
+    "preview": "svelte-kit preview",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/preset-env": "^7.14.7",
     "@sveltejs/kit": "^1.0.0-next.111",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/svelte": "^3.0.3",
+    "babel-jest": "^27.0.6",
     "cookie": "^0.4.1",
     "dayjs": "^1.10.6",
     "dotenv": "^9.0.2",
     "firebase-admin": "^9.8.0",
+    "jest": "^26.6.3",
     "js-cookie": "^2.2.1",
     "msb_pay_api": "github:AndrewLester/msb_pay_api",
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
     "svelte": "^3.38.3",
     "svelte-adapter-firebase": "^0.8.4",
+    "svelte-jester": "^1.7.0",
     "svelte-popperjs": "^1.2.6",
     "svelte-preprocess": "^4.7.3",
     "tippy.js": "^6.3.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.svelte$": ["svelte-jester", { "preprocess": true }]
+    },
+    "moduleFileExtensions": [
+      "js",
+      "svelte"
+    ],
+    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
+    "moduleNameMapper": {
+      "^\\$lib/(.*)$": "<rootDir>/src/lib/$1"
+    },
+    "modulePaths": ["<rootDir>"]
   },
   "type": "module"
 }
