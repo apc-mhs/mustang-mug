@@ -31,8 +31,13 @@ async function save(itemData) {
         items.push(itemData);
     }
     items = items;
-    // Update the menu item + options in firestore
-    await docRef.set(itemData, { merge: true });
+    // Update the menu item in firestore
+    const { id, ...strippedItemData } = itemData;
+    // Change list of options into list of references to options
+    strippedItemData.options = strippedItemData.options.map((option) => {
+        return app.firestore().collection('options').doc(option.id);
+    });
+    await docRef.set(strippedItemData, { merge: true });
     // TODO: Post a notification on save
 }
 
@@ -87,6 +92,18 @@ async function optionsMenuItemAddHandler() {
         },
     ];
 }
+
+async function itemsMenuItemDeleteHandler(itemId) {
+    const { app } = await getFirebase();
+    items = items.filter((item) => item.id !== itemId);
+    app.firestore().collection('items').doc(itemId).delete();
+}
+
+async function optionsMenuItemDeleteHandler(optionId) {
+    const { app } = await getFirebase();
+    options = options.filter((option) => option.id !== optionId);
+    app.firestore().collection('options').doc(optionId).delete();
+}
 </script>
 
 <Menu
@@ -104,7 +121,8 @@ async function optionsMenuItemAddHandler() {
             {item}
             options={itemOptions}
             allOptions={options}
-            on:save={(e) => save(e.detail)} />
+            on:save={(e) => save(e.detail)}
+            on:delete={({ detail }) => itemsMenuItemDeleteHandler(detail)} />
     {:else}
         <SkeletonLayout>
             <EditableMenuItem {item} />
@@ -124,7 +142,8 @@ async function optionsMenuItemAddHandler() {
     {#if !options.length < 1}
         <EditableMenuOptionsItem
             option={item}
-            on:save={(e) => saveOption(e.detail)} />
+            on:save={(e) => saveOption(e.detail)}
+            on:delete={({ detail }) => optionsMenuItemDeleteHandler(detail)} />
     {/if}
 </Menu>
 

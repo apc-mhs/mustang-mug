@@ -1,14 +1,17 @@
 import getFirebase from "./firebase";
 
+// One day in milliseconds for cache to clear
+const maxAge = 1000 * 60 * 60 * 24;
+
 function getDocuments(collection) {
     return getDocumentsWhere(collection, (queryable) => queryable);
 }
 
 async function getDocumentsWhere(collection, queryOnQueryable) {
     const { app, firebase } = await getFirebase();
-
-    if (!(await getLastModified(collection))) {
-        setLastModified(collection, firebase.firestore.Timestamp.fromMillis(0));
+    const lastModified = await getLastModified(collection);
+    if (!lastModified || Date.now() - lastModified.toDate() > maxAge) {
+        lastModified = firebase.firestore.Timestamp.fromMillis(0);
     }
 
     const [modified, cached] = await Promise.all([
@@ -16,7 +19,7 @@ async function getDocumentsWhere(collection, queryOnQueryable) {
             app
                 .firestore()
                 .collection(collection)
-                .where('lastModified', '>', await getLastModified(collection))
+                .where('lastModified', '>', lastModified)
         ).get(),
         queryOnQueryable(app.firestore().collection(collection)).get({
             source: 'cache',

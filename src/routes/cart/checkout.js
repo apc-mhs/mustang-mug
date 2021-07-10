@@ -24,6 +24,7 @@ export async function post({ locals, body }) {
     }
 
     await removeOutOfStockItems(cart);
+    // TODO: Remove deleted items. Not sure how to get these...
     for (let cartItem of cart.cartItems) {
         cartItem.studentName = body.studentName || 'Unspecified';
     }

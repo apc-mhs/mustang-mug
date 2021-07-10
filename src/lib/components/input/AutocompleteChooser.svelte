@@ -7,18 +7,23 @@ export let options = [];
 export let selectedOptions = [];
 export let placeholder;
 
-let selectedOptionIds = selectedOptions.map((seletedOption) => seletedOption.id);
-$: selectedOptions = options.filter((option) => selectedOptionIds.includes(option.id));
+let selectedOptionIds = selectedOptions.map(
+    (seletedOption) => seletedOption.id
+);
+$: selectedOptions = options.filter((option) =>
+    selectedOptionIds.includes(option.id)
+);
 $: availableOptions = options.filter(
     (option) => !selectedOptionIds.includes(option.id)
 );
-$: suggestions = availableOptions.filter(
-    (option) => option.name.toLowerCase().startsWith(value.toLowerCase())
+$: suggestions = availableOptions.filter((option) =>
+    option.name.toLowerCase().startsWith(value.toLowerCase())
 );
 let input;
 let popper;
 let suggestionsElement;
 let value = '';
+let focusedSuggestion;
 
 function handleKeydown(event) {
     if (!suggestions || suggestions.length <= 0) return;
@@ -46,14 +51,27 @@ function handleKeydown(event) {
 }
 
 function select(option) {
-    selectedOptionsIds = [...selectedOptionsIds, option.id];
+    selectedOptionIds = [...selectedOptionIds, option.id];
     value = '';
     input.focus();
+
+    if (selectedOptionIds.length === options.length) popper.close();
+}
+
+export function remove(optionId) {
+    selectedOptionIds = selectedOptionIds.filter(
+        (selectedOptionId) => selectedOptionId !== optionId
+    );
 }
 </script>
 
 <span class="input-wrapper" bind:this={input}>
-    <Input {placeholder} bind:value on:focus={popper.open} --font-size="16px" />
+    <Input
+        {placeholder}
+        bind:value
+        on:focus={popper.open}
+        --font-size="16px"
+        on:keydown={handleKeydown} />
     <Popper
         bind:this={popper}
         reference={input}

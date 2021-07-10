@@ -63,6 +63,7 @@ input {
     width: var(--width, 150px);
     --input-status-color: gray;
     box-shadow: 0px 0px 0px 2px var(--input-status-color, gray);
+    flex: 1;
 }
 
 input:focus {
