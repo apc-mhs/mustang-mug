@@ -1,6 +1,9 @@
 import getFirebase from '$lib/firebase';
 import { CurrentPurchaseWindow, PurchaseWindow } from './window';
 
+/** 
+ * @returns {Promise<import("firebase").default.firestore.DocumentSnapshot<import("firebase").default.firestore.DocumentData>?>}
+ */
 async function getCurrentPurchaseWindow() {
     const { app } = await getFirebase();
 

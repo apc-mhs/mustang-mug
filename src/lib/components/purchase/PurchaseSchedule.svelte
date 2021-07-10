@@ -174,7 +174,6 @@ async function saveSchedule() {
     max-width: 100%;
     text-align: center;
     align-items: center;
-    gap: 5px 0px;
     border-top: 2px solid black;
 }
 
@@ -184,6 +183,7 @@ async function saveSchedule() {
     align-items: center;
     gap: 0px 5px;
     padding: 5px;
+    margin-bottom: 5px;
 }
 
 .header .button {

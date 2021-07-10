@@ -16,13 +16,9 @@ query().then(([itemsData, optionsData]) => {
 
 async function save(itemData) {
     const { app, firebase } = await getFirebase();
+    
     itemData.lastModified = firebase.firestore.Timestamp.now();
 
-    // Create document reference
-    const docRef = app
-        .firestore()
-        .collection('items')
-        .doc(itemData.id);
     // Update the menu item in the main menuItems array
     const index = items.findIndex((item) => item.id === itemData.id);
     if (index !== -1) {
@@ -37,7 +33,11 @@ async function save(itemData) {
     strippedItemData.options = strippedItemData.options.map((option) => {
         return app.firestore().collection('options').doc(option.id);
     });
-    await docRef.set(strippedItemData, { merge: true });
+    await app
+        .firestore()
+        .collection('items')
+        .doc(itemData.id)
+        .set(strippedItemData, { merge: true });
     // TODO: Post a notification on save
 }
 
@@ -46,8 +46,6 @@ async function saveOption(optionData) {
 
     optionData.lastModified = firebase.firestore.Timestamp.now();
 
-    // Create document reference
-    const docRef = app.firestore().collection('options').doc(optionData.id);
     // Update the menu item in the main menuItems array
     options.splice(
         options.indexOf(options.find((option) => optionData.id === option.id)),
@@ -57,7 +55,11 @@ async function saveOption(optionData) {
     options = options;
     // Update the option in firestore
     const { id, ...strippedOptionData } = optionData;
-    await docRef.set(strippedOptionData, { merge: true });
+    await app
+        .firestore()
+        .collection('options')
+        .doc(optionData.id)
+        .set(strippedOptionData, { merge: true });
     // TODO: Post a notification on save
 }
 
