@@ -1,6 +1,7 @@
 <script>
+import { Time } from '$lib/purchase/time';
+
 import Input from './Input.svelte';
-import { Time } from '$lib/purchase/window';
 
 export let time;
 export let placeholder = '';

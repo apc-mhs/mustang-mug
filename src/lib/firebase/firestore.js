@@ -1,7 +1,7 @@
+import { Time } from '$lib/purchase/time';
 import {
     CurrentPurchaseWindow,
     PurchaseWindow,
-    Time,
 } from '$lib/purchase/window';
 
 /**

@@ -28,7 +28,6 @@ getFirebase().then(({ app, firebase }) => {
                     currentPurchaseWindow = window;
                     continue;
                 }
-
                 const window = doc.data();
                 window.id = doc.id;
                 purchaseWindows.push(window);
@@ -45,7 +44,7 @@ getFirebase().then(({ app, firebase }) => {
             <PurchaseSchedule
                 dayOfWeek={i}
                 purchaseWindows={purchaseWindows.filter(
-                    (window) => window.dayOfWeek == i
+                    (window) => window.dayOfWeek === i
                 )}
                 open={i === 0} />
         {/each}

@@ -24,7 +24,7 @@ class Time {
             this.hours,
             this.minutes,
             this.seconds,
-            this.milliseconds
+            this.milliseconds,
         );
     }
 
@@ -37,6 +37,11 @@ class Time {
             return this.toDate() - other.toDate();
         }
         return null;
+    }
+
+    /** @returns {Time} */
+    static now() {
+        return Time.fromDate(new Date());
     }
 
     /** @param timestamp {firebase.firestore.Timestamp} */

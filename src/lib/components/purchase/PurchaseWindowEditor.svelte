@@ -23,6 +23,7 @@ function clamp(time) {
     if (timeDate < hours.start.toDate()) return hours.start;
     else if (timeDate > hours.end.toDate()) return hours.end;
     else return time;
+    return time;
 }
 </script>
 
