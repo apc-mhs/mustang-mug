@@ -76,7 +76,7 @@ class CurrentPurchaseWindow extends PurchaseWindow {
             },
             fromFirestore: function (snapshot, options) {
                 const data = snapshot.data(options);
-                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders, date.lastModified.toDate());
+                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders, data.lastModified.toDate());
             }
         };
     }
