@@ -27,6 +27,7 @@ jobs:
             public
             functions
             !src/**
+            !test/**
             !resources/**
             !.svelte-kit/**
             !.github/**
