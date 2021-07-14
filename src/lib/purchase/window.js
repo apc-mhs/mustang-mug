@@ -6,7 +6,7 @@ class PurchaseWindow {
         this.start = start;
         this.end = end;
         this.maxOrders = maxOrders;
-        this.lastModified = lastModified || Time.now();
+        this.lastModified = lastModified || new Date();
     }
 
     get current() {
@@ -44,12 +44,12 @@ class PurchaseWindow {
                     start: purchaseWindow.start.toTimestamp(timestampClass),
                     end: purchaseWindow.end.toTimestamp(timestampClass),
                     maxOrders: purchaseWindow.maxOrders,
-                    lastModified: purchaseWindow.lastModified.toTimestamp(timestampClass),
+                    lastModified: timestampClass.fromDate(purchaseWindow.lastModified),
                 };
             },
             fromFirestore: function (snapshot, options) {
                 const data = snapshot.data(options);
-                return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.lastModified);
+                return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.lastModified.toDate());
             }
         };
     }
@@ -76,7 +76,7 @@ class CurrentPurchaseWindow extends PurchaseWindow {
             },
             fromFirestore: function (snapshot, options) {
                 const data = snapshot.data(options);
-                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders, Time.fromTimestamp(data.lastModified));
+                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders, date.lastModified.toDate());
             }
         };
     }

@@ -58,7 +58,7 @@ class Time {
     static fromPickUpTimeString(pickUpTime) {
         const parsedTime = dayjs(pickUpTime, 'h:mm A', true);
         if (!parsedTime.isValid()) {
-            throw new Error('Pick up time failed to parse', pickUpTime);
+            throw new Error(`Pick up time ${pickUpTime} failed to parse`);
         }
         return Time.fromDate(parsedTime.toDate());
     }
@@ -67,4 +67,3 @@ class Time {
 export {
     Time
 };
-
