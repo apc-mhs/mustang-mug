@@ -81,7 +81,7 @@ async function itemsMenuItemAddHandler() {
 }
 
 async function optionsMenuItemAddHandler() {
-    const { app } = await getFirebase();
+    const { app, firebase } = await getFirebase();
     const { id } = app.firestore().collection('options').doc();
     options = [
         ...options,
