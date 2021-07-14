@@ -56,19 +56,19 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
             .collection('purchase_windows')
             .withConverter(PurchaseWindow.converter(Timestamp))
             .doc()
-            .set(new PurchaseWindow(i, new Time(8), new Time(9), 20));
+            .set(new PurchaseWindow(i, new Time(8), new Time(9), 20, new Date()));
 
         await firestore
             .collection('purchase_windows')
             .withConverter(PurchaseWindow.converter(Timestamp))
             .doc()
-            .set(new PurchaseWindow(i, new Time(11), new Time(12), 20));
+            .set(new PurchaseWindow(i, new Time(11), new Time(12), 20, new Date()));
 
         await firestore
             .collection('purchase_windows')
             .withConverter(PurchaseWindow.converter(Timestamp))
             .doc()
-            .set(new PurchaseWindow(i, new Time(14), new Time(15), 20));
+            .set(new PurchaseWindow(i, new Time(14), new Time(15), 20, new Date()));
     }
 
     const now = new Date();
@@ -82,7 +82,8 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
                 new Time(now.getHours() - 1, 0, 0),
                 new Time(now.getHours() + 3, 0, 0),
                 20,
-                0
+                0,
+                new Date()
             )
         );
 }

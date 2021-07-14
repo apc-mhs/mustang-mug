@@ -30,7 +30,7 @@ async function updateCurrentPurchaseWindow() {
         'purchase_windows',
         PurchaseWindow.converter(firebase.firestore.Timestamp)
     );
-    for (let purchaseWindow of purchaseWindows.map((doc) => doc.data())) {
+    for (let purchaseWindow of purchaseWindows) {
         if (purchaseWindow.current) {
             await app
                 .firestore()

@@ -36,13 +36,14 @@ async function getDocumentsWhere(collection, queryOnQueryable, converter = null)
             !modified.some((modifiedDoc) => modifiedDoc.id === cachedDoc.id)
     );
 
-    let data = [...shouldCache, ...modified];
-    if (converter === null) {
-        data = data.map((doc) => {
+    const data = [...shouldCache, ...modified].map((doc) => {
+        if (converter === null) {
             // Add all document ids as properties to the documents
             return { id: doc.id, ...doc.data() };
-        });
-    }
+        }
+        return doc.data();
+    });
+
     if (modified.length > 0) {
         const lastModifiedDocument = data.reduce((prevHighest, current) => {
             return prevHighest.lastModified.valueOf() >
@@ -57,7 +58,11 @@ async function getDocumentsWhere(collection, queryOnQueryable, converter = null)
 
 function setLastModified(collection, lastModified) {
     if (browser) {
-        localStorage.setItem(collection, lastModified.toMillis());
+        localStorage.setItem(
+            collection,
+            // If it's a firestore timestamp, use toMillis. If it's a date use getTime
+            lastModified.toMillis ? lastModified.toMillis() : lastModified.getTime()
+        );
     }
 }
 
@@ -66,10 +71,10 @@ async function getLastModified(collection) {
 
     if (browser) {
         return localStorage.getItem(collection)
-        ? firebase.firestore.Timestamp.fromMillis(
-              localStorage.getItem(collection)
-          )
-        : null;
+            ? firebase.firestore.Timestamp.fromMillis(
+                localStorage.getItem(collection)
+            )
+            : null;
     }
     return null;
 }
