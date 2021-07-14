@@ -82,7 +82,7 @@ async function addPurchaseWindow() {
 async function saveSchedule() {
     const { app, firebase } = await getFirebase();
     for (let purchaseWindow of purchaseWindows) {
-        purchaseWindow.lastModified = Time.now();
+        purchaseWindow.lastModified = new Date();
         app.firestore()
             .collection('purchase_windows')
             .doc(purchaseWindow.id)

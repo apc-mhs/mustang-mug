@@ -89,7 +89,7 @@ query().then(([items, _]) => {
 <div class="cart-view">
     <div class="cart">
         <h1>View your cart</h1>
-        {#if cart !== null && menuItems.length > 0}
+        {#if cart !== undefined && menuItems.length > 0}
             <Cart
                 bind:cartItems={cart.cartItems}
                 bind:validCart
