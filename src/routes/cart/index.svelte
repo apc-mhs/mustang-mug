@@ -4,13 +4,20 @@ import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
 import { query } from '../_menu';
 import tippy from '$lib/tippy';
-import Button from '$lib/components/input/Button.svelte';
-import {goto} from '$app/navigation';
+import SubmitButton from '$lib/components/input/SubmitButton.svelte';
 import { startLoading, stopLoading } from '$lib/components/loading';
-
+import Input from '$lib/components/input/Input.svelte';
+import LinkButton from '$lib/components/utility/LinkButton.svelte';
+import { getCurrentPurchaseWindow } from '$lib/purchase';
 
 let validCart = false;
 let studentName = '';
+let selectedPickUpTime = [];
+
+let checkoutAvailable = true;
+getCurrentPurchaseWindow().then((currentPurchaseWindow) => {
+    checkoutAvailable = currentPurchaseWindow && !currentPurchaseWindow.exhausted;
+});
 
 let cart;
 if (browser) {
@@ -40,20 +47,17 @@ function onRemove({ detail: item }) {
 
 let checkingOut = false;
 
-async function checkout() {
-    if (!studentName) {
-        alert('Please enter a student name to checkout.');
-        return;
-    }
+async function checkout(e) {
+    if (e) e.preventDefault();
 
     checkingOut = true;
-
     try {
         startLoading();
         const json = await fetch('/cart/checkout', {
             method: 'POST',
             body: JSON.stringify({
                 studentName,
+                pickUpTime: selectedPickUpTime
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -68,22 +72,14 @@ async function checkout() {
     } catch (err) {
         console.error(err);
         checkingOut = false;
+        stopLoading();
     }
 }
-
-const invalidCartCheckoutTooltipProps = {
-    content: 'Your cart has no in-stock items and can not be checked out.',
-    allowHTML: true,
-};
 
 let menuItems = [];
 query().then(([items, _]) => {
     menuItems = items;
 });
-
-function goToMenu() {
-    goto('/');
-}
 </script>
 
 <svelte:head>
@@ -93,7 +89,7 @@ function goToMenu() {
 <div class="cart-view">
     <div class="cart">
         <h1>View your cart</h1>
-        {#if (cart || cart === null) && menuItems.length > 0}
+        {#if cart !== null && menuItems.length > 0}
             <Cart
                 bind:cartItems={cart.cartItems}
                 bind:validCart
@@ -103,27 +99,33 @@ function goToMenu() {
             <h2>Loading cart...</h2>
         {/if}
     </div>
-    <div class="checkout">
+    <form class="checkout" on:submit={checkout}>
         <h1>Checkout</h1>
-        <label for="pick-up-input">
-            Pick-up time:
-            <select id="pick-up-input">
-                <option>1</option>
-            </select>
-        </label>
         <label for="student-name-input">
-            Student name:
-            <input
-                id="student-name-input"
+            Name:
+            <Input
                 bind:value={studentName}
-                type="text" />
+                required
+                pattern="[a-zA-Z ]+"
+                maxlength="10"
+                --flex="none"
+                --font-size="16px" />
         </label>
-        <div use:tippy={!validCart ? invalidCartCheckoutTooltipProps : null}>
-            <Button on:click={checkout} disabled={!validCart || checkingOut}
-                >Proceed to checkout</Button>
+        <div class="button-column">
+            <div use:tippy={
+                !checkoutAvailable
+                ? 'You can\'t checkout right now because too many orders have been placed. Check back later'
+                : !validCart
+                    ? 'Your cart has no in-stock items and can not be checked out.'
+                    : null
+            }>
+                <SubmitButton
+                    value={'Proceed to checkout'}
+                    disabled={!validCart || checkingOut || !checkoutAvailable} />
+            </div>
+            <LinkButton href="/">Return to menu</LinkButton>
         </div>
-        <Button on:click={goToMenu}>Reurn to menu</Button>
-    </div>
+    </form>
 </div>
 
 <style>
@@ -147,6 +149,10 @@ h2 {
 }
 
 label {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 10px;
     color: white;
 }
 
@@ -161,9 +167,17 @@ label {
     top: calc(var(--header-height) + 20px);
     display: flex;
     flex-flow: column nowrap;
-    align-items: center;
     flex: 1 0 auto;
     min-width: 250px;
-    gap: 5px;
+    gap: 10px;
+    padding: 0px 10px;
+}
+
+.button-column {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 0px;
 }
 </style>

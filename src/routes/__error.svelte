@@ -54,7 +54,7 @@ export let status;
                 {#if char == 0}
                     <div class="coffeemug">
                         <img
-                            src="coffeemug.png"
+                            src="/coffeemug.png"
                             alt="Coffee Cup"
                             height="230px"
                             width="230px" />

@@ -4,6 +4,7 @@ import { createEventDispatcher } from 'svelte';
 import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/input/Button.svelte';
+import Input from '../input/Input.svelte';
 
 export let item;
 export let options = [];
@@ -33,44 +34,49 @@ $: changed =
 <div class="item" class:out-of-stock={!stock}>
     <img src="/{image}" alt="Picture of {image}" />
     <label>
-        Item picture:
-        <input bind:value={image} />
+        Picture:
+        <Input bind:value={image} --font-size="16px" />
     </label>
-    <h3>
-        <label
-            >Item name:
-            <input bind:value={name} />
-        </label>
-    </h3>
-    <p>
-        <label>
-            Item Price:
-            <input bind:value={price} type="number" step="0.01" min="0" />
-        </label>
-    </p>
+    <label>
+        Name:
+        <Input bind:value={name} --font-size="16px" />
+    </label>
+    <label>
+        Price:
+        <input bind:value={price} type="number" step="0.01" min="0" />
+    </label>
     <EditableMenuItemOptions
         message={'Options:'}
         bind:selectedOptions={options}
         options={allOptions} />
 
-    <label>
+    <label class="in-stock-label">
         In Stock:
         <input type="checkbox" bind:checked={stock} />
     </label>
 
-    <span use:tippy={!changed ? 'Make a change to save.' : undefined}>
-        <Button
-            on:click={() =>
-                dispatch('save', {
-                    ...item,
-                    price,
-                    name,
-                    image,
-                    stock,
-                    options,
-                })}
-            disabled={!changed}>Save</Button>
-    </span>
+    <div class="button-row">
+        <span use:tippy={!changed ? 'Make a change to save' : undefined}>
+            <Button
+                on:click={() =>
+                    dispatch('save', {
+                        ...item,
+                        price,
+                        name,
+                        image,
+                        stock,
+                        options,
+                    })}
+                disabled={!changed}>Save</Button>
+        </span>
+        <span use:tippy={item.stock ? 'Item must be out of stock before deletion' : undefined}>
+            <Button
+                disabled={item.stock}
+                on:click={() => dispatch('delete', item.id)}>
+                Delete
+            </Button>
+        </span>
+    </div>
 </div>
 
 <style>
@@ -80,7 +86,7 @@ h3 {
 .item {
     display: flex;
     flex-flow: column nowrap;
-    align-items: center;
+    align-items: flex-start;
     width: 250px;
     height: auto;
     border: 1px solid rgb(71, 70, 70);
@@ -103,10 +109,24 @@ p.out-of-stock {
 label {
     padding: 10px;
     /* background-color: rgba(253, 253, 253, 0.5); */
-    display: block;
+    display: flex;
+    width: 100%;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 5px;
     color: rgba(0, 0, 0, 0.75);
 }
 label:hover {
     cursor: pointer;
+}
+.in-stock-label {
+    align-self: center;
+    width: auto;
+}
+.button-row {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    align-self: center;
 }
 </style>

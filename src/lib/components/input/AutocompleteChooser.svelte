@@ -1,20 +1,28 @@
 <script>
-import { scale } from 'svelte/transition';
-
 import Popper from '../utility/Popper.svelte';
 import Input from './Input.svelte';
+import { scale } from 'svelte/transition';
 
 export let options = [];
-export let selectedOption;
+export let selectedOptions = [];
 export let placeholder;
-export let required = false;
 
-$: suggestions = options.filter((option) => option !== selectedOption);
-$: selectedOption = options.find((option) => option === value);
-let value = '';
-let popper;
+let selectedOptionIds = selectedOptions.map(
+    (seletedOption) => seletedOption.id
+);
+$: selectedOptions = options.filter((option) =>
+    selectedOptionIds.includes(option.id)
+);
+$: availableOptions = options.filter(
+    (option) => !selectedOptionIds.includes(option.id)
+);
+$: suggestions = availableOptions.filter((option) =>
+    option.name.toLowerCase().startsWith(value.toLowerCase())
+);
 let input;
+let popper;
 let suggestionsElement;
+let value = '';
 let focusedSuggestion;
 
 function handleKeydown(event) {
@@ -29,7 +37,7 @@ function handleKeydown(event) {
     } else {
         const direction = event.key === 'ArrowUp' ? -1 : 1;
         const suggestionUnsafeIndex =
-            suggestions.indexOf(focusedSuggestion) + (1 * direction);
+            suggestions.indexOf(focusedSuggestion) + 1 * direction;
         // Either wrap the focus to the last element or wrap to the first
         suggestionIndex =
             suggestionUnsafeIndex < 0
@@ -42,21 +50,28 @@ function handleKeydown(event) {
     suggestionsElement.children[suggestionIndex].focus();
 }
 
-function suggestionClickHandler(suggestion) {
-    value = suggestion;
-    popper.close();
+function select(option) {
+    selectedOptionIds = [...selectedOptionIds, option.id];
+    value = '';
+    input.focus();
+
+    if (selectedOptionIds.length === options.length) popper.close();
+}
+
+export function remove(optionId) {
+    selectedOptionIds = selectedOptionIds.filter(
+        (selectedOptionId) => selectedOptionId !== optionId
+    );
 }
 </script>
 
 <span class="input-wrapper" bind:this={input}>
     <Input
         {placeholder}
-        {required}
-        pattern={options.map((option) => `(${option})`).join('|')}
         bind:value
         on:focus={popper.open}
-        on:keydown={handleKeydown}
-        --font-size="16px" />
+        --font-size="16px"
+        on:keydown={handleKeydown} />
     <Popper
         bind:this={popper}
         reference={input}
@@ -67,8 +82,11 @@ function suggestionClickHandler(suggestion) {
                 <div
                     class="suggestion"
                     tabindex="0"
-                    on:click={() => suggestionClickHandler(suggestion)}
-                    on:keydown={(e) => e.key === 'Enter' ? suggestionClickHandler(suggestion) : handleKeydown(e)}>
+                    on:click={() => select(suggestion)}
+                    on:keydown={(e) =>
+                        e.key === 'Enter'
+                            ? select(suggestion)
+                            : handleKeydown(e)}>
                     <slot option={suggestion}>{suggestion}</slot>
                 </div>
             {:else}
@@ -108,7 +126,8 @@ function suggestionClickHandler(suggestion) {
     background-color: rgb(214, 214, 214);
 }
 
-.suggestion:active, .suggestion:focus {
+.suggestion:active,
+.suggestion:focus {
     background-color: rgb(177, 177, 177);
     outline: 0;
 }

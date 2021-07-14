@@ -19,7 +19,7 @@ signInAnonymously();
 
 <style>
 :root {
-    --header-height: 50px;
+    --header-height: 60px;
 }
 
 main {

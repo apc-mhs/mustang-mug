@@ -1,5 +1,4 @@
 <script>
-import { Time } from '$lib/purchase/window';
 import Button from '$lib/components/input/Button.svelte';
 import PurchaseWindowEditor from './PurchaseWindowEditor.svelte';
 import Icon from '$lib/components/utility/Icon.svelte';
@@ -10,6 +9,7 @@ import { PurchaseWindow } from '$lib/purchase/window';
 import { slide, fade } from 'svelte/transition';
 import { sleep } from '$lib/utils';
 import tippy from '$lib/tippy';
+import { Time } from '$lib/purchase/time';
 
 export let dayOfWeek;
 export let purchaseWindows = [];
@@ -82,6 +82,7 @@ async function addPurchaseWindow() {
 async function saveSchedule() {
     const { app, firebase } = await getFirebase();
     for (let purchaseWindow of purchaseWindows) {
+        purchaseWindow.lastModified = Time.now();
         app.firestore()
             .collection('purchase_windows')
             .doc(purchaseWindow.id)
@@ -96,7 +97,7 @@ async function saveSchedule() {
 
 <div class="purchase-schedule">
     <div class="header">
-        <h2>{dayName}</h2>
+        <h2>{dayName} - {purchaseWindows.length}</h2>
         <div class="button" class:flipped={open}>
             <IconButton on:click={() => (open = !open)}>
                 <Icon
@@ -174,7 +175,6 @@ async function saveSchedule() {
     max-width: 100%;
     text-align: center;
     align-items: center;
-    gap: 5px 0px;
     border-top: 2px solid black;
 }
 
@@ -184,6 +184,7 @@ async function saveSchedule() {
     align-items: center;
     gap: 0px 5px;
     padding: 5px;
+    margin-bottom: 5px;
 }
 
 .header .button {

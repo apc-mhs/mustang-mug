@@ -1,14 +1,17 @@
+import { Time } from "./time";
+
 class PurchaseWindow {
-    constructor(dayOfWeek, start, end, maxOrders) {
+    constructor(dayOfWeek, start, end, maxOrders, lastModified) {
         this.dayOfWeek = dayOfWeek;
         this.start = start;
         this.end = end;
         this.maxOrders = maxOrders;
+        this.lastModified = lastModified || Time.now();
     }
 
     get current() {
-        const now = new Date();
-        return this.start <= now && now <= this.end && this.dayOfWeek === now.getDay();
+        const now = Time.now().toDate();
+        return this.start.toDate() <= now && now <= this.end.toDate() && this.dayOfWeek === new Date().getDay();
     }
 
     get duration() {
@@ -40,20 +43,21 @@ class PurchaseWindow {
                     dayOfWeek: purchaseWindow.dayOfWeek,
                     start: purchaseWindow.start.toTimestamp(timestampClass),
                     end: purchaseWindow.end.toTimestamp(timestampClass),
-                    maxOrders: purchaseWindow.maxOrders
+                    maxOrders: purchaseWindow.maxOrders,
+                    lastModified: purchaseWindow.lastModified.toTimestamp(timestampClass),
                 };
             },
             fromFirestore: function (snapshot, options) {
                 const data = snapshot.data(options);
-                return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders);
+                return new PurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.lastModified);
             }
         };
     }
 }
 
 class CurrentPurchaseWindow extends PurchaseWindow {
-    constructor(dayOfWeek, start, end, maxOrders, orders) {
-        super(dayOfWeek, start, end, maxOrders);
+    constructor(dayOfWeek, start, end, maxOrders, orders, lastModified) {
+        super(dayOfWeek, start, end, maxOrders, lastModified);
         this.orders = orders;
     }
 
@@ -72,53 +76,13 @@ class CurrentPurchaseWindow extends PurchaseWindow {
             },
             fromFirestore: function (snapshot, options) {
                 const data = snapshot.data(options);
-                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders);
+                return new CurrentPurchaseWindow(data.dayOfWeek, Time.fromTimestamp(data.start), Time.fromTimestamp(data.end), data.maxOrders, data.orders, Time.fromTimestamp(data.lastModified));
             }
         };
-    }
-}
-
-class Time {
-    constructor(hours, minutes, seconds, milliseconds) {
-        this.hours = hours || 0;
-        this.minutes = minutes || 0;
-        this.seconds = seconds || 0;
-        this.milliseconds = milliseconds || 0;
-    }
-
-    /** @param {typeof import("firebase/app").default.firestore.Timestamp} timestampClass */
-    toTimestamp(timestampClass) {
-        return timestampClass.fromDate(this.toDate());
-    }
-
-    toDate() {
-        return new Date(
-            2021,
-            0,
-            1,
-            this.hours,
-            this.minutes,
-            this.seconds,
-            this.milliseconds
-        );
-    }
-
-    subtract(other) {
-        if (other.toDate) {
-            return this.toDate() - other.toDate();
-        }
-        return null;
-    }
-
-    /** @param timestamp {firebase.firestore.Timestamp} */
-    static fromTimestamp(timestamp) {
-        const date = timestamp.toDate();
-        return new Time(date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
     }
 }
 
 export {
     PurchaseWindow,
     CurrentPurchaseWindow,
-    Time,
 }

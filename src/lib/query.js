@@ -1,14 +1,18 @@
+import { browser } from "$app/env";
 import getFirebase from "./firebase";
 
-function getDocuments(collection) {
-    return getDocumentsWhere(collection, (queryable) => queryable);
+// One day in milliseconds for cache to clear
+const maxAge = 1000 * 60 * 60 * 24;
+
+function getDocuments(collection, converter) {
+    return getDocumentsWhere(collection, (queryable) => queryable, converter);
 }
 
-async function getDocumentsWhere(collection, queryOnQueryable) {
+async function getDocumentsWhere(collection, queryOnQueryable, converter = null) {
     const { app, firebase } = await getFirebase();
-
-    if (!(await getLastModified(collection))) {
-        setLastModified(collection, firebase.firestore.Timestamp.fromMillis(0));
+    let lastModified = await getLastModified(collection);
+    if (!lastModified || Date.now() - lastModified.toDate() > maxAge) {
+        lastModified = firebase.firestore.Timestamp.fromMillis(0);
     }
 
     const [modified, cached] = await Promise.all([
@@ -16,9 +20,10 @@ async function getDocumentsWhere(collection, queryOnQueryable) {
             app
                 .firestore()
                 .collection(collection)
-                .where('lastModified', '>', await getLastModified(collection))
-        ).get(),
-        queryOnQueryable(app.firestore().collection(collection)).get({
+                .withConverter(converter)
+                .where('lastModified', '>', lastModified)
+        ).get({ source: 'server' }),
+        queryOnQueryable(app.firestore().collection(collection)).withConverter(converter).get({
             source: 'cache',
         }),
     ]).then((snapshots) => {
@@ -31,11 +36,14 @@ async function getDocumentsWhere(collection, queryOnQueryable) {
             !modified.some((modifiedDoc) => modifiedDoc.id === cachedDoc.id)
     );
 
-    const data = [...shouldCache, ...modified].map((doc) => {
-        // Add all document ids as properties to the documents
-        return { id: doc.id, ...doc.data() };
-    });
-    if (modified.length > 0 && data.length > 0) {
+    let data = [...shouldCache, ...modified];
+    if (converter === null) {
+        data = data.map((doc) => {
+            // Add all document ids as properties to the documents
+            return { id: doc.id, ...doc.data() };
+        });
+    }
+    if (modified.length > 0) {
         const lastModifiedDocument = data.reduce((prevHighest, current) => {
             return prevHighest.lastModified.valueOf() >
                 current.lastModified.valueOf()
@@ -48,17 +56,22 @@ async function getDocumentsWhere(collection, queryOnQueryable) {
 }
 
 function setLastModified(collection, lastModified) {
-    localStorage.setItem(collection, lastModified.toMillis());
+    if (browser) {
+        localStorage.setItem(collection, lastModified.toMillis());
+    }
 }
 
 async function getLastModified(collection) {
     const { firebase } = await getFirebase();
 
-    return localStorage.getItem(collection)
+    if (browser) {
+        return localStorage.getItem(collection)
         ? firebase.firestore.Timestamp.fromMillis(
               localStorage.getItem(collection)
           )
         : null;
+    }
+    return null;
 }
 
 export { getDocuments, getDocumentsWhere };

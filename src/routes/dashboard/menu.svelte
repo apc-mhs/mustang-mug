@@ -16,37 +16,95 @@ query().then(([itemsData, optionsData]) => {
 
 async function save(itemData) {
     const { app, firebase } = await getFirebase();
+    
     itemData.lastModified = firebase.firestore.Timestamp.now();
 
     // Update the menu item in the main menuItems array
     const index = items.findIndex((item) => item.id === itemData.id);
-    items.splice(index, 1, itemData);
+    if (index !== -1) {
+        items.splice(index, 1, itemData);
+    } else {
+        items.push(itemData);
+    }
     items = items;
-
-    // Update the menu item + options in firestore
+    // Update the menu item in firestore
+    const { id, ...strippedItemData } = itemData;
+    // Change list of options into list of references to options
+    strippedItemData.options = strippedItemData.options.map((option) => {
+        return app.firestore().collection('options').doc(option.id);
+    });
     await app
         .firestore()
         .collection('items')
         .doc(itemData.id)
-        .set(itemData, { merge: true });
+        .set(strippedItemData, { merge: true });
     // TODO: Post a notification on save
 }
 
 async function saveOption(optionData) {
+    const { app, firebase } = await getFirebase();
+
     optionData.lastModified = firebase.firestore.Timestamp.now();
 
     // Update the menu item in the main menuItems array
-    options.splice(options.indexOf(options.find((option) => optionData.id === option.id)), 1, optionData);
+    options.splice(
+        options.indexOf(options.find((option) => optionData.id === option.id)),
+        1,
+        optionData
+    );
     options = options;
-    // Update the menu item + options in firestore
-    const { app } = await getFirebase();
-
+    // Update the option in firestore
+    const { id, ...strippedOptionData } = optionData;
     await app
         .firestore()
         .collection('options')
         .doc(optionData.id)
-        .set(optionData, { merge: true });
+        .set(strippedOptionData, { merge: true });
     // TODO: Post a notification on save
+}
+
+async function itemsMenuItemAddHandler() {
+    const { app, firebase } = await getFirebase();
+    const { id } = app.firestore().collection('items').doc();
+    items = [
+        ...items,
+        {
+            id,
+            name: 'New Item',
+            image: 'menuItems/pictureunavailable.jpg',
+            options: [],
+            stock: true,
+            price: 0,
+            lastModified: firebase.firestore.Timestamp.now()
+        },
+    ];
+}
+
+async function optionsMenuItemAddHandler() {
+    const { app } = await getFirebase();
+    const { id } = app.firestore().collection('options').doc();
+    options = [
+        ...options,
+        {
+            id,
+            name: 'New Option',
+            stock: true,
+            price: 0,
+            lastModified: firebase.firestore.Timestamp.now()
+        },
+    ];
+}
+
+async function itemsMenuItemDeleteHandler(itemId) {
+    const { app } = await getFirebase();
+    items = items.filter((item) => item.id !== itemId);
+    app.firestore().collection('items').doc(itemId).delete();
+}
+
+async function optionsMenuItemDeleteHandler(optionId) {
+    const { app } = await getFirebase();
+    options = options.filter((option) => option.id !== optionId);
+    app.firestore().collection('options').doc(optionId).delete();
 }
 </script>
 
@@ -56,14 +114,17 @@ async function saveOption(optionData) {
     {items}
     {options}
     skeleton={items.length < 1}
+    modify={true}
+    on:addItem={itemsMenuItemAddHandler}
     let:item
     let:itemOptions>
     {#if !items.length < 1}
         <EditableMenuItem
             {item}
             options={itemOptions}
+            allOptions={options}
             on:save={(e) => save(e.detail)}
-            allOptions={options} />
+            on:delete={({ detail }) => itemsMenuItemDeleteHandler(detail)} />
     {:else}
         <SkeletonLayout>
             <EditableMenuItem {item} />
@@ -77,11 +138,14 @@ async function saveOption(optionData) {
     items={options}
     options={[]}
     skeleton={options.length < 1}
+    modify={true}
+    on:addItem={optionsMenuItemAddHandler}
     let:item>
     {#if !options.length < 1}
         <EditableMenuOptionsItem
             option={item}
-            on:save={(e) => saveOption(e.detail)} />
+            on:save={(e) => saveOption(e.detail)}
+            on:delete={({ detail }) => optionsMenuItemDeleteHandler(detail)} />
     {/if}
 </Menu>
 

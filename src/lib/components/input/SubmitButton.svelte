@@ -1,13 +1,12 @@
 <script>
+export let value = 'Submit';
 export let disabled = false;
 </script>
 
-<button class="button" {disabled} on:click >
-    <slot />
-</button>
+<input type="submit" {value} {disabled} on:click>
 
 <style>
-button {
+input {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
@@ -27,19 +26,19 @@ button {
     -webkit-tap-highlight-color: transparent;
     text-decoration: none;
 }
-button:hover {
+input:hover {
     background-color: var(--background-color, rgb(126, 33, 33));
     box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 20%);
 }
-button:active {
+input:active {
     background-color: var(--background-color, rgb(82, 23, 23));
 }
-button:disabled {
+input:disabled {
     cursor: not-allowed;
     color: rgb(201, 201, 201);
     background-color: var(--background-color, rgb(90, 47, 47));
 }
-button :global(*) {
+input :global(*) {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;

@@ -1,5 +1,7 @@
 import getFirebase from '$lib/firebase';
 import { getAuthorization } from '$lib/msb';
+import { getCurrentPurchaseWindow } from '$lib/purchase';
+import { CurrentPurchaseWindow } from '$lib/purchase/window';
 import { getCart } from './_cart';
 
 /**
@@ -9,82 +11,103 @@ export async function get({ query }) {
     const { app, firebase } = await getFirebase();
 
     const cartId = query.get('cartID');
-    if (cartId) {
-        const [cart, cartSnapshot] = await Promise.all([
-            getCart(cartId),
-            app.firestore()
-                .collection('carts')
-                .where('cartId', '==', cartId)
-                .get()
-        ]);
+    if (!cartId) {
+        return await writeProcessingError('Cart Id was not present in query parameters');
+    }
 
-        if (!cartSnapshot.empty) {
+    const [cart, cartSnapshot] = await Promise.all([
+        getCart(cartId),
+        app.firestore()
+            .collection('carts')
+            .where('cartId', '==', cartId)
+            .get()
+    ]);
+    if (cartSnapshot.empty) {
+        return await writeProcessingError('Cart Id does not reference an existing cart');
+    }
 
-            const cartDocument = cartSnapshot.docs[0];
+    const cartDocument = cartSnapshot.docs[0];
 
-            // TODO: Get cart items and make sure they are all in stock
-            // And confirm that their checkout time is still available
+    const currentPurchaseWindow = await getCurrentPurchaseWindow();
+    if (!currentPurchaseWindow || currentPurchaseWindow.exhausted) {
+        return await writeProcessingError(
+            'You can\'t checkout right now because too many orders have been placed. Check back later',
+            cartDocument.id
+        );
+    }
 
-            if (true) {
-                const res = await fetch(
-                    `https://test.www.myschoolbucks.com/msbpay/v2/carts/${cartId}/process`,
-                    {
-                        method: 'POST',
-                        headers: {
-                            Authorization: getAuthorization(),
-                        },
-                    }
-                ).then((res) => res.json());
+    // TODO: Get cart items and make sure they are all in stock
 
-                await app
-                    .firestore()
-                    .collection('carts')
-                    .where('cartId', '==', cartId)
-                    .get();
-
-                if (!cartSnapshot.empty) {
-                    const cartDocument = cartSnapshot.docs[0];
-                    await app
-                        .firestore()
-                        .collection('carts')
-                        .doc(cartDocument.id)
-                        .set({
-                            cartId: '',
-                            resultCodes: res.resultCodes || [],
-                            resultStatus: 'processing_success'
-                        });
-                }
-
-                // Make sure every result code has a confirmation code. This is deemed "successful"
-                // https://www.myschoolbucks.com/ver2/developer/msbpayapi
-                // "How will I know if a payment is successful after it is processed?"
-                if (res.resultCodes.every((code) => /confirmation code/.test(code))) {
-                    await app
-                        .firestore()
-                        .collection('orders')
-                        .doc(res.cartId)
-                        .set({
-                            pickUpTime: firebase.firestore.Timestamp.fromDate(new Date(2021, 8, 31, 7, 30))
-                        });
-                    
-                    return {
-                        status: 302,
-                        headers: {
-                            Location: '/confirmation',
-                        },
-                    };
-                }
-            } else {
-                await app
-                    .firestore()
-                    .collection('carts')
-                    .doc(cartDocument.id)
-                    .set({
-                        cartId: '',
-                        resultStatus: 'processing_failure',
-                    });
-            }
+    const res = await fetch(
+        `https://test.www.myschoolbucks.com/msbpay/v2/carts/${cartId}/process`,
+        {
+            method: 'POST',
+            headers: {
+                Authorization: getAuthorization(),
+            },
         }
+    ).then((res) => res.json());
+
+    // Make sure every result code has a confirmation code. This is deemed "successful"
+    // https://www.myschoolbucks.com/ver2/developer/msbpayapi
+    // "How will I know if a payment is successful after it is processed?"
+    if (!res.resultCodes.every((code) => /confirmation code/.test(code))) {
+        console.error(res);
+        return writeProcessingError('MSB API Processing Request Failure. Try again later', cartDocument.id);
+    }
+
+    currentPurchaseWindow.orders++;
+    await app
+        .firestore()
+        .collection('purchase_windows')
+        .doc('current')
+        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+        .set(currentPurchaseWindow);
+
+    await app
+        .firestore()
+        .collection('carts')
+        .doc(cartDocument.id)
+        .set({
+            cartId: '',
+            resultCodes: res.resultCodes || [],
+            resultStatus: 'Processing Success'
+        });
+
+    // Currently the pick up time is simply the next multiple of 5 mins from NOW
+    // unless the next multiple of 5 is within 2.5 mins, in which case its the one after
+    // In the future this may be specified by the user
+    const pickUpTime = new Date();
+    pickUpTime.setSeconds(0, 0);
+    pickUpTime.setMinutes((Math.round(pickUpTime.getMinutes() / 5) * 5) + 5);
+    await app
+        .firestore()
+        .collection('orders')
+        .doc(cartDocument.id)
+        .set({
+            pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
+        });
+
+    return {
+        status: 302,
+        headers: {
+            Location: '/confirmation',
+        },
+    };
+}
+
+async function writeProcessingError(message, cartDocumentId) {
+    if (cartDocumentId) {
+        const { app } = await getFirebase();
+
+        await app
+            .firestore()
+            .collection('carts')
+            .doc(cartDocumentId)
+            .set({
+                cartId: '',
+                resultStatus: message,
+            });
     }
 
     return {

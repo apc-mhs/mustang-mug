@@ -1,5 +1,5 @@
 <script>
-import { Time } from '$lib/purchase/window';
+import { Time } from '$lib/purchase/time';
 import PurchaseWindowRow from './PurchaseWindowRow.svelte';
 
 export let colors;

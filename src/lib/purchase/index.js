@@ -1,40 +1,43 @@
 import getFirebase from '$lib/firebase';
+import { getDocuments } from '$lib/query';
 import { CurrentPurchaseWindow, PurchaseWindow } from './window';
 
+/** 
+ * @returns {Promise<CurrentPurchaseWindow?>}
+ */
 async function getCurrentPurchaseWindow() {
-    const { app } = await getFirebase();
+    const { app, firebase } = await getFirebase();
 
-    let currentPurchaseWindow = app
+    let currentPurchaseWindow = await app
         .firestore()
         .doc('purchase_windows/current')
-        .withConverter(CurrentPurchaseWindow.converter)
-        .get();
+        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+        .get({ source: 'server' });
 
     if (!currentPurchaseWindow.exists || !currentPurchaseWindow.data().current) {
         currentPurchaseWindow = await updateCurrentPurchaseWindow();
+    } else {
+        currentPurchaseWindow = currentPurchaseWindow.data();
     }
 
     return currentPurchaseWindow;
 }
 
 async function updateCurrentPurchaseWindow() {
-    const { app } = await getFirebase();
+    const { app, firebase } = await getFirebase();
 
-    const purchaseWindows = app
-        .firestore()
-        .collection('purchase_windows')
-        .withConverter(PurchaseWindow.converter)
-        .get();
-
-    for (let purchaseWindow of purchaseWindows.docs.map((snapshot) => snapshot.data())) {
+    const purchaseWindows = await getDocuments(
+        'purchase_windows',
+        PurchaseWindow.converter(firebase.firestore.Timestamp)
+    );
+    for (let purchaseWindow of purchaseWindows.map((doc) => doc.data())) {
         if (purchaseWindow.current) {
-            const current = purchaseWindow.toCurrent();
             await app
                 .firestore()
                 .doc('purchase_windows/current')
-                .withConverter(CurrentPurchaseWindow.converter)
-                .set(current);
-            return current;
+                .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+                .set(purchaseWindow.toCurrent());
+            return purchaseWindow.toCurrent();
         }
     }
 

@@ -10,6 +10,7 @@ async function startLoading() {
     loading = true;
 
     progress.set(25);
+    // Max 12.5 seconds load time before the bar stalls
     for (let i = 0; i < 25; i++) {
         if (!loading) break;
         progress.update((progress) => progress + 2);

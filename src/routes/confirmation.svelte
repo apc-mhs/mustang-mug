@@ -5,6 +5,7 @@ import { currentUser } from '$lib/auth';
 import getFirebase from '$lib/firebase';
 
 let resultCodes = null;
+let resultStatus = null;
 $: if (browser && $currentUser) {
     getFirebase().then(({ app }) => {
         app.firestore()
@@ -13,7 +14,9 @@ $: if (browser && $currentUser) {
             .get()
             .then((snapshot) => {
                 if (snapshot.exists) {
-                    resultCodes = snapshot.data().resultCodes;
+                    const data = snapshot.data();
+                    resultCodes = data.resultCodes;
+                    resultStatus = data.resultStatus;
                 } else {
                     resultCodes = [];
                 }
@@ -29,6 +32,9 @@ $: if (browser && $currentUser) {
 
 <h1>Your order is being processed. Thanks for shopping at the Mustang Mug!</h1>
 <h2>Results of your payment</h2>
+{#if resultStatus}
+    <p>Result status: {resultStatus}</p>
+{/if}
 {#if resultCodes !== null}
     <ul>
         {#each resultCodes as resultCode, i (i)}
