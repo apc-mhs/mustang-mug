@@ -19,5 +19,8 @@ service cloud.firestore {
     match /options/{option} {
       allow read: if request.auth != null;
     }
+    match /purchase_windows/{purchase_window} {
+      allow read: if request.auth != null;
+    }
   }
 }
