@@ -13,7 +13,6 @@ async function request(
 ) {
     const res = await fetch(`${baseURL}${url}`, {
         method: method,
-        mode: method !== 'GET' ? 'cors' : undefined,
         headers: { ...defaultHeaders, ...headers },
         body: data,
     });
@@ -37,7 +36,7 @@ const api = {
                 .then((value) => value, (e) => ignoreExceptions || console.error(e), null);
     },
     get: async function(url, ignoreExceptions = false) {
-        return await this.request(url, 'GET', ignoreExceptions);
+        return await this.request(url, 'GET', undefined, undefined, ignoreExceptions);
     },
     post: async function(url, data, headers = defaultHeaders) {
         return await this.request(
