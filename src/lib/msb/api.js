@@ -2,7 +2,6 @@ import { getAuthorization, baseURL } from ".";
 
 const defaultHeaders = {
     Accept: 'application/json',
-    Authorization: getAuthorization(),
 };
 
 async function request(
@@ -13,7 +12,7 @@ async function request(
 ) {
     const res = await fetch(`${baseURL}${url}`, {
         method: method,
-        headers: { ...defaultHeaders, ...headers },
+        headers: { ...defaultHeaders, ...headers, Authorization: getAuthorization(), },
         body: data,
     });
     if (!res.ok) {
