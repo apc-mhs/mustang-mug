@@ -32,11 +32,15 @@ async function request(
 }
 
 const api = {
-    get: async (url) => {
-        return await request(url, 'GET');
+    request: async function(url, method, headers, data, ignoreExceptions = false) {
+        return request(url, method, headers, data)
+                .then((value) => value, (e) => ignoreExceptions || console.error(e), null);
     },
-    post: async (url, data, headers = defaultHeaders) => {
-        return await request(
+    get: async function(url, ignoreExceptions = false) {
+        return await this.request(url, 'GET', ignoreExceptions);
+    },
+    post: async function(url, data, headers = defaultHeaders) {
+        return await this.request(
             url,
             'POST',
             {
@@ -46,8 +50,8 @@ const api = {
             JSON.stringify(data)
         );
     },
-    put: async (url, data, headers = defaultHeaders) => {
-        return await request(
+    put: async function(url, data, headers = defaultHeaders) {
+        return await this.request(
             url,
             'PUT',
             {
@@ -57,8 +61,8 @@ const api = {
             JSON.stringify(data)
         );
     },
-    delete: async (url) => {
-        return await request(url, 'DELETE');
+    delete: async function(url) {
+        return await this.request(url, 'DELETE');
     },
 };
 

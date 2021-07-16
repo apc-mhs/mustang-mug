@@ -115,9 +115,9 @@ async function updateCart(body, cartId) {
 
 async function getCart(cartId) {
     /** @type {Cart} */
-    const msbCart = await api.get(`/carts/${cartId}`);
+    const msbCart = await api.get(`/carts/${cartId}`, true);
 
-    if (msbCart.result === 'Error') {
+    if (!msbCart || msbCart.result === 'Error') {
         return null;
     }
 
