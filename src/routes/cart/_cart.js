@@ -3,6 +3,7 @@ import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
 import { CartApi, Cart } from 'msb_pay_api';
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
+import api from '$lib/msb/api';
 
 const cartApi = new CartApi(client);
 
@@ -114,17 +115,9 @@ async function updateCart(body, cartId) {
 
 async function getCart(cartId) {
     /** @type {Cart} */
-    const msbCart = await fetch(
-        'https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId,
-        {
-            method: 'GET',
-            headers: {
-                Authorization: getAuthorization(),
-            },
-        }
-    ).then((res) => res.json());
+    const msbCart = await api.get(`/carts/${cartId}`);
 
-    if (msbCart.result == 'Error') {
+    if (msbCart.result === 'Error') {
         return null;
     }
 
