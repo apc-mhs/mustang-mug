@@ -19,4 +19,5 @@ export {
     departmentId,
     storeId,
     paymentMethodId,
+    baseURL
 };
