@@ -3,13 +3,14 @@ import getFirebase from '$lib/firebase';
 import { onDestroy } from 'svelte';
 import OrderGroup from '$lib/components/orders/OrderGroup.svelte';
 import Order from '$lib/components/orders/Order.svelte';
+import { browser } from '$app/env';
 
 let orders = {};
 let groupedOrders = {};
 
 $: {
     for (let order of Object.values(orders)) {
-        const pickUpTimeSeconds = order.pickUpTime.toMillis()
+        const pickUpTimeSeconds = order.pickUpTime.toMillis();
         if (!groupedOrders[pickUpTimeSeconds]) {
             groupedOrders[pickUpTimeSeconds] = [order];
         } else {
@@ -19,6 +20,11 @@ $: {
             ];
         }
     }
+}
+
+let alert;
+if (browser) {
+    alert = new Audio('/audio/alert.mp3');
 }
 
 let unsubscribe = () => {};
@@ -32,6 +38,10 @@ getFirebase().then(({ app }) => {
                     const msbPaymentData = await fetch(
                         '/dashboard/orders.json?id=' + change.doc.id
                     ).then((res) => res.json());
+
+                    if (browser) {
+                        alert.play();
+                    }
                     orders[change.doc.id] = {
                         id: change.doc.id,
                         cartPayments: msbPaymentData,

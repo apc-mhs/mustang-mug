@@ -34,17 +34,26 @@
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest",
-      "^.+\\.svelte$": ["svelte-jester", { "preprocess": true }]
+      "^.+\\.svelte$": [
+        "svelte-jester",
+        {
+          "preprocess": true
+        }
+      ]
     },
     "moduleFileExtensions": [
       "js",
       "svelte"
     ],
-    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ],
     "moduleNameMapper": {
       "^\\$lib/(.*)$": "<rootDir>/src/lib/$1"
     },
-    "modulePaths": ["<rootDir>"]
+    "modulePaths": [
+      "<rootDir>"
+    ]
   },
   "type": "module"
 }
