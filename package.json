@@ -25,7 +25,7 @@
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
     "svelte": "^3.38.3",
-    "svelte-adapter-firebase": "^0.8.4",
+    "svelte-adapter-firebase": "github:jthegedus/svelte-adapter-firebase",
     "svelte-jester": "^1.7.0",
     "svelte-popperjs": "^1.2.6",
     "svelte-preprocess": "^4.7.3",
