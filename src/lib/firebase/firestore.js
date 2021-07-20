@@ -17,7 +17,7 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
         .set({
             name: 'Mustang Brew',
             price: 2.75,
-            image: 'coffee.jpg',
+            image: 'hotDrinks.jpg',
             stock: true,
             options: [firestore.doc('/options/milk')],
             lastModified: timestamp,
@@ -26,7 +26,7 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
     await firestore.collection('items').doc('free_item').set({
         name: 'This item is free',
         price: 0,
-        image: 'coffee.jpg',
+        image: 'missing.jpg',
         stock: false,
         options: [],
         lastModified: timestamp,

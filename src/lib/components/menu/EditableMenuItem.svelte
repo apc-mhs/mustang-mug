@@ -32,7 +32,7 @@ $: changed =
 </script>
 
 <div class="item" class:out-of-stock={!stock}>
-    <img src="/{image}" alt="Picture of {image}" />
+    <img src="/menuItems/{image}" alt="Picture of {image}" />
     <label>
         Picture:
         <Input bind:value={image} --font-size="16px" />
