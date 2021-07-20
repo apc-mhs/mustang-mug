@@ -26,7 +26,16 @@ $: if (cartItems) {
 </script>
 
 <div class="item" class:out-of-stock={!item.stock}>
-    <img src="/{item.image}" alt="Picture of {item.name}" />
+    {#if !item.stock}
+        <div class="parent">
+            <img src="/menuItems/{item.image}" alt="Picture of {item.name}" />
+            <div class="child">
+                <img src="OOS.png" alt="out of stock X" />
+            </div>
+        </div>
+    {:else}
+        <img src="/menuItems/{item.image}" alt="Picture of {item.name}" />
+    {/if}
     <h3>{item.name}</h3>
     <p>{numberFormatter.format(item.price)}</p>
     <label>
@@ -65,16 +74,33 @@ h3 {
     padding-bottom: 10px;
 }
 .item.out-of-stock > :not(.out-of-stock) {
-    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(100%);
+    -webkit-filter: grayscale(50%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(50%);
+    position: relative;
+    top: 0;
+    left: 0;
 }
 p.out-of-stock {
     color: rgb(253, 54, 54);
     font-weight: bold;
 }
-.item > img {
+.item > div > img {
+    top: 0;
+    left: 0;
     width: 100%;
 }
+.item > img {
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.item > div > div > img {
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
 label {
     padding: 10px;
     /* background-color: rgba(253, 253, 253, 0.5); */
@@ -83,5 +109,15 @@ label {
 }
 label:hover {
     cursor: pointer;
+}
+
+.parent {
+    position: relative;
+}
+
+.child {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 </style>
