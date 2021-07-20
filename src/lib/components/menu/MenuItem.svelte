@@ -27,10 +27,12 @@ $: if (cartItems) {
 
 <div class="item" class:out-of-stock={!item.stock}>
     {#if !item.stock}
-        <div class="parent">
-            <img src="/menuItems/{item.image}" alt="Picture of {item.name}" />
-            <div class="child">
-                <img src="OOS.png" alt="out of stock X" />
+        <div class="oos-wrapper">
+            <img
+                src="/menuItems/{item.image}"
+                alt="Picture of {item.name} - out of stock" />
+            <div class="oos-x">
+                <img src="OOS.png" />
             </div>
         </div>
     {:else}
@@ -111,11 +113,11 @@ label:hover {
     cursor: pointer;
 }
 
-.parent {
+.oos-wrapper {
     position: relative;
 }
 
-.child {
+.oos-x {
     position: absolute;
     left: 0;
     top: 0;
