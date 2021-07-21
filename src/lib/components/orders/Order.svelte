@@ -33,7 +33,10 @@ $: paymentItems = cartPayments[0].cartPaymentItems;
         {/each}
     </div>
     <p>Confirmation code: {payment.orderId}</p>
-    <Button><Icon name="check"/>Complete</Button>
+    <Button>
+        <Icon name="check"/>
+        Complete
+    </Button>
 </div>
 
 <style>

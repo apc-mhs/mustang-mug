@@ -82,7 +82,6 @@ aside.menu {
     min-width: 400px;
     width: min-content;
     flex: 1 1 auto;
-    background-color: hotpink;
     height: 100%;
     overflow-y: auto;
 }
