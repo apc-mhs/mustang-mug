@@ -4,6 +4,7 @@ import { PurchaseWindow } from '$lib/purchase/window';
 import PurchaseSchedule from '$lib/components/purchase/PurchaseSchedule.svelte';
 import getFirebase from '$lib/firebase';
 
+const todayDayOfWeek = new Date().getDay();
 let deleting = false;
 async function deleteAllCarts() {
     deleting = true;
@@ -46,7 +47,7 @@ getFirebase().then(({ app, firebase }) => {
                 purchaseWindows={purchaseWindows.filter(
                     (window) => window.dayOfWeek === i
                 )}
-                open={i === 0} />
+                open={i === todayDayOfWeek} />
         {/each}
     </div>
 </section>

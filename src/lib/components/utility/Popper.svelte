@@ -10,6 +10,7 @@ export let persistScroll = false;
 export let transition;
 export let transitionProps = {};
 export let opened = false;
+export let boundingElement;
 
 if (!popperOptions) {
     popperOptions = {
@@ -19,6 +20,7 @@ if (!popperOptions) {
                 name: 'preventOverflow',
                 options: {
                     altAxis: true,
+                    boundary: boundingElement,
                 },
             },
         ],

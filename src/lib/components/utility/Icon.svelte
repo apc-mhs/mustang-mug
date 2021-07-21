@@ -11,3 +11,9 @@ export let dp = 24;
         height="{height}px"
         width="{width}px" />
 </svg>
+
+<style>
+svg {
+    vertical-align: var(--vertical-align, baseline);
+}
+</style>

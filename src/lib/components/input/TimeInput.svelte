@@ -104,4 +104,6 @@ function handleFocus(e) {
     bind:input={input}
     bind:value={rawValue}
     on:focus={handleFocus}
-    on:keydown={handleKeydown} />
+    on:keydown={handleKeydown}
+    --width="100px"
+    --flex="0" />

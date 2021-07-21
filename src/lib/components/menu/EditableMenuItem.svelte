@@ -12,6 +12,7 @@ export let allOptions;
 
 const dispatch = createEventDispatcher();
 
+let itemElement;
 let { price, name, image, stock } = item;
 
 function optionIdSorter(option1, option2) {
@@ -29,9 +30,18 @@ $: changed =
     !item.options
         .sort(optionIdSorter)
         .every((option, i) => option.id === (options[i] && options[i].id));
+
+function beforeUnload(e) {
+    if (!changed) return;
+
+    e.returnValue = 'Unsaved';
+    return e.returnValue;
+}
 </script>
 
-<div class="item" class:out-of-stock={!stock}>
+<svelte:window on:beforeunload={beforeUnload}/>
+
+<div class="item" class:out-of-stock={!stock} bind:this={itemElement}>
     <img src="/menuItems/{image}" alt="Picture of {image}" />
     <label>
         Picture:
@@ -46,6 +56,7 @@ $: changed =
         <input bind:value={price} type="number" step="0.01" min="0" />
     </label>
     <EditableMenuItemOptions
+        popperBoundingElement={itemElement}
         message={'Options:'}
         bind:selectedOptions={options}
         options={allOptions} />

@@ -57,6 +57,7 @@ export async function get({ query }) {
     }
 
     currentPurchaseWindow.orders++;
+    currentPurchaseWindow.lastModified = new Date();
     await app
         .firestore()
         .collection('purchase_windows')
@@ -64,6 +65,22 @@ export async function get({ query }) {
         .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
         .set(currentPurchaseWindow);
 
+    // Currently the pick up time is simply the next multiple of 5 mins from NOW
+    // unless the next multiple of 5 is within 2.5 mins, in which case its the one after
+    // In the future this may be specified by the user
+    const pickUpTime = new Date();
+    pickUpTime.setSeconds(0, 0);
+    pickUpTime.setMinutes((Math.round(pickUpTime.getMinutes() / 5) * 5) + 5);
+
+    await app
+        .firestore()
+        .collection('orders')
+        .doc(cartDocument.id)
+        .set({
+            pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
+        });
+
+    const formatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     await app
         .firestore()
         .collection('carts')
@@ -71,21 +88,7 @@ export async function get({ query }) {
         .set({
             cartId: '',
             resultCodes: res.resultCodes || [],
-            resultStatus: 'Processing Success'
-        });
-
-    // Currently the pick up time is simply the next multiple of 5 mins from NOW
-    // unless the next multiple of 5 is within 2.5 mins, in which case its the one after
-    // In the future this may be specified by the user
-    const pickUpTime = new Date();
-    pickUpTime.setSeconds(0, 0);
-    pickUpTime.setMinutes((Math.round(pickUpTime.getMinutes() / 5) * 5) + 5);
-    await app
-        .firestore()
-        .collection('orders')
-        .doc(cartDocument.id)
-        .set({
-            pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
+            resultStatus: 'Processing Success. You order will be ready at ' + formatter.format(pickUpTime),
         });
 
     return {

@@ -14,10 +14,16 @@ let validCart = false;
 let studentName = '';
 let selectedPickUpTime = [];
 
-let checkoutAvailable = true;
+/** @type {import("$lib/purchase/window").CurrentPurchaseWindow} */
+let purchaseWindow;
 getCurrentPurchaseWindow().then((currentPurchaseWindow) => {
-    checkoutAvailable = currentPurchaseWindow && !currentPurchaseWindow.exhausted;
+    purchaseWindow = currentPurchaseWindow;
 });
+$: checkoutUnavailableMessage = !purchaseWindow
+    ? 'Checkout is not available at this time. Check back later.'
+    : purchaseWindow.exhausted
+        ? 'You can\'t checkout now because too many orders have been placed. Check back later.'
+        : undefined;
 
 let cart;
 if (browser) {
@@ -113,15 +119,14 @@ query().then(([items, _]) => {
         </label>
         <div class="button-column">
             <div use:tippy={
-                !checkoutAvailable
-                ? 'You can\'t checkout right now because too many orders have been placed. Check back later'
-                : !validCart
+                checkoutUnavailableMessage ||
+                (!validCart
                     ? 'Your cart has no in-stock items and can not be checked out.'
-                    : null
+                    : null)
             }>
                 <SubmitButton
                     value={'Proceed to checkout'}
-                    disabled={!validCart || checkingOut || !checkoutAvailable} />
+                    disabled={!validCart || checkingOut || checkoutUnavailableMessage} />
             </div>
             <LinkButton href="/">Return to menu</LinkButton>
         </div>
@@ -167,6 +172,7 @@ label {
     top: calc(var(--header-height) + 20px);
     display: flex;
     flex-flow: column nowrap;
+    align-items: center;
     flex: 1 0 auto;
     min-width: 250px;
     gap: 10px;
