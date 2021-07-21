@@ -8,6 +8,7 @@ import AutocompleteChooser from '../input/AutocompleteChooser.svelte';
 
 export let selectedOptions;
 export let options = [];
+export let popperBoundingElement;
 
 let chooser;
 
@@ -21,6 +22,7 @@ const removeOptionMessage = 'Remove this option';
 
 <div class="item-options" transition:slide|local>
     <AutocompleteChooser
+        {popperBoundingElement}
         placeholder="Search options"
         options={options}
         bind:this={chooser}

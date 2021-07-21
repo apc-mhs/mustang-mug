@@ -6,6 +6,7 @@ import { scale } from 'svelte/transition';
 export let options = [];
 export let selectedOptions = [];
 export let placeholder;
+export let popperBoundingElement;
 
 let selectedOptionIds = selectedOptions.map(
     (seletedOption) => seletedOption.id
@@ -73,10 +74,11 @@ export function remove(optionId) {
         --font-size="16px"
         on:keydown={handleKeydown} />
     <Popper
-        bind:this={popper}
+        boundingElement={popperBoundingElement}
         reference={input}
         transition={scale}
-        transitionProps={{ duration: 250, start: 0.85 }}>
+        transitionProps={{ duration: 250, start: 0.85 }}
+        bind:this={popper}>
         <div class="suggestions" bind:this={suggestionsElement}>
             {#each suggestions as suggestion, i (i)}
                 <div
