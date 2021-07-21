@@ -86,21 +86,26 @@ p.out-of-stock {
     color: rgb(253, 54, 54);
     font-weight: bold;
 }
-.item > div > img {
-    top: 0;
-    left: 0;
-    width: 100%;
-}
+
+/* In stock menu image */
 .item > img {
     top: 0;
     left: 0;
     width: 100%;
 }
 
-.item > div > div > img {
+/* Out of stock menu image */
+.item > div > img {
     top: 0;
     left: 0;
     width: 100%;
+}
+
+/* Out of stock red X */
+.item > div > div > img {
+    width: 100%;
+    position: relative;
+    top: 50%;
 }
 
 label {
@@ -114,7 +119,13 @@ label:hover {
 }
 
 .oos-wrapper {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: center;
 }
 
 .oos-x {
@@ -123,3 +134,4 @@ label:hover {
     top: 0;
 }
 </style>
+
