@@ -8,6 +8,7 @@ exports.ssrServer = functions.https.onRequest(async (request, response) => {
         functions.logger.info('SvelteKit SSR Handler initialised!');
     }
 
+    process.env['TZ'] = 'America/New_York';
     // Pass the functions config variable into process.env
     // so it can be accessed by SvelteKit
     // TODO: Do this for every config variable automatically
