@@ -29,7 +29,16 @@ $: changed =
     !item.options
         .sort(optionIdSorter)
         .every((option, i) => option.id === (options[i] && options[i].id));
+
+function beforeUnload(e) {
+    if (!changed) return;
+
+    e.returnValue = 'Unsaved';
+    return e.returnValue;
+}
 </script>
+
+<svelte:window on:beforeunload={beforeUnload}/>
 
 <div class="item" class:out-of-stock={!stock}>
     <img src="/menuItems/{image}" alt="Picture of {image}" />

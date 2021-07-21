@@ -28,7 +28,7 @@ async function getFirebase() {
     try {
         app = firebase.app(appName);
     } catch (error) {
-        setupFirebase(app);
+        app = setupFirebase(firebase);
     }
 
     return {
@@ -37,8 +37,11 @@ async function getFirebase() {
     };
 }
 
-/** @param {import("firebase/app").default.app.App} app */
-function setupFirebase(app) {
+/**
+ * @param {import("firebase/app").default.app.App} app
+ * @param {import("firebase/app").default} firebase
+ */
+function setupFirebase(firebase) {
     if (!browser && dev) {
         // Load firebase admin environment variables
         loadConfig({
@@ -51,7 +54,7 @@ function setupFirebase(app) {
         : {
             credential: firebase.credential.applicationDefault(),
         };
-    app = firebase.initializeApp(config, appName);
+    const app = firebase.initializeApp(config, appName);
 
     if (browser) {
         if (dev) initializeDev(app);
@@ -74,6 +77,8 @@ function setupFirebase(app) {
                 firebase.firestore.Timestamp
             );
     }
+
+    return app;
 }
 
 /** @param {import("firebase/app").default.app.App} app */
