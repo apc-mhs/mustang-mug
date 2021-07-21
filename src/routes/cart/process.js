@@ -57,6 +57,7 @@ export async function get({ query }) {
     }
 
     currentPurchaseWindow.orders++;
+    currentPurchaseWindow.lastModified = new Date();
     await app
         .firestore()
         .collection('purchase_windows')
