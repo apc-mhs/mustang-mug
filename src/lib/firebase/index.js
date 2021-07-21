@@ -28,47 +28,52 @@ async function getFirebase() {
     try {
         app = firebase.app(appName);
     } catch (error) {
-        if (!browser && dev) {
-            // Load firebase admin environment variables
-            loadConfig({
-                path: path.resolve(process.cwd(), '.env.development.local'),
-            });
-        }
-
-        const config = browser
-            ? firebaseConfig
-            : {
-                  credential: firebase.credential.applicationDefault(),
-              };
-        app = firebase.initializeApp(config, appName);
-
-        if (browser) {
-            if (dev) initializeDev(app);
-
-            app.firestore()
-                .enablePersistence()
-                .catch((err) => {
-                    console.error(
-                        'Persistence failed to enable with error',
-                        err
-                    );
-                    if (err.code == 'failed-precondition') {
-                        alert(`You currently have more than one tab open! The menu and site will not function properly with more than one tab open. Please close the additional tabs and refresh the page.`);
-                    }
-                });
-        } else {
-            if (dev)
-                setupEmulatedFirestore(
-                    app.firestore(),
-                    firebase.firestore.Timestamp
-                );
-        }
+        setupFirebase(app);
     }
 
     return {
         app,
         firebase,
     };
+}
+
+/** @param {import("firebase/app").default.app.App} app */
+function setupFirebase(app) {
+    if (!browser && dev) {
+        // Load firebase admin environment variables
+        loadConfig({
+            path: path.resolve(process.cwd(), '.env.development.local'),
+        });
+    }
+
+    const config = browser
+        ? firebaseConfig
+        : {
+            credential: firebase.credential.applicationDefault(),
+        };
+    app = firebase.initializeApp(config, appName);
+
+    if (browser) {
+        if (dev) initializeDev(app);
+
+        app.firestore()
+            .enablePersistence()
+            .catch((err) => {
+                console.error(
+                    'Persistence failed to enable with error',
+                    err
+                );
+                if (err.code == 'failed-precondition') {
+                    alert(`You currently have more than one tab open! The menu and site will not function properly with more than one tab open. Please close the additional tabs and refresh the page.`);
+                }
+            });
+    } else {
+        if (dev)
+            setupEmulatedFirestore(
+                app.firestore(),
+                firebase.firestore.Timestamp
+            );
+    }
 }
 
 /** @param {import("firebase/app").default.app.App} app */
