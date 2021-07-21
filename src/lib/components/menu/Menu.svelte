@@ -24,7 +24,7 @@ const skeletonItems = new Array(10).fill(5).map((_, i) => {
         id: i,
         name: Math.random().toString().substring(0, 5),
         price: 0,
-        stock: false,
+        stock: true,
         options: [],
         image: 'menu-item-placeholder.jpg',
     };
