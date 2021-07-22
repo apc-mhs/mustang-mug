@@ -78,6 +78,7 @@ export async function get({ query }) {
         .doc(cartDocument.id)
         .set({
             pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
+            cartId
         });
 
     const formatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });

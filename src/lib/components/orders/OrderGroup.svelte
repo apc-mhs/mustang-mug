@@ -26,6 +26,10 @@ $: getFirebase()
 
 
 <style>
+.order-group {
+    margin: 10px 0px;
+}
+
 hr {
     border: 0;
     height: 1px;

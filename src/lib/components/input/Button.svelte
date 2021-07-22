@@ -28,16 +28,16 @@ button {
     text-decoration: none;
 }
 button:hover {
-    background-color: var(--background-color, rgb(126, 33, 33));
+    background-color: var(--background-color-hover, var(--background-color, rgb(126, 33, 33)));
     box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 20%);
 }
 button:active {
-    background-color: var(--background-color, rgb(82, 23, 23));
+    background-color: var(--background-color-active, var(--background-color, rgb(82, 23, 23)));
 }
 button:disabled {
     cursor: not-allowed;
     color: rgb(201, 201, 201);
-    background-color: var(--background-color, rgb(90, 47, 47));
+    background-color: var(--background-color-disabled, var(--background-color, rgb(90, 47, 47)));
 }
 button :global(*) {
     -moz-user-select: none;
