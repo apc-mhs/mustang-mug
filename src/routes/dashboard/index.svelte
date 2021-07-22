@@ -40,12 +40,12 @@ if (browser) {
             .collection('orders')
             .onSnapshot(async (snapshot) => {
                 for (let change of snapshot.docChanges()) {
-                    if (change.type === 'added') {
+                    if (change.type === 'added' || change.type === 'modified') {
                         const msbPaymentData = await fetch(
                             '/dashboard/orders.json?id=' + change.doc.data().cartId
                         ).then((res) => res.json());
 
-                        if (browser && playOrderSounds) {
+                        if (browser && playOrderSounds && change.type === 'added') {
                             alert.play();
                         }
                         orders[change.doc.id] = {
