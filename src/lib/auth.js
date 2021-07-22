@@ -5,7 +5,7 @@ import getFirebase from './firebase';
 import { readable } from 'svelte/store';
 
 // TODO: Use firebase auth JWT custom claims
-const acceptableEmails = ['mustangmug@fccps.org', 'alester220@gmail.com'];
+const acceptableEmails = ['mustangmug@fccps.org', 'alester220@gmail.com', '147infiniti@gmail.com'];
 if (browser) {
     async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
