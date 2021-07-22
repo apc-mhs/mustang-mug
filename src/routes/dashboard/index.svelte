@@ -11,17 +11,19 @@ let orders = {};
 let groupedOrders = {};
 
 $: {
+    const newGroupedOrders = {};
     for (let order of Object.values(orders)) {
         const pickUpTimeSeconds = order.pickUpTime.toMillis();
-        if (!groupedOrders[pickUpTimeSeconds]) {
-            groupedOrders[pickUpTimeSeconds] = [order];
+        if (newGroupedOrders[pickUpTimeSeconds] === undefined) {
+            newGroupedOrders[pickUpTimeSeconds] = [order];
         } else {
-            groupedOrders[pickUpTimeSeconds] = [
-                ...groupedOrders[pickUpTimeSeconds],
+            newGroupedOrders[pickUpTimeSeconds] = [
+                ...newGroupedOrders[pickUpTimeSeconds],
                 order,
             ];
         }
     }
+    groupedOrders = newGroupedOrders;
 }
 
 let playOrderSounds = false;
@@ -38,7 +40,7 @@ if (browser) {
             .collection('orders')
             .onSnapshot(async (snapshot) => {
                 for (let change of snapshot.docChanges()) {
-                    if (change.type === 'added' || change.type === 'modified') {
+                    if (change.type === 'added') {
                         const msbPaymentData = await fetch(
                             '/dashboard/orders.json?id=' + change.doc.data().cartId
                         ).then((res) => res.json());

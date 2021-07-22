@@ -57,7 +57,7 @@ $: paymentItems = cartPayments[0].cartPaymentItems;
 }
 
 .item {
-    background-color: gray;
+    border: 1px solid gray;
     padding: 5px;
     border-radius: 5px;
 }
