@@ -29,7 +29,7 @@ $: {
 let playOrderSounds = false;
 let alert;
 if (browser) {
-    alert = new Audio('/audio/alert.mp3');
+    alert = new Audio('/audio/alert.wav');
 }
 
 let unsubscribe = () => {};

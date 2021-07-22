@@ -104,8 +104,6 @@ p.out-of-stock {
 /* Out of stock red X */
 .item > div > div > img {
     width: 100%;
-    position: relative;
-    top: 50%;
 }
 
 label {
@@ -119,13 +117,7 @@ label:hover {
 }
 
 .oos-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    vertical-align: center;
+    /* Applies styling to both the X and the underlying image */
 }
 
 .oos-x {

@@ -89,7 +89,7 @@ export async function get({ query }) {
         .set({
             cartId: '',
             resultCodes: res.resultCodes || [],
-            resultStatus: 'Processing Success. You order will be ready at ' + formatter.format(pickUpTime),
+            resultStatus: 'Processed Successfully. Your order will be ready at ' + formatter.format(pickUpTime),
         });
 
     return {
