@@ -71,7 +71,7 @@ async function itemsMenuItemAddHandler() {
         {
             id,
             name: 'New Item',
-            image: 'menuItems/pictureunavailable.jpg',
+            image: 'missing.jpg',
             options: [],
             stock: true,
             price: 0,
