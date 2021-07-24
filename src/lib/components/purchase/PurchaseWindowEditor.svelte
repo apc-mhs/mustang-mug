@@ -15,8 +15,8 @@ const dispatch = createEventDispatcher();
 let start = purchaseWindow.start;
 let end = purchaseWindow.end;
 
-$: purchaseWindow.start = clamp(start);
-$: purchaseWindow.end = clamp(end);
+$: purchaseWindow.start = start;
+$: purchaseWindow.end = end;
 
 function clamp(time) {
     const timeDate = time.toDate();
@@ -30,7 +30,7 @@ function clamp(time) {
 <p>&rarr;</p>
 <TimeInput placeholder="End time" bind:time={end} />
 <p>|</p>
-<Input label="Max purchases:" bind:value={purchaseWindow.maxOrders} --width="50px" />
+<Input type="number" label="Max purchases:" bind:value={purchaseWindow.maxOrders} --width="70px" />
 <IconButton on:click={() => dispatch('remove')}><Icon name="close" width="20" height="20" /></IconButton>
 
 <style>
