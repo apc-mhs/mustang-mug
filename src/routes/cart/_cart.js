@@ -60,22 +60,7 @@ async function createCartWithItems(body, user, host) {
     };
 
     /** @type {Cart} */
-    const msbCart = await fetch(
-        'https://test.www.myschoolbucks.com/msbpay/v2/carts',
-        {
-            method: 'POST',
-            headers: {
-                Authorization: getAuthorization(),
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cartData),
-        }
-    ).then((res) => res.json());
-
-    /** @type {Cart} */
-    // const msbCart = await new Promise(async (resolve, _) => {
-    //     cartApi.cartsPost(getAuthorization(), cartData, resolve);
-    // });
+    const msbCart = await api.post('/carts', cartData);
 
     if (msbCart.result == 'Error') {
         console.error(msbCart);
