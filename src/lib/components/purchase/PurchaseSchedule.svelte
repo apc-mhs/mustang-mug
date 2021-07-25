@@ -11,6 +11,7 @@ import { sleep } from '$lib/utils';
 import tippy from '$lib/tippy';
 import { Time } from '$lib/purchase/time';
 import PurchaseWindowRow from './PurchaseWindowRow.svelte';
+import { updateCurrentPurchaseWindow } from '$lib/purchase';
 
 export let dayOfWeek;
 export let purchaseWindows = [];
@@ -98,33 +99,18 @@ async function saveSchedule() {
                 PurchaseWindow.converter(firebase.firestore.Timestamp)
             )
             .set(purchaseWindow);
-
-        if (purchaseWindow.current) {
-            const currentPurchaseWindowRef = app
-                .firestore()
-                .collection('purchase_windows')
-                .doc('current');
-
-            currentPurchaseWindowRef.get().then((snapshot) => {
-                // Document already exists, merge in new data without overwriting "orders"
-                if (snapshot.exists) {
-                    currentPurchaseWindowRef
-                        .withConverter(
-                            PurchaseWindow.converter(firebase.firestore.Timestamp)
-                        )
-                        .set(purchaseWindow, {
-                            merge: true,
-                        });
-                } else {
-                    currentPurchaseWindowRef
-                        .withConverter(
-                            CurrentPurchaseWindow.converter(firebase.firestore.Timestamp)
-                        )
-                        .set(purchaseWindow.toCurrent());
-                }
-            });
-        }
     }
+
+    const currentPurchaseWindowRef = app
+        .firestore()
+        .collection('purchase_windows')
+        .doc('current');
+
+    currentPurchaseWindowRef.get().then((snapshot) => {
+        // Document already exists, merge in new data without overwriting "orders"
+        updateCurrentPurchaseWindow(snapshot.exists);
+    });
+
     changed = false;
 }
 </script>

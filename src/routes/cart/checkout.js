@@ -31,7 +31,7 @@ export async function post({ locals, body }) {
             body: 'User does not have a cart',
         };
     }
-    
+
     // Process cart data
     await Promise.all([
         removeOutOfStockItems(cart),
