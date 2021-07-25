@@ -43,7 +43,10 @@ getFirebase().then(({ app, firebase }) => {
         .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
         .onSnapshot((snapshot) => {
             if (snapshot.exists) {
-                currentPurchaseWindow = snapshot.data();
+                const purchaseWindow = snapshot.data();
+                currentPurchaseWindow = purchaseWindow.current ? purchaseWindow : null;
+            } else {
+                currentPurchaseWindow = null;
             }
         });
 });
