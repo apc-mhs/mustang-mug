@@ -18,6 +18,15 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
             name: 'Mustang Brew',
             price: 2.75,
             image: 'hotDrinks.jpg',
+            filters: {
+                cold: false,
+                drink: true,
+                food: false,
+                gluten_free: true,
+                hot: true,
+                lactose_free: true,
+                nut_free: true,
+            },
             stock: true,
             options: [firestore.doc('/options/milk')],
             lastModified: timestamp,
@@ -27,6 +36,15 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
         name: 'This item is free',
         price: 0,
         image: 'missing.jpg',
+        filters: {
+            cold: true,
+            drink: true,
+            food: false,
+            gluten_free: false,
+            hot: false,
+            lactose_free: false,
+            nut_free: false,
+        },
         stock: false,
         options: [],
         lastModified: timestamp,
@@ -56,36 +74,8 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
             .collection('purchase_windows')
             .withConverter(PurchaseWindow.converter(Timestamp))
             .doc()
-            .set(new PurchaseWindow(i, new Time(8), new Time(9), 20, new Date()));
-
-        await firestore
-            .collection('purchase_windows')
-            .withConverter(PurchaseWindow.converter(Timestamp))
-            .doc()
-            .set(new PurchaseWindow(i, new Time(11), new Time(12), 20, new Date()));
-
-        await firestore
-            .collection('purchase_windows')
-            .withConverter(PurchaseWindow.converter(Timestamp))
-            .doc()
-            .set(new PurchaseWindow(i, new Time(14), new Time(15), 20, new Date()));
+            .set(new PurchaseWindow(i, new Time(8), new Time(16), 20, new Date()));
     }
-
-    const now = new Date();
-    await firestore
-        .collection('purchase_windows')
-        .withConverter(CurrentPurchaseWindow.converter(Timestamp))
-        .doc('current')
-        .set(
-            new CurrentPurchaseWindow(
-                now.getDay(),
-                new Time(now.getHours() - 1, 0, 0),
-                new Time(now.getHours() + 3, 0, 0),
-                20,
-                0,
-                new Date()
-            )
-        );
 }
 
 // https://github.com/firebase/snippets-node/blob/e5f6214059bdbc63f94ba6600f7f84e96325548d/firestore/main/index.js#L889-L921

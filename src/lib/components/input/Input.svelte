@@ -11,6 +11,8 @@ export let pattern = undefined;
 export let input;
 export let maxlength;
 export let required = false;
+export let step;
+export let min;
 
 const dispatch = createEventDispatcher();
 
@@ -31,6 +33,8 @@ function handleInput(e) {
             {pattern}
             {maxlength}
             {required}
+            {step}
+            {min}
             bind:this={input}
             on:input={handleInput}
             on:focus
@@ -46,6 +50,8 @@ function handleInput(e) {
         {pattern}
         {maxlength}
         {required}
+        {step}
+        {min}
         bind:this={input}
         on:input={handleInput}
         on:focus

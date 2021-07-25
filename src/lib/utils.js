@@ -39,7 +39,7 @@ function useMediaQuery(mediaQuery) {
 
         return () => {
             mediaQueryListener.removeEventListener('change', queryListener);
-        }
+        };
     });
     mediaQueries[mediaQuery] = store;
 

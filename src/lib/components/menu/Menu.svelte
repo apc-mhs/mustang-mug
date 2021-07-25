@@ -9,13 +9,13 @@ import { flip } from 'svelte/animate';
 import { fade } from 'svelte/transition';
 import Button from '../input/Button.svelte';
 
-
 export let title;
 export let items;
 export let options;
 export let skeleton = false;
 export let refine = true;
 export let modify = false;
+let refinedItems = [];
 
 const mobile = useMediaQuery('(max-width: 650px)');
 const dispatch = createEventDispatcher();
@@ -30,7 +30,8 @@ const skeletonItems = new Array(10).fill(5).map((_, i) => {
     };
 });
 
-$: menuItems = skeleton ? skeletonItems : items;
+// If skeleton use skeletonItems, if refiner is active then used refined items, otherwise raw items
+$: menuItems = skeleton ? skeletonItems : refine ? refinedItems : items;
 
 let mobileRefinerShown = false;
 
@@ -62,10 +63,10 @@ function getOptions(item) {
                 <Drawer
                     visible={mobileRefinerShown}
                     on:close={() => (mobileRefinerShown = false)}>
-                    <Refiner bind:refinedItems={items} />
+                    <Refiner bind:refinedItems {items} />
                 </Drawer>
             {:else}
-                <Refiner bind:refinedItems={items} />
+                <Refiner bind:refinedItems {items} />
             {/if}
         </div>
     {/if}

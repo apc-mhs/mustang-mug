@@ -96,12 +96,16 @@ async function optionsMenuItemAddHandler() {
 }
 
 async function itemsMenuItemDeleteHandler(itemId) {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+
     const { app } = await getFirebase();
     items = items.filter((item) => item.id !== itemId);
     app.firestore().collection('items').doc(itemId).delete();
 }
 
 async function optionsMenuItemDeleteHandler(optionId) {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+    
     const { app } = await getFirebase();
     options = options.filter((option) => option.id !== optionId);
     app.firestore().collection('options').doc(optionId).delete();
