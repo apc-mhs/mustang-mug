@@ -17,7 +17,7 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
         .set({
             name: 'Mustang Brew',
             price: 2.75,
-            image: 'hotDrinks.jpg',
+            image: 'hotDrinks.png',
             filters: {
                 cold: false,
                 drink: true,
@@ -35,7 +35,7 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
     await firestore.collection('items').doc('free_item').set({
         name: 'This item is free',
         price: 0,
-        image: 'missing.jpg',
+        image: 'missing.png',
         filters: {
             cold: true,
             drink: true,
@@ -55,7 +55,7 @@ async function setupEmulatedFirestore(firestore, Timestamp) {
     //    firestore.collection('items').doc('free_item' + i).set({
     //        name: 'This item is free',
     //         price: 0,
-    //        image: 'coffee.jpg',
+    //        image: 'missing.png',
     //        stock: true,
     //          options: [],
     //       lastModified: timestamp

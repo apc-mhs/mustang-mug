@@ -26,7 +26,7 @@ const skeletonItems = new Array(10).fill(5).map((_, i) => {
         price: 0,
         stock: true,
         options: [],
-        image: 'menu-item-placeholder.jpg',
+        image: 'menu-item-placeholder.png',
     };
 });
 

@@ -22,8 +22,8 @@ getCurrentPurchaseWindow().then((currentPurchaseWindow) => {
 $: checkoutUnavailableMessage = !purchaseWindow
     ? 'Checkout is not available at this time. Check back later.'
     : purchaseWindow.exhausted
-        ? 'You can\'t checkout now because too many orders have been placed. Check back later.'
-        : undefined;
+    ? "You can't checkout now because too many orders have been placed. Check back later."
+    : undefined;
 
 let cart;
 if (browser) {
@@ -63,7 +63,7 @@ async function checkout(e) {
             method: 'POST',
             body: JSON.stringify({
                 studentName,
-                pickUpTime: selectedPickUpTime
+                pickUpTime: selectedPickUpTime,
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -90,6 +90,10 @@ query().then(([items, _]) => {
 
 <svelte:head>
     <title>Cart - Mustang Mug</title>
+    <meta property="og:title" content="Cart - Mustang Mug" />
+    <meta
+        property="og:description"
+        content="View, remove and checkout items in your cart." />
 </svelte:head>
 
 <div class="cart-view">
@@ -118,15 +122,16 @@ query().then(([items, _]) => {
                 --font-size="16px" />
         </label>
         <div class="button-column">
-            <div use:tippy={
-                checkoutUnavailableMessage ||
-                (!validCart
-                    ? 'Your cart has no in-stock items and can not be checked out.'
-                    : null)
-            }>
+            <div
+                use:tippy={checkoutUnavailableMessage ||
+                    (!validCart
+                        ? 'Your cart has no in-stock items and can not be checked out.'
+                        : null)}>
                 <SubmitButton
                     value={'Proceed to checkout'}
-                    disabled={!validCart || checkingOut || checkoutUnavailableMessage} />
+                    disabled={!validCart ||
+                        checkingOut ||
+                        checkoutUnavailableMessage} />
             </div>
             <LinkButton href="/">Return to menu</LinkButton>
         </div>

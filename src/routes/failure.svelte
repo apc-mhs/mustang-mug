@@ -28,6 +28,10 @@ $: if (browser && $currentUser) {
 
 <svelte:head>
     <title>Failure - Mustang Mug</title>
+    <meta property="og:title" content="Failure - Mustang Mug" />
+    <meta
+        property="og:description"
+        content="Your order failed to go through. Please navigate home and try again." />
 </svelte:head>
 
 <section>

@@ -9,6 +9,9 @@ let navbar;
 signInAnonymously();
 </script>
 
+<!-- We need a nice image-->
+<meta property="og:image" content="menuItems/missing.png" />
+
 <svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
 
 <Navbar bind:this={navbar} />

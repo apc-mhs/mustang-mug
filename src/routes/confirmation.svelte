@@ -29,6 +29,11 @@ $: if (browser && $currentUser) {
 
 <svelte:head>
     <title>Payment Confirmation - Mustang Mug</title>
+    <meta property="og:title" content="Payment Confirmation - Mustang Mug" />
+    <!-- idk why you'd ever link to this-->
+    <meta
+        property="og:description"
+        content="Your order has been confirmed and is being processed." />
 </svelte:head>
 
 <section>
