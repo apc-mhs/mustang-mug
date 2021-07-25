@@ -24,12 +24,7 @@ export let status;
 
 <svelte:head>
     <title>Error {status.toString()}</title>
-    <meta property="og:title" content="Payment Confirmation - Mustang Mug" />
-    <meta property="og:title" content="Error" />
-     <!-- idk why you'd ever link to this-->
-    <meta
-        property="og:description"
-        content="This is an invalid page. Please navigate back home." />
+
 </svelte:head>
 
 {#if status === 404}
