@@ -103,23 +103,26 @@ async function saveSchedule() {
             const currentPurchaseWindowRef = app
                 .firestore()
                 .collection('purchase_windows')
-                .doc('current')
-                .withConverter(
-                    CurrentPurchaseWindow.converter(firebase.firestore.Timestamp)
-                );
+                .doc('current');
 
-            currentPurchaseWindowRef
-                .create(purchaseWindow.toCurrent())
+            currentPurchaseWindowRef.get().then((snapshot) => {
                 // Document already exists, merge in new data without overwriting "orders"
-                .catch(() => {
+                if (snapshot.exists) {
                     currentPurchaseWindowRef
                         .withConverter(
                             PurchaseWindow.converter(firebase.firestore.Timestamp)
                         )
                         .set(purchaseWindow, {
-                            merge: true
-                        })
-                });
+                            merge: true,
+                        });
+                } else {
+                    currentPurchaseWindowRef
+                        .withConverter(
+                            CurrentPurchaseWindow.converter(firebase.firestore.Timestamp)
+                        )
+                        .set(purchaseWindow.toCurrent());
+                }
+            });
         }
     }
     changed = false;
