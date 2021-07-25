@@ -10,6 +10,7 @@ import { slide, fade } from 'svelte/transition';
 import { sleep } from '$lib/utils';
 import tippy from '$lib/tippy';
 import { Time } from '$lib/purchase/time';
+import PurchaseWindowRow from './PurchaseWindowRow.svelte';
 
 export let dayOfWeek;
 export let purchaseWindows = [];
@@ -99,16 +100,25 @@ async function saveSchedule() {
             .set(purchaseWindow);
 
         if (purchaseWindow.current) {
-            // Use the PurchaseWindow converter instead of the CurrentPurchaseWindow one
-            // So that the "orders" property is not overwritten to 0
-            app.firestore()
+            const currentPurchaseWindowRef = app
+                .firestore()
                 .collection('purchase_windows')
                 .doc('current')
                 .withConverter(
-                    PurchaseWindow.converter(firebase.firestore.Timestamp)
-                )
-                .set(purchaseWindow, {
-                    merge: true,
+                    CurrentPurchaseWindow.converter(firebase.firestore.Timestamp)
+                );
+
+            currentPurchaseWindowRef
+                .create(purchaseWindow.toCurrent())
+                // Document already exists, merge in new data without overwriting "orders"
+                .catch(() => {
+                    currentPurchaseWindowRef
+                        .withConverter(
+                            PurchaseWindow.converter(firebase.firestore.Timestamp)
+                        )
+                        .set(purchaseWindow, {
+                            merge: true
+                        })
                 });
         }
     }
