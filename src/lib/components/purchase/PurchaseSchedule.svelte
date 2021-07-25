@@ -5,7 +5,7 @@ import Icon from '$lib/components/utility/Icon.svelte';
 import IconButton from '$lib/components/input/IconButton.svelte';
 import PurchaseWindowDisplay from './PurchaseWindowDisplay.svelte';
 import getFirebase from '$lib/firebase';
-import { PurchaseWindow } from '$lib/purchase/window';
+import { CurrentPurchaseWindow, PurchaseWindow } from '$lib/purchase/window';
 import { slide, fade } from 'svelte/transition';
 import { sleep } from '$lib/utils';
 import tippy from '$lib/tippy';
@@ -54,6 +54,13 @@ async function removePurchaseWindow(i) {
         .collection('purchase_windows')
         .doc(purchaseWindow.id)
         .delete();
+
+    if (purchaseWindow.current) {
+        await app.firestore()
+            .collection('purchase_windows')
+            .doc('current')
+            .delete();
+    }
 }
 
 async function addPurchaseWindow() {
@@ -90,6 +97,20 @@ async function saveSchedule() {
                 PurchaseWindow.converter(firebase.firestore.Timestamp)
             )
             .set(purchaseWindow);
+
+        if (purchaseWindow.current) {
+            // Use the PurchaseWindow converter instead of the CurrentPurchaseWindow one
+            // So that the "orders" property is not overwritten to 0
+            app.firestore()
+                .collection('purchase_windows')
+                .doc('current')
+                .withConverter(
+                    PurchaseWindow.converter(firebase.firestore.Timestamp)
+                )
+                .set(purchaseWindow, {
+                    merge: true,
+                });
+        }
     }
     changed = false;
 }

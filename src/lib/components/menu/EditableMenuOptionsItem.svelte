@@ -3,6 +3,7 @@ import { createEventDispatcher } from 'svelte';
 
 import tippy from '$lib/tippy';
 import Button from '$lib/components/input/Button.svelte';
+import Input from '../input/Input.svelte';
 
 export let option;
 
@@ -15,18 +16,14 @@ $: changed =
 </script>
 
 <div class="option" class:out-of-stock={!stock}>
-    <h3>
-        <label
-            >Option name:
-            <input bind:value={name} />
-        </label>
-    </h3>
-    <p>
-        <label>
-            Option Price:
-            <input bind:value={price} type="number" step="0.01" min="0" />
-        </label>
-    </p>
+    <label>
+        Option name:
+        <Input bind:value={name} --font-size="16px" />
+    </label>
+    <label>
+        Option Price:
+        <Input bind:value={price} type="number" step="0.01" min="0" />
+    </label>
 
     <label>
         In Stock:
@@ -56,9 +53,6 @@ $: changed =
 </div>
 
 <style>
-h3 {
-    margin-bottom: 0px;
-}
 .option {
     display: flex;
     flex-flow: column nowrap;
@@ -82,7 +76,10 @@ p.out-of-stock {
 label {
     padding: 10px;
     /* background-color: rgba(253, 253, 253, 0.5); */
-    display: block;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    gap: 5px;
     color: rgba(0, 0, 0, 0.75);
 }
 label:hover {

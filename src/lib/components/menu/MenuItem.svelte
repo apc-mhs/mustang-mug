@@ -26,18 +26,7 @@ $: if (cartItems) {
 </script>
 
 <div class="item" class:out-of-stock={!item.stock}>
-    {#if !item.stock}
-        <div class="oos-wrapper">
-            <img
-                src="/menuItems/{item.image}"
-                alt="Picture of {item.name} - out of stock" />
-            <div class="oos-x">
-                <img src="OOS.png" />
-            </div>
-        </div>
-    {:else}
-        <img src="/menuItems/{item.image}" alt="Picture of {item.name}" />
-    {/if}
+    <img src="/menuItems/{item.image}" alt="Picture of {item.name}{!item.stock ? ' - out of stock' : ''}" />
     <h3>{item.name}</h3>
     <p>{numberFormatter.format(item.price)}</p>
     <label>
@@ -114,16 +103,6 @@ label {
 }
 label:hover {
     cursor: pointer;
-}
-
-.oos-wrapper {
-    /* Applies styling to both the X and the underlying image */
-}
-
-.oos-x {
-    position: absolute;
-    left: 0;
-    top: 0;
 }
 </style>
 

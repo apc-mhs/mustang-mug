@@ -1,8 +1,10 @@
 <script>
 import Button from '$lib/components/input/Button.svelte';
-import { PurchaseWindow } from '$lib/purchase/window';
+import { CurrentPurchaseWindow, PurchaseWindow } from '$lib/purchase/window';
 import PurchaseSchedule from '$lib/components/purchase/PurchaseSchedule.svelte';
 import getFirebase from '$lib/firebase';
+import { onDestroy } from 'svelte';
+import tippy from '$lib/tippy';
 
 const todayDayOfWeek = new Date().getDay();
 let deleting = false;
@@ -15,6 +17,8 @@ async function deleteAllCarts() {
 /** @type {Array<PurchaseWindow>} */
 let purchaseWindows = [];
 let currentPurchaseWindow;
+let unsubscribe = () => {};
+
 getFirebase().then(({ app, firebase }) => {
     app.firestore()
         .collection('purchase_windows')
@@ -24,9 +28,6 @@ getFirebase().then(({ app, firebase }) => {
         .then((snapshot) => {
             for (let doc of snapshot.docs) {
                 if (doc.id === 'current') {
-                    const window = doc.data();
-                    window.id = doc.id;
-                    currentPurchaseWindow = window;
                     continue;
                 }
                 const window = doc.data();
@@ -35,10 +36,41 @@ getFirebase().then(({ app, firebase }) => {
             }
             purchaseWindows = purchaseWindows;
         });
+
+    unsubscribe = app.firestore()
+        .collection('purchase_windows')
+        .doc('current')
+        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+        .onSnapshot((snapshot) => {
+            if (snapshot.exists) {
+                currentPurchaseWindow = snapshot.data();
+            }
+        });
 });
+
+onDestroy(() => unsubscribe());
 </script>
 
 <section class="purchase">
+    <h1>Current Purchases</h1>
+    <div class="progress-wrapper">
+        {#if currentPurchaseWindow && currentPurchaseWindow.current}
+            <div>
+                <p class="min-label">0</p>
+                <progress
+                    max={currentPurchaseWindow.maxOrders}
+                    value={currentPurchaseWindow.orders}
+                    use:tippy={currentPurchaseWindow.orders + ' / ' + currentPurchaseWindow.maxOrders}>
+                    0%
+                </progress>
+                <p class="max-label">{currentPurchaseWindow.maxOrders}</p>
+            </div>
+        {:else if currentPurchaseWindow === null}
+            <p>Purchasing is currently disabled</p>
+        {:else}
+            <p>Loading...</p>
+        {/if}
+    </div>
     <h1>Purchase Windows by Day</h1>
     <div class="purchase-schedules">
         {#each new Array(7).fill(null) as _, i (i)}
@@ -86,5 +118,42 @@ h1 {
     margin: 0px auto;
     gap: 50px 0px;
     padding: 25px 10px;
+}
+
+.progress-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+progress {
+    height: 30px;
+    width: 250px;
+    background-color: green;
+    border-radius: 10px;
+    border: 1px solid rgb(71, 70, 70);
+    overflow: hidden;
+}
+
+.progress-wrapper > div {
+    position: relative;
+}
+
+.progress-wrapper p {
+    position: absolute;
+}
+
+.progress-wrapper p.min-label {
+    position: absolute;
+    top: 105%;
+    left: 0;
+}
+
+.progress-wrapper p.max-label {
+    position: absolute;
+    top: 105%;
+    right: 0;
 }
 </style>

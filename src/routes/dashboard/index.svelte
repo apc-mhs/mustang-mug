@@ -9,6 +9,7 @@ import Icon from '$lib/components/utility/Icon.svelte';
 
 let orders = {};
 let groupedOrders = {};
+let completedOrders = [];
 
 $: {
     const newGroupedOrders = {};
@@ -45,7 +46,9 @@ if (browser) {
                             '/dashboard/orders.json?id=' + change.doc.data().cartId
                         ).then((res) => res.json());
 
-                        if (browser && playOrderSounds && change.type === 'added') {
+                        // Make sure to check if the orders list DOESN'T contain this id
+                        // That way orders that are "uncompleted" don't play a sound
+                        if (browser && playOrderSounds && change.type === 'added' && !orders[change.doc.id]) {
                             alert.play();
                         }
                         orders[change.doc.id] = {
@@ -62,7 +65,29 @@ if (browser) {
     });
 }
 
-onDestroy(unsubscribe);
+async function orderCompleteHandler(groupKey, order) {
+    groupedOrders[groupKey] = groupedOrders[groupKey].filter((groupedOrder) => groupedOrder !== order);
+    completedOrders = [...completedOrders, order];
+
+    const { app } = await getFirebase();
+    app.firestore()
+        .collection('orders')
+        .doc(order.id)
+        .delete();
+}
+
+async function orderUncompleteHandler(order) {
+    completedOrders = completedOrders.filter((completedOrder) => completedOrder !== order);
+    orders[order.id] = order;
+
+    const { app } = await getFirebase();
+    app.firestore()
+        .collection('orders')
+        .doc(order.id)
+        .set(order);
+}
+
+onDestroy(() => unsubscribe());
 </script>
 
 <div class="orders">
@@ -78,10 +103,17 @@ onDestroy(unsubscribe);
         </Button>
     </h1>
     {#each Object.keys(groupedOrders) as groupKey (groupKey)}
-        <OrderGroup key={groupKey} orders={groupedOrders[groupKey]} let:order>
-            <Order {...order} />
-        </OrderGroup>
+        {#if groupedOrders[groupKey].length > 0}
+            <OrderGroup key={groupKey} orders={groupedOrders[groupKey]} let:order>
+                <Order {...order} on:complete={() => orderCompleteHandler(groupKey, order)} />
+            </OrderGroup>
+        {/if}
     {/each}
+    {#if completedOrders.length > 0}
+        <OrderGroup title={'Completed Orders'} orders={completedOrders} let:order>
+            <Order {...order} on:complete={() => orderUncompleteHandler(order)} completed={true} />
+        </OrderGroup>
+    {/if}
 </div>
 
 <style>

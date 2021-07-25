@@ -4,18 +4,21 @@ import getFirebase from "$lib/firebase";
 
 export let key;
 export let orders;
+export let title;
 
 const formatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
 let date;
-$: getFirebase()
+$: if (key) {
+getFirebase()
     .then(({ firebase }) => {
         date = firebase.firestore.Timestamp.fromMillis(key).toDate();
     });
+}
 </script>
 
 <div class="order-group">
-    <h2>Orders to be picked up at {date ? formatter.format(date) : 'Loading...'}</h2>
+    <h2>{title || (date ? 'Orders to be picked up at ' + formatter.format(date) : 'Loading...')}</h2>
     <hr>
     <div class="orders">
         {#each orders as order (order.id)}

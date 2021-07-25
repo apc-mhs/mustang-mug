@@ -1,5 +1,11 @@
 <script>
 export let refinedItems;
+export let items;
+
+$: refinedItems = items;
+let filters = [];
+
+$: refinedItems = filter(filters);
 
 function alphabetize() {
     refinedItems = refinedItems.sort((a, b) => a.name.localeCompare(b.name));
@@ -11,19 +17,19 @@ function sortByPrice() {
 
 function temperatureRadioChoice(temperature) {
     let choice = temperature;
-    if ((choice = 'hot')) {
-        //only show hot items
-    } else if ((choice = 'cold')) {
-        //only show cold items
+    if (choice == 'hot') {
+        filters = [...filters, (item) => item.filters.hot];
+    } else if (choice == 'cold') {
+        filters = [...filters, (item) => item.filters.cold];
     }
 }
 
 function stateRadioChoice(state) {
     let choice = state;
-    if ((choice = 'food')) {
-        //only show food
-    } else if ((choice = 'beverage')) {
-        //only show beverages
+    if (choice == 'food') {
+        filters = [...filters, (item) => item.filters.food];
+    } else if (choice == 'drink') {
+        filters = [...filters, (item) => item.filters.drink];
     }
 }
 
@@ -31,19 +37,27 @@ function stateRadioChoice(state) {
 
 //unfortunately i never got this function to work in high school :/
 function showGF() {
-    //show gluten free items
+    filters = [...filters, (item) => item.filters.gluten_free];
 }
 
 function showLF() {
-    //show lactose free items
+    filters = [...filters, (item) => item.filters.lactose_free];
 }
 
 function showNF() {
-    //show nut free items
+    filters = [...filters, (item) => item.filters.nut_free];
 }
 
 function showInStock() {
-    //Only show in stock items
+    filters = [...filters, (item) => item.stock];
+}
+
+function filter(filters) {
+    let filteredItems = items;
+    for (let filter of filters) {
+        filteredItems = filteredItems.filter(filter);
+    }
+    return filteredItems;
 }
 </script>
 
@@ -83,7 +97,7 @@ function showInStock() {
             <label>
                 <input
                     type="radio"
-                    on:click={() => stateRadioChoice('beverage')}
+                    on:click={() => stateRadioChoice('drink')}
                     name="consumable-type" />
                 Beverage
             </label>
@@ -124,7 +138,11 @@ function showInStock() {
     <ul class="selection-items">
         <li>
             <label>
-                <input type="radio" checked on:click={alphabetize} name="sort" />
+                <input
+                    type="radio"
+                    checked
+                    on:click={alphabetize}
+                    name="sort" />
                 Alphabetical
             </label>
         </li>

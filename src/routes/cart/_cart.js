@@ -52,8 +52,11 @@ async function createCartWithItems(body, user, host) {
         cartItems: cartItems,
         redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
         allowDuplicatePayments: 'false',
+        //using 'none', 'express', and 'none' forces user buy item without signing in 
+        loginPolicy: 'optional',
+        checkoutStyle: 'express',
+        paymentPreauthPolicy: null,
         returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
-        loginPolicy: 'required',
     };
 
     /** @type {Cart} */
