@@ -26,12 +26,13 @@ async function getCurrentPurchaseWindow() {
 async function updateCurrentPurchaseWindow(merge = false) {
     const { app, firebase } = await getFirebase();
 
-    const purchaseWindows = await getDocumentsWhere(
-        'purchase_windows',
-        (query) => query.where(firebase.firestore.FieldPath.documentId, '!=', 'current'),
-        PurchaseWindow.converter(firebase.firestore.Timestamp)
-    );
-    for (let purchaseWindow of purchaseWindows) {
+    const purchaseWindows = await getDocuments('purchase_windows');
+    for (let purchaseWindowRaw of purchaseWindows) {
+        if (purchaseWindowRaw.id === 'current') continue;
+        const purchaseWindow = PurchaseWindow.converter(firebase.firestore.Timestamp).fromFirestore({
+            data: () => purchaseWindowRaw
+        });
+
         if (purchaseWindow.current) {
             if (merge) {
                 await app
