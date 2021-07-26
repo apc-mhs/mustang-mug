@@ -9,8 +9,9 @@ let navbar;
 signInAnonymously();
 </script>
 
-<!-- We need a nice image-->
-<meta property="og:image" content="mustang-mug-logo.png" />
+<svelte:head>
+    <meta property="og:image" content="mustang-mug-logo.png" />
+</svelte:head>
 
 <svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
 
