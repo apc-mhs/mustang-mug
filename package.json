@@ -24,7 +24,7 @@
     "msb_pay_api": "github:AndrewLester/msb_pay_api",
     "rxfire": "^4.0.0",
     "rxjs": "^6.6.7",
-    "svelte": "^3.38.3",
+    "svelte": "3.38.3",
     "svelte-adapter-firebase": "^0.10.1",
     "svelte-jester": "^1.7.0",
     "svelte-popperjs": "^1.2.6",
