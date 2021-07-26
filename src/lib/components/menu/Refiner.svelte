@@ -1,63 +1,32 @@
 <script>
+import Button from "../input/Button.svelte";
+import { slide } from 'svelte/transition';
+
 export let refinedItems;
 export let items;
 
-$: refinedItems = items;
 let filters = [];
 
-$: refinedItems = filter(filters);
+const noFilter = (_) => true;
+let temperatureFilter = noFilter;
+let itemTypeFilter = noFilter;
+let priceFilter = noFilter;
+let groupedFilters = [];
 
-function alphabetize() {
-    refinedItems = refinedItems.sort((a, b) => a.name.localeCompare(b.name));
+$: filters = [temperatureFilter, itemTypeFilter, priceFilter, ...groupedFilters];
+$: refinedItems = sortFunction(filter(items, filters));
+
+let sortFunction = alphabetize;
+
+function alphabetize(items) {
+    return items.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-function sortByPrice() {
-    refinedItems = refinedItems.sort((a, b) => a.price - b.price);
-}
-
-function temperatureRadioChoice(temperature) {
-    let choice = temperature;
-    if (choice == 'hot') {
-        filters = [...filters, (item) => item.filters.hot];
-    } else if (choice == 'cold') {
-        filters = [...filters, (item) => item.filters.cold];
-    }
-}
-
-function stateRadioChoice(state) {
-    let choice = state;
-    if (choice == 'food') {
-        filters = [...filters, (item) => item.filters.food];
-    } else if (choice == 'drink') {
-        filters = [...filters, (item) => item.filters.drink];
-    }
-}
-
-//When one checkbox becomes clicked, everything that DOESNT fall under that checkbox needs to be hidden
-
-//unfortunately i never got this function to work in high school :/
-function showGF() {
-    filters = [...filters, (item) => item.filters.gluten_free];
-}
-
-function showLF() {
-    filters = [...filters, (item) => item.filters.lactose_free];
-}
-
-function showNF() {
-    filters = [...filters, (item) => item.filters.nut_free];
-}
-
-function showInStock() {
-    filters = [...filters, (item) => item.stock];
-}
-
-function filter(filters) {
-    let filteredItems = items;
+function filter(items, filters) {
     for (let filter of filters) {
-        filteredItems = filteredItems.filter(filter);
+        items = items.filter(filter);
     }
-    return filteredItems;
+    return items;
 }
 </script>
 
@@ -69,8 +38,9 @@ function filter(filters) {
             <label>
                 <input
                     type="radio"
-                    on:click={() => temperatureRadioChoice('hot')}
-                    name="temperature" />
+                    name="temperature"
+                    value={(item) => item.filters.hot}
+                    bind:group={temperatureFilter}>
                 Hot
             </label>
         </li>
@@ -78,18 +48,25 @@ function filter(filters) {
             <label>
                 <input
                     type="radio"
-                    on:click={() => temperatureRadioChoice('cold')}
-                    name="temperature" />
+                    name="temperature"
+                    value={(item) => item.filters.cold}
+                    bind:group={temperatureFilter}>
                 Cold
             </label>
         </li>
+        {#if temperatureFilter !== noFilter}
+            <div transition:slide style="margin: 5px;">
+                <Button on:click={() => temperatureFilter = noFilter}>Clear selection</Button>
+            </div>
+        {/if}
         <hr />
         <li>
             <label>
                 <input
                     type="radio"
-                    on:click={() => stateRadioChoice('food')}
-                    name="consumable-type" />
+                    name="item-type"
+                    value={(item) => item.filters.food}
+                    bind:group={itemTypeFilter}>
                 Food
             </label>
         </li>
@@ -97,41 +74,73 @@ function filter(filters) {
             <label>
                 <input
                     type="radio"
-                    on:click={() => stateRadioChoice('drink')}
-                    name="consumable-type" />
+                    unselectable="true"
+                    name="item-type" 
+                    value={(item) => item.filters.drink}
+                    bind:group={itemTypeFilter}>
                 Beverage
             </label>
         </li>
+        {#if itemTypeFilter !== noFilter}
+            <div transition:slide style="margin: 5px;">
+                <Button on:click={() => itemTypeFilter = noFilter}>Clear selection</Button>
+            </div>
+        {/if}
         <hr />
         <li>
             <label>
-                <input type="checkbox" on:click={showGF} />
+                <input 
+                    type="checkbox"
+                    value={(item) => item.filters.gluten_free}
+                    bind:group={groupedFilters}>
                 Gluten Free
             </label>
         </li>
         <li>
             <label>
-                <input type="checkbox" on:click={showLF} />
+                <input
+                    type="checkbox"
+                    value={(item) => item.filters.lactose_free}
+                    bind:group={groupedFilters}>
                 Lactose Free
             </label>
         </li>
         <li>
             <label>
-                <input type="checkbox" on:click={showNF} />
+                <input
+                    type="checkbox"
+                    value={(item) => item.filters.nut_free}
+                    bind:group={groupedFilters}>
                 Nut Free
             </label>
         </li>
         <hr />
         <li>
             <label>
-                <input type="checkbox" on:click={showInStock} />
+                <input
+                    type="checkbox"
+                    value={(item) => item.stock}
+                    bind:group={groupedFilters}/>
                 In Stock
             </label>
         </li>
         <hr />
         <li>
             <p class="label">Price Filter</p>
-            <input type="range" min="1" max="100" value="100" />
+            <input
+                type="range"
+                min="1"
+                max="9"
+                value="9"
+                list="prices"
+                style="width: 100%;"
+                on:change={(e) => priceFilter = (item) => item.price < e.target.value || e.target.value === 9}>
+            <datalist id="prices" style="display: flex; flex-flow: row nowrap; justify-content: space-between;">
+                {#each new Array(8).fill(null) as _, i (i)}
+                    <option value={i + 1} label={'$' + (i + 1)}></option>
+                {/each}
+                <option value={9} label="$9+"></option>
+            </datalist>
         </li>
     </ul>
     <h3>Sort</h3>
@@ -141,14 +150,17 @@ function filter(filters) {
                 <input
                     type="radio"
                     checked
-                    on:click={alphabetize}
-                    name="sort" />
+                    value={alphabetize}
+                    bind:group={sortFunction}>
                 Alphabetical
             </label>
         </li>
         <li>
             <label>
-                <input type="radio" on:click={sortByPrice} name="sort" />
+                <input
+                    type="radio"
+                    value={(items) => items.sort((a, b) => a.price - b.price)}
+                    bind:group={sortFunction}>
                 Price
             </label>
         </li>
