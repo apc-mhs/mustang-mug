@@ -75,10 +75,15 @@ function getOptions(item) {
             <h2>{title}</h2>
             <div class="items">
                 {#each menuItems as item (item.id)}
+                        <div
+                            transition:fade|local={{ duration: 250 }}
+                            animate:flip={{ duration: 600 }}>
+                            <slot {item} itemOptions={getOptions(item)} />
+                        </div>
+                {:else}
                     <div
-                        transition:fade|local={{ duration: 250 }}
-                        animate:flip={{ duration: 600 }}>
-                        <slot {item} itemOptions={getOptions(item)} />
+                        in:fade|local={{ duration: 250 }}>
+                        <h1>No menu items match the selected filters</h1>
                     </div>
                 {/each}
                 {#if modify}
@@ -125,6 +130,7 @@ h2 {
     text-align: center;
     box-shadow: 0px 0px 3px 0px black;
     padding: 10px 0px;
+    min-height: 500px;
 }
 .items {
     display: flex;
@@ -135,6 +141,9 @@ h2 {
 @media (max-width: 650px) {
     .flex-left {
         position: absolute;
+    }
+    .menu {
+        min-height: unset;
     }
 }
 </style>
