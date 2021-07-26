@@ -83,18 +83,6 @@ p.out-of-stock {
     width: 100%;
 }
 
-/* Out of stock menu image */
-.item > div > img {
-    top: 0;
-    left: 0;
-    width: 100%;
-}
-
-/* Out of stock red X */
-.item > div > div > img {
-    width: 100%;
-}
-
 label {
     padding: 10px;
     /* background-color: rgba(253, 253, 253, 0.5); */

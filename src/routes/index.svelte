@@ -46,6 +46,10 @@ async function addToCart() {
 
 <svelte:head>
     <title>Menu - Mustang Mug</title>
+    <meta property="og:title" content="Menu - Mustang Mug" />
+    <meta
+        property="og:description"
+        content="View menu options, and add them to you cart" />
 </svelte:head>
 
 <section>
