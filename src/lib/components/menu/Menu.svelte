@@ -74,7 +74,7 @@ function getOptions(item) {
         <div class="menu">
             <h2>{title}</h2>
             <div class="items">
-                    {#each menuItems as item (item.id)}
+                {#each menuItems as item (item.id)}
                         <div
                             transition:fade|local={{ duration: 250 }}
                             animate:flip={{ duration: 600 }}>
