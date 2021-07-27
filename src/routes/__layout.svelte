@@ -10,7 +10,7 @@ signInAnonymously();
 </script>
 
 <svelte:head>
-    <meta property="og:image" content="mustang-mug-logo.png" />
+    <meta property="og:image" content="{import.meta.env.BASE_URL}/mustang-mug-logo.png}" />
 </svelte:head>
 
 <svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
