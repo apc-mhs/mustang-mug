@@ -2,7 +2,7 @@
 import { signInAnonymously } from '$lib/auth';
 import Navbar from '$lib/components/layout/Navbar.svelte';
 import Footer from '$lib/components/layout/Footer.svelte';
-import { BASE_URL } from '$lib/env';
+import { page } from '$app/stores';
 import '../app.css';
 
 let navbar;
@@ -11,7 +11,7 @@ signInAnonymously();
 </script>
 
 <svelte:head>
-    <meta property="og:image" content="{BASE_URL}/mustang-mug-logo.png}" />
+    <meta property="og:image" content="https://{page.host}/mustang-mug-logo.png" />
 </svelte:head>
 
 <svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
