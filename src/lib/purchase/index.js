@@ -34,31 +34,40 @@ async function updateCurrentPurchaseWindow(merge = false) {
         });
 
         if (purchaseWindow.current) {
-            if (merge) {
-                await app
-                    .firestore()
-                    .doc('purchase_windows/current')
-                    .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
-                    .set(purchaseWindow, {
-                        merge: true
-                    });
-            } else {
-                await app
-                    .firestore()
-                    .doc('purchase_windows/current')
-                    .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
-                    .set(purchaseWindow.toCurrent());
+            try {
+                if (merge) {
+                    await app
+                        .firestore()
+                        .doc('purchase_windows/current')
+                        .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
+                        .set(purchaseWindow, {
+                            merge: true
+                        });
+                } else {
+                    await app
+                        .firestore()
+                        .doc('purchase_windows/current')
+                        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+                        .set(purchaseWindow.toCurrent());
+                }
+            } catch (e) {
+                // If on the browser it's probably a correctly placed insufficient permissions error
+                if (!browser) {
+                    console.error(e);
+                }
             }
             
             return purchaseWindow.toCurrent();
         }
     }
 
-    await app
-        .firestore()
-        .doc('purchase_windows/current')
-        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
-        .delete();
+    try {
+        await app
+            .firestore()
+            .doc('purchase_windows/current')
+            .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+            .delete();   
+    } catch (e) {}
 
     return null;
 }
