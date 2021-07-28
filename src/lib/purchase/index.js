@@ -1,6 +1,7 @@
 import getFirebase from '$lib/firebase';
 import { getDocuments, getDocumentsWhere } from '$lib/query';
 import { CurrentPurchaseWindow, PurchaseWindow } from './window';
+import { browser } from '$app/env';
 
 /** 
  * @returns {Promise<CurrentPurchaseWindow?>}
