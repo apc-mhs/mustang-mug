@@ -82,17 +82,7 @@ async function createCartWithItems(body, user, host) {
 /** @returns {Promise<boolean>} */
 async function updateCart(body, cartId) {
     /** @type {Cart} */
-    const msbCart = await fetch(
-        'https://test.www.myschoolbucks.com/msbpay/v2/carts/' + cartId,
-        {
-            method: 'PUT',
-            headers: {
-                Authorization: getAuthorization(),
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        }
-    ).then((res) => res.json());
+    const msbCart = await api.put(`/carts/${cartId}`, body);
 
     if (msbCart.result === 'Error') {
         return false;
