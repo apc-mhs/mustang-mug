@@ -83,8 +83,7 @@ async function createCartWithItems(body, user, host) {
 async function updateCart(body, cartId) {
     /** @type {Cart} */
     const msbCart = await api.put(`/carts/${cartId}`, body);
-
-    if (msbCart.result === 'Error') {
+    if (!msbCart || msbCart.result === 'Error') {
         return false;
     }
 
@@ -94,7 +93,6 @@ async function updateCart(body, cartId) {
 async function getCart(cartId) {
     /** @type {Cart} */
     const msbCart = await api.get(`/carts/${cartId}`, true);
-
     if (!msbCart || msbCart.result === 'Error') {
         return null;
     }

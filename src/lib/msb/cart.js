@@ -27,11 +27,13 @@ function createCartItemsWithProperties(formData, user) {
             itemId: cartItem.id,
             itemName: cartItem.name,
             unitPrice: itemPrice.toString(),
-            salesTaxAmount: 0,
-            displaySalesTaxRate: 0,
+            salesTaxAmount: '0',
+            displaySalesTaxRate: '0',
             studentName: 'Test',
+            quantity: '1',
             reference: user.uid + ':' + crypto.randomBytes(20).toString('hex'),
             properties: constructPropertiesFromOptions(cartItem.options),
+            glAccountId: '',
         });
     }
     return cartItems;
