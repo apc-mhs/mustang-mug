@@ -5,8 +5,11 @@ import PurchaseSchedule from '$lib/components/purchase/PurchaseSchedule.svelte';
 import getFirebase from '$lib/firebase';
 import { onDestroy } from 'svelte';
 import tippy from '$lib/tippy';
+import { browser } from '$app/env';
+import { getCurrentPurchaseWindow } from '$lib/purchase';
 
 const todayDayOfWeek = new Date().getDay();
+const purchaseWindowRefresh = 30 * 1000;
 let deleting = false;
 async function deleteAllCarts() {
     deleting = true;
@@ -18,40 +21,57 @@ async function deleteAllCarts() {
 let purchaseWindows = [];
 let currentPurchaseWindow;
 let unsubscribe = () => {};
+let interval = 0;
 
-getFirebase().then(({ app, firebase }) => {
-    app.firestore()
-        .collection('purchase_windows')
-        // .where(firebase.firestore.FieldPath.documentId, '!=', 'current')
-        .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
-        .get()
-        .then((snapshot) => {
-            for (let doc of snapshot.docs) {
-                if (doc.id === 'current') {
-                    continue;
+function setupSnapshotListeners() {
+    getFirebase().then(({ app, firebase }) => {
+        app.firestore()
+            .collection('purchase_windows')
+            // .where(firebase.firestore.FieldPath.documentId, '!=', 'current')
+            .withConverter(PurchaseWindow.converter(firebase.firestore.Timestamp))
+            .get()
+            .then((snapshot) => {
+                for (let doc of snapshot.docs) {
+                    if (doc.id === 'current') {
+                        continue;
+                    }
+                    const window = doc.data();
+                    window.id = doc.id;
+                    purchaseWindows.push(window);
                 }
-                const window = doc.data();
-                window.id = doc.id;
-                purchaseWindows.push(window);
-            }
-            purchaseWindows = purchaseWindows;
-        });
+                purchaseWindows = purchaseWindows;
+            });
 
-    unsubscribe = app.firestore()
-        .collection('purchase_windows')
-        .doc('current')
-        .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
-        .onSnapshot((snapshot) => {
-            if (snapshot.exists) {
-                const purchaseWindow = snapshot.data();
-                currentPurchaseWindow = purchaseWindow.current ? purchaseWindow : null;
-            } else {
-                currentPurchaseWindow = null;
-            }
-        });
+        unsubscribe = app.firestore()
+            .collection('purchase_windows')
+            .doc('current')
+            .withConverter(CurrentPurchaseWindow.converter(firebase.firestore.Timestamp))
+            .onSnapshot((snapshot) => {
+                if (snapshot.exists) {
+                    const purchaseWindow = snapshot.data();
+                    currentPurchaseWindow = purchaseWindow.current ? purchaseWindow : null;
+                } else {
+                    currentPurchaseWindow = null;
+                }
+            });
+    });
+
+    // If the current purchase window becomes outdated, make a request to update it
+    interval = setInterval(() => {
+        if (currentPurchaseWindow && !currentPurchaseWindow.current) {
+            getCurrentPurchaseWindow();
+        }
+    }, purchaseWindowRefresh);
+}
+
+if (browser) {
+    setupSnapshotListeners();
+}
+
+onDestroy(() => {
+    unsubscribe();
+    clearInterval(interval);
 });
-
-onDestroy(() => unsubscribe());
 </script>
 
 <section class="purchase">
