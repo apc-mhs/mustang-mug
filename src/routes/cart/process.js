@@ -2,7 +2,8 @@ import getFirebase from '$lib/firebase';
 import { getAuthorization } from '$lib/msb';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
 import { CurrentPurchaseWindow } from '$lib/purchase/window';
-import { getCart } from '$lib/cart';
+import { getCart, removeDeletedItems, removeOutOfStockItems } from '$lib/cart';
+import api from '$lib/msb/api';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -36,23 +37,26 @@ export async function get({ query }) {
         );
     }
 
-    // TODO: Get cart items and make sure they are all in stock
+    const savedCartItems = cart.cartItems;
+    await Promise.all([
+        removeOutOfStockItems(cart),
+        removeDeletedItems(cart),
+    ]);
+    
+    if (savedCartItems.length !== cart.cartItems.length) {
+        return await writeProcessingError(
+            'Your order could not be processed because some items were marked as out of stock. Try again after removing the items from your cart.',
+            cartDocument.id
+        );
+    }
 
-    const res = await fetch(
-        `https://test.www.myschoolbucks.com/msbpay/v2/carts/${cartId}/process`,
-        {
-            method: 'POST',
-            headers: {
-                Authorization: getAuthorization(),
-            },
-        }
-    ).then((res) => res.json());
+    const processResponse = await api.post(`/carts/${cartId}/process`);
 
     // Make sure every result code has a confirmation code. This is deemed "successful"
     // https://www.myschoolbucks.com/ver2/developer/msbpayapi
     // "How will I know if a payment is successful after it is processed?"
-    if (!res.resultCodes.every((code) => /confirmation code/.test(code))) {
-        console.error(res);
+    if (!processResponse.resultCodes.every((code) => /confirmation code/.test(code))) {
+        console.error(processResponse);
         return writeProcessingError('MSB API Processing Request Failure. Try again later', cartDocument.id);
     }
 
@@ -75,9 +79,10 @@ export async function get({ query }) {
     await app
         .firestore()
         .collection('orders')
-        .doc(cartDocument.id)
+        .doc()
         .set({
             pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
+            userId: cartDocument.id,
             cartId
         });
 
@@ -100,17 +105,25 @@ export async function get({ query }) {
     };
 }
 
-async function writeProcessingError(message, cartDocumentId) {
+async function writeProcessingError(message, cartDocumentId, deleteCart = false) {
     if (cartDocumentId) {
         const { app } = await getFirebase();
+
+        const cartData = {
+            resultStatus: message,
+            resultCodes: ['Error'],
+        };
+
+        if (deleteCart) {
+            cartData.cartId = '';
+        }
 
         await app
             .firestore()
             .collection('carts')
             .doc(cartDocumentId)
-            .set({
-                cartId: '',
-                resultStatus: message,
+            .set(cartData, {
+                merge: true
             });
     }
 

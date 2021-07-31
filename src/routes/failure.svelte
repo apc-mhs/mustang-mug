@@ -44,7 +44,7 @@ $: if (browser && $currentUser) {
             {#each resultCodes as resultCode, i (i)}
                 <li><strong>Result {i + 1}</strong>: {resultCode}</li>
             {:else}
-                <li>No results</li>
+                <li>No results. Your cart may have been deleted! Try placing the order again; you were not already charged.</li>
             {/each}
         </ul>
     {:else}

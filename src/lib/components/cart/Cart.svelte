@@ -20,7 +20,7 @@ const dispatch = createEventDispatcher();
 
 const outOfStockTooltipProps = {
     content:
-        'This item has been marked as out of stock, so if you proceed to checkout now it will be removed from your cart. You can either remove it from your cart yourself or wait until it becomes available again.',
+        'If you proceed to checkout now, this item will be removed from your cart.',
     placement: 'left',
 };
 
