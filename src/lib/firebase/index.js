@@ -22,6 +22,9 @@ async function getFirebase() {
         : (await import('firebase-admin')).default;
     await import('firebase/firestore');
     await import('firebase/auth');
+    if (browser && !dev) {
+        await import('firebase/analytics');
+    }
 
     /** @type {import("firebase/app").default.app.App} */
     let app;
