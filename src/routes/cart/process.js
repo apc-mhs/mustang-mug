@@ -33,7 +33,8 @@ export async function get({ query }) {
     if (!currentPurchaseWindow || currentPurchaseWindow.exhausted) {
         return await writeProcessingError(
             'You can\'t checkout right now because too many orders have been placed. Check back later',
-            cartDocument.id
+            cartDocument.id,
+            cartId
         );
     }
 
@@ -45,8 +46,9 @@ export async function get({ query }) {
     
     if (savedCartItems.length !== cart.cartItems.length) {
         return await writeProcessingError(
-            'Your order could not be processed because some items were marked as out of stock. Try again after removing the items from your cart.',
-            cartDocument.id
+            'Your order could not be processed because some items were marked as out of stock.',
+            cartDocument.id,
+            cartId
         );
     }
 
@@ -57,7 +59,11 @@ export async function get({ query }) {
     // "How will I know if a payment is successful after it is processed?"
     if (!processResponse.resultCodes.every((code) => /confirmation code/.test(code))) {
         console.error(processResponse);
-        return writeProcessingError('MSB API Processing Request Failure. Try again later', cartDocument.id);
+        return writeProcessingError(
+            'MSB API Processing Request Failure. Try again later',
+            cartDocument.id,
+            cartId
+        );
     }
 
     currentPurchaseWindow.orders++;
@@ -105,17 +111,19 @@ export async function get({ query }) {
     };
 }
 
-async function writeProcessingError(message, cartDocumentId, deleteCart = false) {
+async function writeProcessingError(message, cartDocumentId, cartId) {
     if (cartDocumentId) {
         const { app } = await getFirebase();
 
         const cartData = {
             resultStatus: message,
-            resultCodes: ['Error'],
+            resultCodes: ['Error. Your cart had to be reset in response to this issue. You were not charged.'],
         };
 
-        if (deleteCart) {
+        if (cartId) {
             cartData.cartId = '';
+
+            await api.delete(`/carts/${cartId}`);
         }
 
         await app
