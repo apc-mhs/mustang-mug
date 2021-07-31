@@ -16,7 +16,7 @@ const dispatch = createEventDispatcher();
 
 let itemElement;
 let { price, name, image, stock, filters } = item;
-$: console.log(item.filters, filters);
+
 function optionIdSorter(option1, option2) {
     return option1.id.localeCompare(option2.id);
 }

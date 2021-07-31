@@ -44,6 +44,6 @@ exports.processSignUp = functions.auth.user().onCreate(async (user) => {
 });
 
 function isAdminEmail(email) {
-    const adminEmails = functions.config().adminEmails.split(',').map((email) => email.toLowerCase());
+    const adminEmails = functions.config().admin.emails.split(',').map((email) => email.toLowerCase());
     return adminEmails.includes(email.toLowerCase());
 }

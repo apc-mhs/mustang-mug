@@ -6,23 +6,23 @@ The website, backend, and dashboard for the Mustang Mug Cafe. This readme serves
 
 ## Table of Contents
 
--   [mustang-mug](#mustang-mug)
-    -   [Table of Contents](#table-of-contents)
-    -   [Contribution Guides](#contribution-guides)
-    -   [Setup](#setup)
-        -   [Install homebrew](#install-homebrew)
-        -   [Install Node](#install-node)
-        -   [Install Firebase Tools](#install-firebase-tools)
-        -   [Configure the repository](#configure-the-repository)
-        -   [Test your code](#test-your-code)
-    -   [Selected Documentation](#selected-documentation)
-        -   [Design](#design)
-        -   [Development](#development)
-    -   [Selected Administration-Sourced Information for Website](#selected-administration-sourced-information-for-website)
-        -   [Technical Specifications](#technical-specifications)
-        -   [Current Mustang-Mug Order Procedure](#current-mustang-mug-order-procedure)
-        -   [Benefits of an API and Order Site over a Google Form](#benefits-of-an-api-and-order-site-over-a-google-form)
-    -   [Project Timeline](#project-timeline)
+- [mustang-mug](#mustang-mug)
+  - [Table of Contents](#table-of-contents)
+  - [Contribution Guides](#contribution-guides)
+  - [Setup](#setup)
+    - [Install homebrew](#install-homebrew)
+    - [Install Node](#install-node)
+    - [Install Firebase Tools](#install-firebase-tools)
+    - [Configure the repository](#configure-the-repository)
+    - [Test your code](#test-your-code)
+  - [Selected Documentation](#selected-documentation)
+    - [Design](#design)
+    - [Development](#development)
+  - [Selected Administration-Sourced Information for Website](#selected-administration-sourced-information-for-website)
+    - [Technical Specifications](#technical-specifications)
+    - [Current Mustang-Mug Order Procedure](#current-mustang-mug-order-procedure)
+    - [Benefits of an API and Order Site over a Google Form](#benefits-of-an-api-and-order-site-over-a-google-form)
+  - [Project Timeline](#project-timeline)
 
 ## Contribution Guides
 
@@ -74,13 +74,13 @@ In terminal, inside your repository's folder, install dependencies:
 
     npm install && npm install --prefix functions
 
-Build the necessary hosting files for future runs:
-
-    npm run build
-
 Set the firebase project
 
     firebase use --add
+
+Download the firebase functions config for functions emulation:
+
+    firebase functions:config:get > functions/.runtimeconfig.json
 
 ### Test your code
 
@@ -90,13 +90,15 @@ Create a file called `.env.development.local` in your project's root directory. 
     FIRESTORE_EMULATOR_HOST="localhost:8080"
     FIREBASE_AUTH_EMULATOR_HOST="localhost:9099"
 
-Then, add your service account JSON file to the `admin` directory inside `src`. You can get this file by contacting [@AndrewLester](https://github.com/AndrewLester). The file should be named `mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json`. Also ask for the MySchoolBucks API key at the same time, which you'll need to test API interactions. Now, you are ready to test. Run the firebase emulators:
+Then, add one more variable to this file called `MSB_API_KEY`, you'll need to check the `.runtimeconfig.json` file you downloaded in the previous section for the value.
+
+Next, add your service account JSON file to the `admin` directory inside `src`. You can get this file by contacting [@AndrewLester](https://github.com/AndrewLester). The file should be named `mustang-mug-firebase-adminsdk-te6ci-2af91d14d1.json`. Also ask for the MySchoolBucks API key at the same time, which you'll need to test API interactions. Now, you are ready to test. Run the firebase emulators:
 
     firebase emulators:start
 
-Alternatively, if you're having issues with running all the emulators you can run a limited number of emulators, which should be enough to do local development: 
+Alternatively, if you're having issues with running all the emulators you can run a limited number of emulators, which should be enough to do local development (recommended approach): 
 
-    firebase emulators:start --only firestore,auth
+    firebase emulators:start --only firestore,auth,functions
 
 In a separate shell tab, start the dev server.
 
