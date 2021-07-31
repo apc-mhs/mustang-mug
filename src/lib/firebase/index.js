@@ -63,7 +63,7 @@ function setupFirebase(firebase) {
         if (dev) {
             initializeDev(app);
         } else {
-            firebase.analytics();
+            app.analytics();
         }
 
         app.firestore()
