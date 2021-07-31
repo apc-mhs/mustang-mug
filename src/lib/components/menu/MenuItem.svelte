@@ -25,7 +25,7 @@ $: if (cartItems) {
 }
 </script>
 
-<div class="item" class:out-of-stock={!item.stock}>
+<div class="item" class:out-of-stock={!item.stock} class:options-shown={quantity > 0}>
     <img src="/menuItems/{item.image}" alt="Picture of {item.name}{!item.stock ? ' - out of stock' : ''}" />
     <h3>{item.name}</h3>
     <p>{numberFormatter.format(item.price)}</p>
@@ -64,7 +64,14 @@ h3 {
     overflow: hidden;
     font-size: 16px;
     padding-bottom: 10px;
+    max-height: 349px;
+    transition: max-height 400ms ease;
 }
+
+.item.options-shown {
+    max-height: 100%;
+}
+
 .item > * {
     padding: 5px 0px;
 }
@@ -85,8 +92,9 @@ p.out-of-stock {
     top: 0;
     left: 0;
     width: 248px;
-    height: 248px;
     padding: 0px;
+    flex: 0 1 auto;
+    min-height: 0px;
 }
 
 label {
