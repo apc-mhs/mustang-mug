@@ -16,7 +16,8 @@ async function request(
         body: data,
     });
     if (!res.ok) {
-        throw new Error(`Request for ${url} failed with error: ${res.statusText}`);h
+        console.error(data, await res.text());
+        throw new Error(`Request for ${url} failed with error: ${res.statusText}`);
     }
     
     let json;
