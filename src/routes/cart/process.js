@@ -115,7 +115,7 @@ async function writeProcessingError(message, cartDocumentId, deleteCart = false)
         };
 
         if (deleteCart) {
-            cartData['cartId'] = '';
+            cartData.cartId = '';
         }
 
         await app
