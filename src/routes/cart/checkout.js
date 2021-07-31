@@ -1,7 +1,7 @@
 import getFirebase from '$lib/firebase';
 import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
-import { updateCart, getCart, getCartIdFor } from '$lib/cart';
+import { updateCart, getCart, getCartIdFor, removeOutOfStockItems, removeDeletedItems } from '$lib/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -57,46 +57,4 @@ export async function post({ locals, body }) {
             url: cart.checkoutUrl,
         },
     };
-}
-
-async function removeOutOfStockItems(cart) {
-    const { app } = await getFirebase();
-
-    const [outOfStockItemIds, outOfStockOptionIds] = await Promise.all([
-        app
-            .firestore()
-            .collection('items')
-            .where('stock', '==', false)
-            .get()
-            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
-        app
-            .firestore()
-            .collection('options')
-            .where('stock', '==', false)
-            .get()
-            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
-    ]);
-
-    cart.cartItems = cart.cartItems.filter((cartItem) => {
-        return (
-            !outOfStockItemIds.includes(cartItem.itemId) &&
-            !getOptionIdsFromProperties(cartItem.properties).some((optionId) =>
-                outOfStockOptionIds.includes(optionId)
-            )
-        );
-    });
-}
-
-async function removeDeletedItems(cart) {
-    const { app } = await getFirebase();
-    const menuItems = await Promise.all(cart.cartItems.map((cartItem) => {
-        return app.firestore()
-            .collection('items')
-            .doc(cartItem.itemId)
-            .get()
-    }));
-
-    cart.cartItems = cart.cartItems.filter((_, i) => {
-        return menuItems[i].exists;
-    });
 }

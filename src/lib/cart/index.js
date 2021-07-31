@@ -1,4 +1,4 @@
-import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
+import { getCartData, createCartItemsWithProperties, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
@@ -93,6 +93,48 @@ async function getCart(cartId) {
     return msbCart.cart;
 }
 
+async function removeDeletedItems(cart) {
+    const { app } = await getFirebase();
+    const menuItems = await Promise.all(cart.cartItems.map((cartItem) => {
+        return app.firestore()
+            .collection('items')
+            .doc(cartItem.itemId)
+            .get()
+    }));
+
+    cart.cartItems = cart.cartItems.filter((_, i) => {
+        return menuItems[i].exists;
+    });
+}
+
+async function removeOutOfStockItems(cart) {
+    const { app } = await getFirebase();
+
+    const [outOfStockItemIds, outOfStockOptionIds] = await Promise.all([
+        app
+            .firestore()
+            .collection('items')
+            .where('stock', '==', false)
+            .get()
+            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
+        app
+            .firestore()
+            .collection('options')
+            .where('stock', '==', false)
+            .get()
+            .then((snapshot) => snapshot.docs.map((doc) => doc.id)),
+    ]);
+
+    cart.cartItems = cart.cartItems.filter((cartItem) => {
+        return (
+            !outOfStockItemIds.includes(cartItem.itemId) &&
+            !getOptionIdsFromProperties(cartItem.properties).some((optionId) =>
+                outOfStockOptionIds.includes(optionId)
+            )
+        );
+    });
+}
+
 export {
     getCartIdFor,
     getCartFor,
@@ -100,4 +142,6 @@ export {
     createCartWithItems,
     updateCart,
     getCart,
+    removeDeletedItems,
+    removeOutOfStockItems,
 };
