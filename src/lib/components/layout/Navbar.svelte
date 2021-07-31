@@ -88,8 +88,7 @@ nav {
     -webkit-backdrop-filter: blur(3px);
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     height: var(--header-height);
-    /* Is there a better way to do this?*/
-    z-index: 9999;
+    z-index: 4;
     box-shadow: 0px 1px 5px 0px black;
 }
 .navbar-list {
