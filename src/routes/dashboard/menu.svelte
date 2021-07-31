@@ -4,7 +4,7 @@ import EditableMenuOptionsItem from '$lib/components/menu/EditableMenuOptionsIte
 import Menu from '$lib/components/menu/Menu.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import getFirebase from '$lib/firebase';
-import { query } from '../_menu';
+import { query } from '$lib/menu';
 
 let items = [];
 let options = [];

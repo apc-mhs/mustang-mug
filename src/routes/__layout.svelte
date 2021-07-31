@@ -4,6 +4,7 @@ import Navbar from '$lib/components/layout/Navbar.svelte';
 import Footer from '$lib/components/layout/Footer.svelte';
 import { page } from '$app/stores';
 import '../app.css';
+import SkipToContentButton from '$lib/components/utility/SkipToContentButton.svelte';
 
 let navbar;
 
@@ -16,8 +17,9 @@ signInAnonymously();
 
 <svelte:window on:sveltekit:navigation-start={() => navbar.closeMobileMenu()} />
 
+<SkipToContentButton />
 <Navbar bind:this={navbar} />
-<main>
+<main id="main">
     <slot />
     <Footer />
 </main>

@@ -55,14 +55,18 @@ h3 {
     margin-bottom: 0px;
 }
 .item {
+    display: flex;
+    flex-flow: column nowrap;
     width: 250px;
-    height: auto;
     border: 1px solid rgb(71, 70, 70);
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
     font-size: 16px;
     padding-bottom: 10px;
+}
+.item > * {
+    padding: 5px 0px;
 }
 .item.out-of-stock > :not(.out-of-stock) {
     -webkit-filter: grayscale(50%); /* Safari 6.0 - 9.0 */
@@ -80,11 +84,12 @@ p.out-of-stock {
 .item > img {
     top: 0;
     left: 0;
-    width: 100%;
+    width: 248px;
+    height: 248px;
+    padding: 0px;
 }
 
 label {
-    padding: 10px;
     /* background-color: rgba(253, 253, 253, 0.5); */
     display: block;
     color: rgba(0, 0, 0, 0.75);

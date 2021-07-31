@@ -1,4 +1,4 @@
-import { getCartIdFor, getCartFor, addItemsToCart, updateCart } from './_cart';
+import { getCartIdFor, getCartFor, addItemsToCart, updateCart } from '$lib/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}

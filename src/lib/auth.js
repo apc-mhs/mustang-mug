@@ -1,11 +1,9 @@
-import { browser } from '$app/env';
+import { browser, dev } from '$app/env';
 import Cookies from 'js-cookie';
 import { goto } from '$app/navigation';
 import getFirebase from './firebase';
 import { readable } from 'svelte/store';
 
-// TODO: Use firebase auth JWT custom claims
-const acceptableEmails = ['mustangmug@fccps.org', 'alester220@gmail.com', '147infiniti@gmail.com'];
 if (browser) {
     async function updateSessionCookie(user) {
         Cookies.set('__session', user ? await user.getIdToken() : '', {
@@ -34,7 +32,7 @@ const currentUser = readable(null, (set) => {
 });
 
 function isAdmin(user) {
-    return user.email && acceptableEmails.includes(user.email);
+    return dev || user.customClaims['admin'];
 }
 
 /** @returns {Promise<import('firebase/app').User | undefined>} */

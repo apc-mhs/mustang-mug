@@ -5,16 +5,18 @@ import EditableMenuItemOptions from './EditableMenuItemOptions.svelte';
 import tippy from '$lib/tippy';
 import Button from '$lib/components/input/Button.svelte';
 import Input from '../input/Input.svelte';
+import EditableMenuItemFilters from './EditableMenuItemFilters.svelte';
 
 export let item;
 export let options = [];
 export let allOptions;
 
+const allFilters = item && item.filters;
 const dispatch = createEventDispatcher();
 
 let itemElement;
-let { price, name, image, stock } = item;
-
+let { price, name, image, stock, filters } = item;
+$: console.log(item.filters, filters);
 function optionIdSorter(option1, option2) {
     return option1.id.localeCompare(option2.id);
 }
@@ -29,7 +31,8 @@ $: changed =
     item.options.length !== options.length ||
     !item.options
         .sort(optionIdSorter)
-        .every((option, i) => option.id === (options[i] && options[i].id));
+        .every((option, i) => option.id === (options[i] && options[i].id)) ||
+    !Object.keys(item.filters).every((key) => item.filters[key] === filters[key]);
 
 function beforeUnload(e) {
     if (!changed) return;
@@ -61,6 +64,12 @@ function beforeUnload(e) {
         bind:selectedOptions={options}
         options={allOptions} />
 
+    <EditableMenuItemFilters
+        popperBoundingElement={itemElement}
+        message={'Filters:'}
+        bind:selectedFilters={filters}
+        filters={allFilters} />
+
     <label class="in-stock-label">
         In Stock:
         <input type="checkbox" bind:checked={stock} />
@@ -77,6 +86,7 @@ function beforeUnload(e) {
                         image,
                         stock,
                         options,
+                        filters
                     })}
                 disabled={!changed}>Save</Button>
         </span>
@@ -103,7 +113,6 @@ h3 {
     border: 1px solid rgb(71, 70, 70);
     background-color: white;
     border-radius: 5px;
-    overflow: hidden;
     font-size: 16px;
     padding-bottom: 10px;
 }
