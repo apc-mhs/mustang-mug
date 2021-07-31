@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 
 const admin = require('firebase-admin');
 admin.initializeApp({
-    credential: firebase.credential.applicationDefault(),
+    credential: admin.credential.applicationDefault(),
 });
 
 let ssrServerServer;
