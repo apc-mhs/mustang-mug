@@ -9,6 +9,7 @@ import { startLoading, stopLoading } from '$lib/components/loading';
 import Input from '$lib/components/input/Input.svelte';
 import LinkButton from '$lib/components/utility/LinkButton.svelte';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
+import { currentUser } from '$lib/auth';
 
 let validCart = false;
 let studentName = '';
@@ -83,9 +84,11 @@ async function checkout(e) {
 }
 
 let menuItems = [];
-query().then(([items, _]) => {
-    menuItems = items;
-});
+$: if ($currentUser && menuItems.length === 0) {
+    query().then(([items, _]) => {
+        menuItems = items;
+    });
+}
 </script>
 
 <svelte:head>

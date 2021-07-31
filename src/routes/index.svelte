@@ -8,6 +8,7 @@ import Icon from '$lib/components/utility/Icon.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import { query, postCartItems } from '$lib/menu';
 import { startLoading, stopLoading } from '$lib/components/loading';
+import { currentUser } from '$lib/auth';
 
 let skeleton = true;
 let updatingCart = false;
@@ -15,11 +16,13 @@ let items = [];
 let options = [];
 let cartItems = {};
 
-query().then(([itemsData, optionsData]) => {
-    items = itemsData && itemsData.sort((a, b) => a.name.localeCompare(b.name));
-    options = optionsData;
-    skeleton = false;
-});
+$: if ($currentUser && items.length === 0) {
+    query().then(([itemsData, optionsData]) => {
+        items = itemsData && itemsData.sort((a, b) => a.name.localeCompare(b.name));
+        options = optionsData;
+        skeleton = false;
+    });
+}
 
 async function addToCart() {
     if (
