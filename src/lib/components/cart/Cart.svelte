@@ -67,12 +67,12 @@ function isOutOfStock(cartItem, optionIds) {
                     {/if}
                     {item.itemName}
                 </h2>
-                <h4>
+                <p>
                     Price: ({numberFormatter.format(
                         menuItems.find((menuItem) => menuItem.id == item.itemId)
                             .price
                     )})
-                </h4>
+                </p>
                 {#if item.properties.length > 0}
                     <h3>Options:</h3>
                     <ul>
@@ -87,10 +87,13 @@ function isOutOfStock(cartItem, optionIds) {
                         {/each}
                     </ul>
                 {/if}
-                <h4 class="item-price">
+                <p class="quantity">
+                    Quantity: {item.quantity}
+                </p>
+                <h4>
                     <InfoBox
-                        content="The item price is the cost of the item plus the cost of all of its selected options." />
-                    Total Item Price: {numberFormatter.format(item.unitPrice)}
+                        content="The total is the cost of the item plus the cost of all of its selected options, all times the quantity." />
+                    Total: {numberFormatter.format(item.unitPrice * item.quantity)}
                 </h4>
                 <Button on:click={() => dispatch('remove', item)}>
                     <Icon name="remove-shopping-cart" width="20" height="20" />
@@ -128,7 +131,7 @@ function isOutOfStock(cartItem, optionIds) {
     gap: 5px;
 }
 
-.item-price {
+.quantity {
     margin-top: auto;
 }
 
