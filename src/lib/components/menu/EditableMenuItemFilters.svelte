@@ -7,29 +7,50 @@ import { flip } from 'svelte/animate';
 import AutocompleteChooser from '../input/AutocompleteChooser.svelte';
 import Option from './Option.svelte';
 
-export let selectedOptions;
-export let options = [];
+export let selectedFilters;
+export let filters = {};
 export let popperBoundingElement;
 
 let chooser;
+let selectedOptions = filtersToOptions(filters).filter(({id}) => filters[id]);
+
+$: filterObjects = filtersToOptions(filters);
+const getFilters = () => filters;
+$: {
+    // unselectedFilters is a duplicate of filters with all filters set to false
+    const unselectedFilters = {};
+    Object.keys(getFilters()).forEach((k) => unselectedFilters[k] = false);
+    selectedFilters = {...unselectedFilters, ...optionsToFilters(selectedOptions)};
+}
+
+function filtersToOptions(filters) {
+    return Object.keys(filters).map((filterName) => { return {id: filterName, name: filterName}; });
+}
+
+function optionsToFilters(options) {
+    const filters = {};
+    for (let option of options) {
+        filters[option.name] = true;
+    }
+    return filters;
+}
 
 function remove(optionIndex) {
     chooser.remove(optionIndex);
 }
-const outOfStockMessage =
-    'This option is marked out of stock. It won\'t appear on the menu.';
-const removeOptionMessage = 'Remove this option';
+
+const removeOptionMessage = 'Remove this filter';
 </script>
 
 <div class="item-options" transition:slide|local>
     <AutocompleteChooser
         {popperBoundingElement}
-        placeholder="Search options"
-        options={options}
+        placeholder="Search filters"
+        options={filterObjects}
         bind:this={chooser}
         bind:selectedOptions
         let:option>
-        <Option {option} iconName={option.stock ? 'check' : 'close'}/>
+        <Option {option}/>
     </AutocompleteChooser>
     {#if selectedOptions.length > 0}
         <div class="options-list">
@@ -37,14 +58,13 @@ const removeOptionMessage = 'Remove this option';
                 <div animate:flip={{ duration: 250 }}>
                     <Option
                         {option}
-                        iconName={option.stock ? 'check' : 'close'}
-                        hoverMessage={option.stock ? removeOptionMessage : outOfStockMessage}
+                        hoverMessage={removeOptionMessage}
                         on:click={() => remove(option.id)}/>
                 </div>
             {/each}
         </div>
     {:else}
-        <p in:fade|local={{ duration: 250, delay: 250 }}>No options selected</p>
+        <p in:fade|local={{ duration: 250, delay: 250 }}>No filters selected</p>
     {/if}
 </div>
 
@@ -71,27 +91,5 @@ const removeOptionMessage = 'Remove this option';
     justify-content: center;
     width: 100%;
     gap: 3px 5px;
-}
-.option {
-    box-sizing: content-box;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0px 2px;
-    border: 2px solid currentColor;
-    border-radius: 20px;
-    height: 16px;
-    color: white;
-    font-size: 13px;
-    padding: 5px 16px;
-    color: gray;
-    cursor: pointer; /* Transition function equal to cubicOut (in horizontalSlide) */
-    transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
-    color: skyblue; /* Set padding left-right to take off 16 (width of checkmark) total pixels */
-    padding: 5px 8px;
-}
-.option.out-of-stock {
-    color: red;
 }
 </style>

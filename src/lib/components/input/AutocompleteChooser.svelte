@@ -55,8 +55,7 @@ function select(option) {
     selectedOptionIds = [...selectedOptionIds, option.id];
     value = '';
     input.focus();
-
-    if (selectedOptionIds.length === options.length) popper.close();
+    popper.close();
 }
 
 export function remove(optionId) {
