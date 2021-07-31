@@ -2,11 +2,7 @@ import { dev } from '$app/env';
 import { isAdmin } from '$lib/auth';
 import getFirebase from '$lib/firebase';
 import { deleteCollection } from '$lib/firebase/firestore';
-import { getAuthorization, client } from '$lib/msb';
-import { CartApi, Cart } from 'msb_pay_api';
-
-const cartApi = new CartApi(client);
-
+import { getAuthorization } from '$lib/msb';
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */

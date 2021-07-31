@@ -2,7 +2,7 @@ import getFirebase from '$lib/firebase';
 import { getAuthorization } from '$lib/msb';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
 import { CurrentPurchaseWindow } from '$lib/purchase/window';
-import { getCart } from './_cart';
+import { getCart } from '$lib/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}

@@ -2,7 +2,7 @@
 import Cart from '$lib/components/cart/Cart.svelte';
 import { browser } from '$app/env';
 import { getCartData } from '$lib/msb/cart';
-import { query } from '../_menu';
+import { query } from '$lib/menu';
 import tippy from '$lib/tippy';
 import SubmitButton from '$lib/components/input/SubmitButton.svelte';
 import { startLoading, stopLoading } from '$lib/components/loading';

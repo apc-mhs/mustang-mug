@@ -1,11 +1,7 @@
-import { client, getAuthorization } from '$lib/msb';
 import { getCartData, createCartItemsWithProperties } from '$lib/msb/cart';
-import { CartApi, Cart } from 'msb_pay_api';
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
-
-const cartApi = new CartApi(client);
 
 async function getCartIdFor(user) {
     const { app, firebase } = await getFirebase();
@@ -59,7 +55,6 @@ async function createCartWithItems(body, user, host) {
         returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
     };
 
-    /** @type {Cart} */
     const msbCart = await api.post('/carts', cartData);
 
     if (msbCart.result == 'Error') {
@@ -81,7 +76,6 @@ async function createCartWithItems(body, user, host) {
 
 /** @returns {Promise<boolean>} */
 async function updateCart(body, cartId) {
-    /** @type {Cart} */
     const msbCart = await api.put(`/carts/${cartId}`, body);
     if (!msbCart || msbCart.result === 'Error') {
         return false;
@@ -91,7 +85,6 @@ async function updateCart(body, cartId) {
 }
 
 async function getCart(cartId) {
-    /** @type {Cart} */
     const msbCart = await api.get(`/carts/${cartId}`, true);
     if (!msbCart || msbCart.result === 'Error') {
         return null;
