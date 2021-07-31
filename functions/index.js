@@ -1,5 +1,10 @@
 const functions = require('firebase-functions');
 
+const admin = require('firebase-admin');
+admin.initializeApp({
+    credential: firebase.credential.applicationDefault(),
+});
+
 let ssrServerServer;
 exports.ssrServer = functions.https.onRequest(async (request, response) => {
     if (!ssrServerServer) {
@@ -15,3 +20,30 @@ exports.ssrServer = functions.https.onRequest(async (request, response) => {
     process.env['MSB_API_KEY'] = functions.config().msb.key;
     return await ssrServerServer(request, response);
 });
+
+// https://firebase.google.com/docs/auth/admin/custom-claims#logic
+exports.processSignUp = functions.auth.user().onCreate(async (user) => {
+  // Check if user meets role criteria.
+  if (
+    user.email &&
+    isAdminEmail(user.email) &&
+    user.emailVerified
+  ) {
+    const customClaims = {
+      admin: true,
+      accessLevel: 10
+    };
+
+    try {
+      // Set custom user claims on this newly created user.
+      await admin.auth().setCustomUserClaims(user.uid, customClaims);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+});
+
+function isAdminEmail(email) {
+    const adminEmails = functions.config().adminEmails.split(',').map((email) => email.toLowerCase());
+    return adminEmails.includes(email.toLowerCase());
+}
