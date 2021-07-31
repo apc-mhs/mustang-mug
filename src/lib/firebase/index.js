@@ -57,7 +57,11 @@ function setupFirebase(firebase) {
     const app = firebase.initializeApp(config, appName);
 
     if (browser) {
-        if (dev) initializeDev(app);
+        if (dev) {
+            initializeDev(app);
+        } else {
+            firebase.analytics();
+        }
 
         app.firestore()
             .enablePersistence()
