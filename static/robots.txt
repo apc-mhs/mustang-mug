@@ -1,3 +1,3 @@
 User-agent: *
 Disallow: /webhooks/
-Disallow: /dashboard/
+Disallow: /dashboard

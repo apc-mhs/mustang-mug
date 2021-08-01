@@ -55,8 +55,5 @@
       "<rootDir>"
     ]
   },
-  "type": "module",
-  "dependencies": {
-    "firebase-functions": "^3.14.1"
-  }
+  "type": "module"
 }

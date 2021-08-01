@@ -50,7 +50,7 @@ if (browser) {
         <Button on:click={() => signOut()}>Sign out</Button>
     </aside>
     <div class="content">
-       <slot />
+        <slot />
     </div>
 </main>
 

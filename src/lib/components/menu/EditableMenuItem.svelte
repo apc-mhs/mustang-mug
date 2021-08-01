@@ -56,14 +56,13 @@ function beforeUnload(e) {
     </label>
     <label>
         Price:
-        <Input bind:value={price} --type="number" --step="0.01" --min="0" />
+        <Input bind:value={price} type="number" step="0.01" min="0" />
     </label>
     <EditableMenuItemOptions
         popperBoundingElement={itemElement}
         message={'Options:'}
         bind:selectedOptions={options}
         options={allOptions} />
-
     <EditableMenuItemFilters
         popperBoundingElement={itemElement}
         message={'Filters:'}
