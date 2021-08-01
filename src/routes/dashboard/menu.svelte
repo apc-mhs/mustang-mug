@@ -6,18 +6,18 @@ import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import getFirebase from '$lib/firebase';
 import { query } from '$lib/menu';
 
-let items = [];
-let options = [];
-let filters_to_send = {
-    "cold": false,
-    "drink": false,
-    "food": false,
-    "gluten_free": false,
-    "hot": false,
-    "lactose_free": false, 
-    "nut_free": false,
+const defaultFilters = {
+    cold: false,
+    drink: false,
+    food: false,
+    gluten_free: false,
+    hot: false,
+    lactose_free: false,
+    nut_free: false,
 };
 
+let items = [];
+let options = [];
 
 query().then(([itemsData, optionsData]) => {
     items = itemsData;
@@ -83,7 +83,7 @@ async function itemsMenuItemAddHandler() {
             name: 'New Item',
             image: 'missing.png',
             options: [],
-            filters: filters_to_send, 
+            filters: defaultFilters,
             stock: true,
             price: 0,
             lastModified: firebase.firestore.Timestamp.now(),
