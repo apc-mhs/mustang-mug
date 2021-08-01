@@ -72,26 +72,4 @@ const removeOptionMessage = 'Remove this option';
     width: 100%;
     gap: 3px 5px;
 }
-.option {
-    box-sizing: content-box;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0px 2px;
-    border: 2px solid currentColor;
-    border-radius: 20px;
-    height: 16px;
-    color: white;
-    font-size: 13px;
-    padding: 5px 16px;
-    color: gray;
-    cursor: pointer; /* Transition function equal to cubicOut (in horizontalSlide) */
-    transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
-    color: skyblue; /* Set padding left-right to take off 16 (width of checkmark) total pixels */
-    padding: 5px 8px;
-}
-.option.out-of-stock {
-    color: red;
-}
 </style>
