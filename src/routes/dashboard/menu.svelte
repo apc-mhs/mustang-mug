@@ -8,6 +8,16 @@ import { query } from '$lib/menu';
 
 let items = [];
 let options = [];
+let filters_to_send = {
+    "cold": false,
+    "drink": false,
+    "food": false,
+    "gluten_free": false,
+    "hot": false,
+    "lactose_free": false, 
+    "nut_free": false,
+};
+
 
 query().then(([itemsData, optionsData]) => {
     items = itemsData;
@@ -73,15 +83,7 @@ async function itemsMenuItemAddHandler() {
             name: 'New Item',
             image: 'missing.png',
             options: [],
-            filters: [
-                ["cold", false],
-                ["drink", false],
-                ["food", false],
-                ["gluten_free", false],
-                ["hot", false],
-                ["lactose_free", false],
-                ["nut_free", false],
-            ],
+            filters: filters_to_send, 
             stock: true,
             price: 0,
             lastModified: firebase.firestore.Timestamp.now(),

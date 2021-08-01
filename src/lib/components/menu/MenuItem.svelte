@@ -70,7 +70,7 @@ h3 {
 
 .item.options-shown {
     max-height: 100%;
-    outline: 5px solid red; 
+    box-shadow: 0 0 0 3px red; /* All the borders by using the spread properties */
 }
 
 .item > * {
