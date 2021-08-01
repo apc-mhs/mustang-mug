@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button.svelte renders correctly 1`] = `
+exports[`Button renders correctly 1`] = `
 <body>
   <div>
     <button
-      class="button svelte-43imro"
+      class="button svelte-2bdwip"
     />
   </div>
 </body>
 `;
 
-exports[`Button.svelte renders correctly when disabled 1`] = `
+exports[`Button renders correctly when disabled 1`] = `
 <body>
   <div>
     <button
-      class="button svelte-43imro"
+      class="button svelte-2bdwip"
       disabled=""
     />
   </div>
