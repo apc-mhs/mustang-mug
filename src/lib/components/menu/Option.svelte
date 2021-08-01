@@ -35,7 +35,7 @@ export let iconName = 'check';
     color: gray;
     cursor: pointer; /* Transition function equal to cubicOut (in horizontalSlide) */
     transition: padding 400ms cubic-bezier(0.215, 0.61, 0.355, 1);
-    color: skyblue; /* Set padding left-right to take off 16 (width of checkmark) total pixels */
+    color: var(--secondary); /* Set padding left-right to take off 16 (width of checkmark) total pixels */
     padding: 5px 8px;
 }
 .option.out-of-stock {

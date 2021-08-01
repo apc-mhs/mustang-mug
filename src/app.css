@@ -1,3 +1,7 @@
+:root {
+    --secondary: rgb(50 115 246);
+}
+
 * {
     box-sizing: border-box;
     margin: 0px;

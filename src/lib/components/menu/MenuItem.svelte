@@ -65,12 +65,12 @@ h3 {
     font-size: 16px;
     padding-bottom: 10px;
     max-height: 349px;
-    transition: max-height 400ms ease;
+    transition: max-height 400ms ease, box-shadow 400ms ease;
 }
 
 .item.options-shown {
     max-height: 100%;
-    box-shadow: 0 0 0 2.5px rgb(206, 44, 44); /* All the borders by using the spread properties */
+    box-shadow: 0 0 0 2.5px var(--secondary); /* All the borders by using the spread properties */
 }
 
 .item > * {
