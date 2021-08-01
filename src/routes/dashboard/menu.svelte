@@ -6,6 +6,16 @@ import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import getFirebase from '$lib/firebase';
 import { query } from '$lib/menu';
 
+const defaultFilters = {
+    cold: false,
+    drink: false,
+    food: false,
+    gluten_free: false,
+    hot: false,
+    lactose_free: false,
+    nut_free: false,
+};
+
 let items = [];
 let options = [];
 
@@ -16,7 +26,7 @@ query().then(([itemsData, optionsData]) => {
 
 async function save(itemData) {
     const { app, firebase } = await getFirebase();
-    
+
     itemData.lastModified = firebase.firestore.Timestamp.now();
 
     // Update the menu item in the main menuItems array
@@ -73,9 +83,10 @@ async function itemsMenuItemAddHandler() {
             name: 'New Item',
             image: 'missing.png',
             options: [],
+            filters: defaultFilters,
             stock: true,
             price: 0,
-            lastModified: firebase.firestore.Timestamp.now()
+            lastModified: firebase.firestore.Timestamp.now(),
         },
     ];
 }
@@ -90,7 +101,7 @@ async function optionsMenuItemAddHandler() {
             name: 'New Option',
             stock: true,
             price: 0,
-            lastModified: firebase.firestore.Timestamp.now()
+            lastModified: firebase.firestore.Timestamp.now(),
         },
     ];
 }
@@ -105,7 +116,7 @@ async function itemsMenuItemDeleteHandler(itemId) {
 
 async function optionsMenuItemDeleteHandler(optionId) {
     if (!confirm('Are you sure you want to delete this item?')) return;
-    
+
     const { app } = await getFirebase();
     options = options.filter((option) => option.id !== optionId);
     app.firestore().collection('options').doc(optionId).delete();
