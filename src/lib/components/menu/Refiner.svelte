@@ -1,5 +1,5 @@
 <script>
-import Button from "../input/Button.svelte";
+import Button from '../input/Button.svelte';
 import { slide } from 'svelte/transition';
 
 export let refinedItems;
@@ -13,7 +13,12 @@ let itemTypeFilter = noFilter;
 let priceFilter = noFilter;
 let groupedFilters = [];
 
-$: filters = [temperatureFilter, itemTypeFilter, priceFilter, ...groupedFilters];
+$: filters = [
+    temperatureFilter,
+    itemTypeFilter,
+    priceFilter,
+    ...groupedFilters,
+];
 $: refinedItems = sortFunction(filter(items, filters));
 
 let sortFunction = alphabetize;
@@ -40,7 +45,7 @@ function filter(items, filters) {
                     type="radio"
                     name="temperature"
                     value={(item) => item.filters.hot}
-                    bind:group={temperatureFilter}>
+                    bind:group={temperatureFilter} />
                 Hot
             </label>
         </li>
@@ -50,13 +55,14 @@ function filter(items, filters) {
                     type="radio"
                     name="temperature"
                     value={(item) => item.filters.cold}
-                    bind:group={temperatureFilter}>
+                    bind:group={temperatureFilter} />
                 Cold
             </label>
         </li>
         {#if temperatureFilter !== noFilter}
             <div transition:slide style="margin: 5px;">
-                <Button on:click={() => temperatureFilter = noFilter}>Clear selection</Button>
+                <Button on:click={() => (temperatureFilter = noFilter)}
+                    >Clear selection</Button>
             </div>
         {/if}
         <hr />
@@ -66,7 +72,7 @@ function filter(items, filters) {
                     type="radio"
                     name="item-type"
                     value={(item) => item.filters.food}
-                    bind:group={itemTypeFilter}>
+                    bind:group={itemTypeFilter} />
                 Food
             </label>
         </li>
@@ -75,24 +81,25 @@ function filter(items, filters) {
                 <input
                     type="radio"
                     unselectable="true"
-                    name="item-type" 
+                    name="item-type"
                     value={(item) => item.filters.drink}
-                    bind:group={itemTypeFilter}>
+                    bind:group={itemTypeFilter} />
                 Beverage
             </label>
         </li>
         {#if itemTypeFilter !== noFilter}
             <div transition:slide style="margin: 5px;">
-                <Button on:click={() => itemTypeFilter = noFilter}>Clear selection</Button>
+                <Button on:click={() => (itemTypeFilter = noFilter)}
+                    >Clear selection</Button>
             </div>
         {/if}
         <hr />
         <li>
             <label>
-                <input 
+                <input
                     type="checkbox"
                     value={(item) => item.filters.gluten_free}
-                    bind:group={groupedFilters}>
+                    bind:group={groupedFilters} />
                 Gluten Free
             </label>
         </li>
@@ -101,7 +108,7 @@ function filter(items, filters) {
                 <input
                     type="checkbox"
                     value={(item) => item.filters.lactose_free}
-                    bind:group={groupedFilters}>
+                    bind:group={groupedFilters} />
                 Lactose Free
             </label>
         </li>
@@ -110,7 +117,7 @@ function filter(items, filters) {
                 <input
                     type="checkbox"
                     value={(item) => item.filters.nut_free}
-                    bind:group={groupedFilters}>
+                    bind:group={groupedFilters} />
                 Nut Free
             </label>
         </li>
@@ -120,7 +127,7 @@ function filter(items, filters) {
                 <input
                     type="checkbox"
                     value={(item) => item.stock}
-                    bind:group={groupedFilters}/>
+                    bind:group={groupedFilters} />
                 In Stock
             </label>
         </li>
@@ -134,12 +141,17 @@ function filter(items, filters) {
                 value="9"
                 list="prices"
                 style="width: 100%;"
-                on:change={(e) => priceFilter = (item) => item.price < e.target.value || e.target.value === 9}>
-            <datalist id="prices" style="display: flex; flex-flow: row nowrap; justify-content: space-between;">
+                on:change={(e) =>
+                    (priceFilter = (item) =>
+                        item.price <= e.target.value ||
+                        e.target.value === 9)} />
+            <datalist
+                id="prices"
+                style="display: flex; flex-flow: row nowrap; justify-content: space-between;">
                 {#each new Array(8).fill(null) as _, i (i)}
-                    <option value={i + 1} label={'$' + (i + 1)}></option>
+                    <option value={i + 1} label={'$' + (i + 1)} />
                 {/each}
-                <option value={9} label="$9+"></option>
+                <option value={9} label="$9+" />
             </datalist>
         </li>
     </ul>
@@ -151,7 +163,7 @@ function filter(items, filters) {
                     type="radio"
                     checked
                     value={alphabetize}
-                    bind:group={sortFunction}>
+                    bind:group={sortFunction} />
                 Alphabetical
             </label>
         </li>
@@ -160,7 +172,7 @@ function filter(items, filters) {
                 <input
                     type="radio"
                     value={(items) => items.sort((a, b) => a.price - b.price)}
-                    bind:group={sortFunction}>
+                    bind:group={sortFunction} />
                 Price
             </label>
         </li>

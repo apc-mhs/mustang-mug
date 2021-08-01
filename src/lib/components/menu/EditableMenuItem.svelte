@@ -56,7 +56,7 @@ function beforeUnload(e) {
     </label>
     <label>
         Price:
-        <input bind:value={price} type="number" step="0.01" min="0" />
+        <Input bind:value={price} --type="number" --step="0.01" --min="0" />
     </label>
     <EditableMenuItemOptions
         popperBoundingElement={itemElement}
@@ -101,9 +101,6 @@ function beforeUnload(e) {
 </div>
 
 <style>
-h3 {
-    margin-bottom: 0px;
-}
 .item {
     display: flex;
     flex-flow: column nowrap;
@@ -118,10 +115,6 @@ h3 {
 }
 .item.out-of-stock > :not(.out-of-stock) {
     opacity: 0.75;
-}
-p.out-of-stock {
-    color: rgb(253, 54, 54);
-    font-weight: bold;
 }
 .item > img {
     width: 100%;

@@ -9,6 +9,14 @@
             href="documentation/fccps_acceptable_use.pdf"
             target="_blank"
             rel="external">Legal</a>
+
+        <!-- I'm the best in the game  -->
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="languages">Language:</label>
+        <select name="languages" id="languages">
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+        </select>
     </p>
 </div>
 
@@ -36,5 +44,9 @@
 }
 .footer a {
     color: white;
+}
+
+select {
+    font-size: 10px;
 }
 </style>

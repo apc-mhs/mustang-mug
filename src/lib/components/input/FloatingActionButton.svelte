@@ -59,7 +59,7 @@ function onScroll() {
     left: var(--left, unset);
     border-radius: 200px;
     box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 50%);
-    z-index: 10;
+    z-index: 1;
 }
 
 .text-wrapper {

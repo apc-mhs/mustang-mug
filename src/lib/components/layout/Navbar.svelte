@@ -47,7 +47,7 @@ export function closeMobileMenu() {
         <ul class="navbar-list" class:mobile={showMobileMenu}>
             {#each navItems as item}
                 <li>
-                    {#if item.label == 'My School Bucks Account Creation'}
+                    {#if item.label == 'MySchoolBucks Help'}
                         <a href={item.href} target="_blank" rel="external"
                             >{item.label}</a>
                     {:else}

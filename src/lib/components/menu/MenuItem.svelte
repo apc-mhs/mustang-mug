@@ -70,6 +70,7 @@ h3 {
 
 .item.options-shown {
     max-height: 100%;
+    outline: 5px solid red; 
 }
 
 .item > * {
