@@ -57,7 +57,7 @@ async function createCartWithItems(body, user, host) {
 
     const msbCart = await api.post('/carts', cartData);
 
-    if (msbCart.result == 'Error') {
+    if (!msbCart || msbCart.result == 'Error') {
         console.error(msbCart);
         return false;
     }
