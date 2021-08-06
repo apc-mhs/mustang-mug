@@ -20,7 +20,7 @@ let items = [];
 let options = [];
 
 query().then(([itemsData, optionsData]) => {
-    items = itemsData;
+    items = itemsData && itemsData.sort((a, b) => a.name.localeCompare(b.name));
     options = optionsData;
 });
 

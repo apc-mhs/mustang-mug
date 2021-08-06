@@ -32,7 +32,31 @@ $: changed =
     !item.options
         .sort(optionIdSorter)
         .every((option, i) => option.id === (options[i] && options[i].id)) ||
-    !Object.keys(item.filters).every((key) => item.filters[key] === filters[key]);
+    !Object.keys(item.filters).every(
+        (key) => item.filters[key] === filters[key]
+    );
+
+$: removeDeletedOptions(allOptions);
+
+function removeDeletedOptions(allOptions) {
+    for (let option of item.options) {
+        if (!allOptions.includes(option)) {
+            save();
+        }
+    }
+}
+
+function save() {
+    dispatch('save', {
+        ...item,
+        price,
+        name,
+        image,
+        stock,
+        options,
+        filters,
+    });
+}
 
 function beforeUnload(e) {
     if (!changed) return;
@@ -42,7 +66,7 @@ function beforeUnload(e) {
 }
 </script>
 
-<svelte:window on:beforeunload={beforeUnload}/>
+<svelte:window on:beforeunload={beforeUnload} />
 
 <div class="item" class:out-of-stock={!stock} bind:this={itemElement}>
     <img src="/menuItems/{image}" alt="Picture of {image}" />
@@ -76,20 +100,12 @@ function beforeUnload(e) {
 
     <div class="button-row">
         <span use:tippy={!changed ? 'Make a change to save' : undefined}>
-            <Button
-                on:click={() =>
-                    dispatch('save', {
-                        ...item,
-                        price,
-                        name,
-                        image,
-                        stock,
-                        options,
-                        filters
-                    })}
-                disabled={!changed}>Save</Button>
+            <Button on:click={save} disabled={!changed}>Save</Button>
         </span>
-        <span use:tippy={item.stock ? 'Item must be out of stock before deletion' : undefined}>
+        <span
+            use:tippy={item.stock
+                ? 'Item must be out of stock before deletion'
+                : undefined}>
             <Button
                 disabled={item.stock}
                 on:click={() => dispatch('delete', item.id)}>
