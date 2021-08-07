@@ -11,7 +11,7 @@ let showMobileMenu = false;
 const navItems = [
     { label: 'Menu', href: '/' },
     {
-        label: 'My School Bucks Account Creation',
+        label: 'MySchoolBucks Help',
         href: 'documentation/msb_account_creation.pdf',
     },
 ];

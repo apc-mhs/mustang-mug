@@ -3,6 +3,7 @@ import { isAdmin } from '$lib/auth';
 import getFirebase from '$lib/firebase';
 import { deleteCollection } from '$lib/firebase/firestore';
 import api from '$lib/msb/api';
+
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */

@@ -39,7 +39,8 @@ $: validCart = cartItems.some(
                     {item}
                     menuItem={menuItemsById[item.itemId]}
                     {outOfStockOptionIds}
-                    outOfStock={isOutOfStock(item, outOfStockItemIds, outOfStockOptionIds)} />
+                    outOfStock={isOutOfStock(item, outOfStockItemIds, outOfStockOptionIds)}
+                    on:remove/>
             </div>
         {/each}
     </div>

@@ -79,4 +79,10 @@ input:focus {
 input:invalid {
     --input-status-color: red;
 }
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 </style>

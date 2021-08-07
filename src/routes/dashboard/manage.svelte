@@ -169,10 +169,13 @@ h1 {
 progress {
     height: 30px;
     width: 250px;
-    background-color: green;
     border-radius: 10px;
     border: 1px solid rgb(71, 70, 70);
     overflow: hidden;
+}
+
+::-moz-progress-bar, ::-webkit-progress-bar {
+  background-color: green;
 }
 
 .progress-wrapper > div {

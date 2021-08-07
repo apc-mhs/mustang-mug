@@ -14,7 +14,6 @@ let completedOrders = [];
 $: {
     const newGroupedOrders = {};
     for (let order of Object.values(orders)) {
-        console.log(order);
         const pickUpTimeSeconds = order.pickUpTime.toMillis();
         if (newGroupedOrders[pickUpTimeSeconds] === undefined) {
             newGroupedOrders[pickUpTimeSeconds] = [order];
@@ -43,10 +42,6 @@ if (browser) {
             .onSnapshot(async (snapshot) => {
                 for (let change of snapshot.docChanges()) {
                     if (change.type === 'added' || change.type === 'modified') {
-                        const msbPaymentData = await fetch(
-                            '/dashboard/orders.json?id=' + change.doc.data().cartId
-                        ).then((res) => res.json());
-
                         // Make sure to check if the orders list DOESN'T contain this id
                         // That way orders that are "uncompleted" don't play a sound
                         if (browser && playOrderSounds && change.type === 'added' && !orders[change.doc.id]) {
@@ -54,7 +49,6 @@ if (browser) {
                         }
                         orders[change.doc.id] = {
                             id: change.doc.id,
-                            cartPayments: msbPaymentData,
                             ...change.doc.data(),
                         };
                     } else {
@@ -69,7 +63,7 @@ if (browser) {
 async function orderCompleteHandler(groupKey, order) {
     groupedOrders[groupKey] = groupedOrders[groupKey].filter((groupedOrder) => groupedOrder !== order);
     completedOrders = [...completedOrders, order];
-    console.log('Now completed', order);
+
     const { app } = await getFirebase();
     app.firestore()
         .collection('orders')
@@ -80,7 +74,7 @@ async function orderCompleteHandler(groupKey, order) {
 async function orderUncompleteHandler(order) {
     completedOrders = completedOrders.filter((completedOrder) => completedOrder !== order);
     orders[order.id] = order;
-    console.log('Now uncompleted', order);
+
     const { app } = await getFirebase();
     app.firestore()
         .collection('orders')

@@ -8,7 +8,8 @@ async function request(
     url,
     method,
     headers = defaultHeaders,
-    data
+    data,
+    ignoreExceptions = false
 ) {
     const res = await fetch(`${baseURL}${url}`, {
         method: method,
@@ -16,7 +17,9 @@ async function request(
         body: data,
     });
     if (!res.ok) {
-        console.error(data, await res.text());
+        if (ignoreExceptions) {
+            console.error(data, await res.text());
+        }
         throw new Error(`Request for ${url} failed with error: ${res.statusText}`);
     }
     
@@ -32,8 +35,8 @@ async function request(
 
 const api = {
     request: async function(url, method, headers, data, ignoreExceptions = false) {
-        return request(url, method, headers, data)
-                .then((value) => value, (e) => ignoreExceptions || console.error(e), null);
+        return request(url, method, headers, data, ignoreExceptions)
+                .then((value) => value, (e) => (ignoreExceptions || console.error(e), null));
     },
     get: async function(url, ignoreExceptions = false) {
         return await this.request(url, 'GET', undefined, undefined, ignoreExceptions);

@@ -1,4 +1,5 @@
 import { getCartIdFor, getCartFor, addItemsToCart, updateCart } from '$lib/cart';
+import { getCartData } from '$lib/msb/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -65,12 +66,9 @@ export async function get({ locals }) {
     const cart = await getCartFor(user);
 
     if (cart) {
-        // Don't send the checkout url to the client
-        delete cart.checkoutUrl;
-
         return {
             status: 200,
-            body: cart,
+            body: getCartData(cart),
         };
     }
 
