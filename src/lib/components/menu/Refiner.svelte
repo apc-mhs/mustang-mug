@@ -143,7 +143,7 @@ function filter(items, filters) {
                 style="width: 100%;"
                 on:change={(e) =>
                     (priceFilter = (item) =>
-                        (item.price <= e.target.value) ||
+                        item.price <= e.target.value ||
                         e.target.value === 9)} />
             <datalist
                 id="prices"

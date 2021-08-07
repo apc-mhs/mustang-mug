@@ -42,10 +42,6 @@ if (browser) {
             .onSnapshot(async (snapshot) => {
                 for (let change of snapshot.docChanges()) {
                     if (change.type === 'added' || change.type === 'modified') {
-                        const msbPaymentData = await fetch(
-                            '/dashboard/orders.json?id=' + change.doc.data().cartId
-                        ).then((res) => res.json());
-
                         // Make sure to check if the orders list DOESN'T contain this id
                         // That way orders that are "uncompleted" don't play a sound
                         if (browser && playOrderSounds && change.type === 'added' && !orders[change.doc.id]) {
@@ -53,7 +49,6 @@ if (browser) {
                         }
                         orders[change.doc.id] = {
                             id: change.doc.id,
-                            cartPayments: msbPaymentData,
                             ...change.doc.data(),
                         };
                     } else {

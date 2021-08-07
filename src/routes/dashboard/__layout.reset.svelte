@@ -43,7 +43,7 @@ if (browser) {
         <nav>
             <h3>Dashboard</h3>
             {#each navLinks as link}
-                <a href={link.href} class:current={link.href === $page.path}
+                <a sveltekit:prefetch href={link.href} class:current={link.href === $page.path}
                     >{link.name}</a>
             {/each}
         </nav>

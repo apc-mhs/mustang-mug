@@ -63,8 +63,8 @@ h3 {
     border-radius: 5px;
     overflow: hidden;
     font-size: 16px;
-    padding-bottom: 10px;
     max-height: 349px;
+    min-height: 349px;
     transition: max-height 400ms ease, box-shadow 400ms ease;
 }
 

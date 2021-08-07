@@ -11,7 +11,7 @@ let showMobileMenu = false;
 const navItems = [
     { label: 'Menu', href: '/' },
     {
-        label: 'My School Bucks Account Creation',
+        label: 'MySchoolBucks Help',
         href: 'documentation/msb_account_creation.pdf',
     },
 ];
@@ -88,7 +88,7 @@ nav {
     -webkit-backdrop-filter: blur(3px);
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     height: var(--header-height);
-    z-index: 4;
+    z-index: 5;
     box-shadow: 0px 1px 5px 0px black;
 }
 .navbar-list {

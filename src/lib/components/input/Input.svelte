@@ -8,11 +8,11 @@ export let type = 'text';
 export let placeholder = '';
 export let label = '';
 export let pattern = undefined;
-export let input;
-export let maxlength;
+export let input = undefined;
+export let maxlength = undefined;
 export let required = false;
-export let step;
-export let min;
+export let step = undefined;
+export let min = undefined;
 
 const dispatch = createEventDispatcher();
 
@@ -78,5 +78,11 @@ input:focus {
 
 input:invalid {
     --input-status-color: red;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 </style>

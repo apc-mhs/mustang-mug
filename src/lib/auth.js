@@ -46,7 +46,7 @@ async function signInAnonymously() {
 
     // If the current user is signed in with Google (dashboard only)
     if (app.auth().currentUser && app.auth().currentUser.email)
-        app.auth().signOut();
+        await app.auth().signOut();
 
     try {
         return await app.auth().signInAnonymously();

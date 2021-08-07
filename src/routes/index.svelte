@@ -41,7 +41,7 @@ async function addToCart() {
     if (success) {
         await goto('/cart');
     } else {
-        alert('Could not add items to cart. Try again later.');
+        alert('Could not add items to cart. Try again later, and consider clearing your cookies.');
     }
     updatingCart = false;
 }

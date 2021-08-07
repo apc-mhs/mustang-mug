@@ -1,6 +1,6 @@
 <script>
-import EditableMenuItem from '$lib/components/menu/EditableMenuItem.svelte';
-import EditableMenuOptionsItem from '$lib/components/menu/EditableMenuOptionsItem.svelte';
+import EditableMenuItem from '$lib/components/menu/editable/EditableMenuItem.svelte';
+import EditableMenuOptionsItem from '$lib/components/menu/editable/EditableMenuOptionsItem.svelte';
 import Menu from '$lib/components/menu/Menu.svelte';
 import SkeletonLayout from '$lib/components/utility/SkeletonLayout.svelte';
 import getFirebase from '$lib/firebase';
@@ -20,7 +20,7 @@ let items = [];
 let options = [];
 
 query().then(([itemsData, optionsData]) => {
-    items = itemsData;
+    items = itemsData && itemsData.sort((a, b) => a.name.localeCompare(b.name));
     options = optionsData;
 });
 

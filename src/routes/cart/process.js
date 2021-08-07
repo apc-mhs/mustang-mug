@@ -82,6 +82,16 @@ export async function get({ query }) {
     pickUpTime.setSeconds(0, 0);
     pickUpTime.setMinutes((Math.round(pickUpTime.getMinutes() / 5) * 5) + 5);
 
+    const paymentResponse = await api.get(`/carts/${cartId}/payments`);
+    if (!paymentResponse || paymentResponse.errors.length > 0) {
+        // Don't pass a MSB cart id so as not to delete their cart
+        return writeProcessingError(
+            `MSB API Payment Fetch Failure. Please save the following information and contact store services:
+            Cart ID: ${cartId}, Payment IDs: ${JSON.stringify(processResponse.paymentIds)}`,
+            cartDocument.id
+        );
+    }
+
     await app
         .firestore()
         .collection('orders')
@@ -89,7 +99,8 @@ export async function get({ query }) {
         .set({
             pickUpTime: firebase.firestore.Timestamp.fromDate(pickUpTime),
             userId: cartDocument.id,
-            cartId
+            cartPayments: paymentResponse.cartPayments,
+            cartId,
         });
 
     const formatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
@@ -99,7 +110,7 @@ export async function get({ query }) {
         .doc(cartDocument.id)
         .set({
             cartId: '',
-            resultCodes: res.resultCodes || [],
+            resultCodes: processResponse.resultCodes || [],
             resultStatus: 'Processed Successfully. Your order will be ready at ' + formatter.format(pickUpTime),
         });
 
