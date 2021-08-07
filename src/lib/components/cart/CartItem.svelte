@@ -66,7 +66,7 @@ const outOfStockTooltipProps = {
     border-radius: 5px;
     background-color: white;
     max-width: 100%;
-    width: 600px;
+    width: 500px;
     min-height: 250px;
     padding: 10px 20px;
     gap: 5px;
