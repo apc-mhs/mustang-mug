@@ -17,7 +17,7 @@ async function request(
         body: data,
     });
     if (!res.ok) {
-        if (ignoreExceptions) {
+        if (!ignoreExceptions) {
             console.error(data, await res.text());
         }
         throw new Error(`Request for ${url} failed with error: ${res.statusText}`);
