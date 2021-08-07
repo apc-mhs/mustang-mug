@@ -14,6 +14,7 @@ let completedOrders = [];
 $: {
     const newGroupedOrders = {};
     for (let order of Object.values(orders)) {
+        console.log(order);
         const pickUpTimeSeconds = order.pickUpTime.toMillis();
         if (newGroupedOrders[pickUpTimeSeconds] === undefined) {
             newGroupedOrders[pickUpTimeSeconds] = [order];
@@ -68,7 +69,7 @@ if (browser) {
 async function orderCompleteHandler(groupKey, order) {
     groupedOrders[groupKey] = groupedOrders[groupKey].filter((groupedOrder) => groupedOrder !== order);
     completedOrders = [...completedOrders, order];
-
+    console.log('Now completed', order);
     const { app } = await getFirebase();
     app.firestore()
         .collection('orders')
@@ -79,7 +80,7 @@ async function orderCompleteHandler(groupKey, order) {
 async function orderUncompleteHandler(order) {
     completedOrders = completedOrders.filter((completedOrder) => completedOrder !== order);
     orders[order.id] = order;
-
+    console.log('Now uncompleted', order);
     const { app } = await getFirebase();
     app.firestore()
         .collection('orders')

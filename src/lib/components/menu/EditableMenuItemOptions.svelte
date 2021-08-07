@@ -1,7 +1,5 @@
 <script>
 import { slide } from 'svelte/transition';
-import Icon from '$lib/components/utility/Icon.svelte';
-import tippy from '$lib/tippy';
 import { fade } from 'svelte/transition';
 import { flip } from 'svelte/animate';
 import AutocompleteChooser from '../input/AutocompleteChooser.svelte';

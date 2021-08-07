@@ -7,21 +7,42 @@ import { onDestroy } from 'svelte';
 import tippy from '$lib/tippy';
 import { browser } from '$app/env';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
+import IconButton from '$lib/components/input/IconButton.svelte';
+import Icon from '$lib/components/utility/Icon.svelte';
 
 const todayDayOfWeek = new Date().getDay();
 const purchaseWindowRefresh = 30 * 1000;
+
+let purchaseSchedulesElement;
+
 let deleting = false;
+/** @type {Array<PurchaseWindow>} */
+let purchaseWindows = [];
+let currentPurchaseWindow;
+let interval = 0;
+
+if (browser) {
+    setupSnapshotListeners();
+}
+
+let unsubscribe = () => {};
+onDestroy(() => {
+    unsubscribe();
+    clearInterval(interval);
+});
+
+function scrollToCurrentSchedule() {
+    purchaseSchedulesElement.children[todayDayOfWeek].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+    });
+}
+
 async function deleteAllCarts() {
     deleting = true;
     await fetch('/dashboard/manage.json', { method: 'DELETE' });
     deleting = false;
 }
-
-/** @type {Array<PurchaseWindow>} */
-let purchaseWindows = [];
-let currentPurchaseWindow;
-let unsubscribe = () => {};
-let interval = 0;
 
 function setupSnapshotListeners() {
     getFirebase().then(({ app, firebase }) => {
@@ -63,15 +84,6 @@ function setupSnapshotListeners() {
         }
     }, purchaseWindowRefresh);
 }
-
-if (browser) {
-    setupSnapshotListeners();
-}
-
-onDestroy(() => {
-    unsubscribe();
-    clearInterval(interval);
-});
 </script>
 
 <section class="purchase">
@@ -94,8 +106,11 @@ onDestroy(() => {
             <p>Loading...</p>
         {/if}
     </div>
-    <h1>Purchase Windows by Day</h1>
-    <div class="purchase-schedules">
+    <h1 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        Purchase Windows by Day
+        <IconButton on:click={scrollToCurrentSchedule}><Icon name="today"/></IconButton>
+    </h1>
+    <div class="purchase-schedules" bind:this={purchaseSchedulesElement}>
         {#each new Array(7).fill(null) as _, i (i)}
             <PurchaseSchedule
                 dayOfWeek={i}

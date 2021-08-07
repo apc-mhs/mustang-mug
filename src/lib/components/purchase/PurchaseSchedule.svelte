@@ -5,13 +5,14 @@ import Icon from '$lib/components/utility/Icon.svelte';
 import IconButton from '$lib/components/input/IconButton.svelte';
 import PurchaseWindowDisplay from './PurchaseWindowDisplay.svelte';
 import getFirebase from '$lib/firebase';
-import { CurrentPurchaseWindow, PurchaseWindow } from '$lib/purchase/window';
+import { PurchaseWindow } from '$lib/purchase/window';
 import { slide, fade } from 'svelte/transition';
 import { sleep } from '$lib/utils';
 import tippy from '$lib/tippy';
 import { Time } from '$lib/purchase/time';
-import PurchaseWindowRow from './PurchaseWindowRow.svelte';
 import { updateCurrentPurchaseWindow } from '$lib/purchase';
+import { onMount, tick } from 'svelte';
+import { browser } from '$app/env';
 
 export let dayOfWeek;
 export let purchaseWindows = [];
@@ -32,17 +33,17 @@ const hours = {
 };
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
 
-$: dayName = days[dayOfWeek];
 let delayed = false;
+let changed = false;
+let collapsedDisplay = false;
+
+$: dayName = days[dayOfWeek];
 $: if (open) delayed = false;
 $: if (purchaseWindows.length > 0 && !delayed) {
     sleep(350).then(() => (delayed = true));
 }
+
 const isDelayed = () => delayed;
-
-let changed = false;
-let collapsedDisplay = false;
-
 $: if (purchaseWindows && isDelayed()) {
     changed = true;
 }
@@ -202,7 +203,7 @@ async function saveSchedule() {
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
-    gap: 0px 5px;
+    gap: 0px 10px;
     padding: 5px;
     margin-bottom: 5px;
 }

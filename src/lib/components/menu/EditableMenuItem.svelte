@@ -9,7 +9,7 @@ import EditableMenuItemFilters from './EditableMenuItemFilters.svelte';
 
 export let item;
 export let options = [];
-export let allOptions;
+export let allOptions = [];
 
 const allFilters = item && item.filters;
 const dispatch = createEventDispatcher();
@@ -84,12 +84,10 @@ function beforeUnload(e) {
     </label>
     <EditableMenuItemOptions
         popperBoundingElement={itemElement}
-        message={'Options:'}
         bind:selectedOptions={options}
         options={allOptions} />
     <EditableMenuItemFilters
         popperBoundingElement={itemElement}
-        message={'Filters:'}
         bind:selectedFilters={filters}
         filters={allFilters} />
 

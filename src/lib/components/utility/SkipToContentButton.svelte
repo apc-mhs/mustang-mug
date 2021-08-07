@@ -3,7 +3,7 @@ import LinkButton from "$lib/components/utility/LinkButton.svelte";
 </script>
 
 <div class="skip-to-content-wrapper">
-    <LinkButton href="#main">Skip to content</LinkButton>
+    <LinkButton href="#main" external>Skip to content</LinkButton>
 </div>
 
 <style>
@@ -12,7 +12,7 @@ import LinkButton from "$lib/components/utility/LinkButton.svelte";
     top: 0;
     left: 0;
     clip: rect(0, 0, 0, 0);
-    z-index: 5;
+    z-index: 10;
 }
 
 .skip-to-content-wrapper:focus-within {

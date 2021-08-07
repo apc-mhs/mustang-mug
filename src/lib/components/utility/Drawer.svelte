@@ -31,7 +31,7 @@ onDestroy(() => document.body.style.overflow = 'unset');
     width: 100vw;
     top: 100vh;
     left: 0px;
-    z-index: 12;
+    z-index: 4;
     transition: transform 300ms cubic-bezier(.66,0,1,.66);
     pointer-events: none;
 }
