@@ -34,7 +34,7 @@ $: validCart = cartItems.some(
 {#if cartItems.length > 0}
     <div class="items" out:fly|local={{ duration: 250, x: -75 }}>
         {#each cartItems as item (item.itemId + item.reference)}
-            <div animate:flip={{ duration: 250, delay: 250 }}>
+            <div style="max-width: 100%;" animate:flip={{ duration: 250, delay: 250 }}>
                 <CartItem
                     {item}
                     menuItem={menuItemsById[item.itemId]}
