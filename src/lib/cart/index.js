@@ -1,4 +1,8 @@
-import { getCartData, createCartItemsWithProperties, getOptionIdsFromProperties } from '$lib/msb/cart';
+import {
+    getCartData,
+    createCartItemsWithProperties,
+    getOptionIdsFromProperties,
+} from '$lib/msb/cart';
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
@@ -44,35 +48,34 @@ async function createCartWithItems(body, user, host) {
     const { app } = await getFirebase();
     const cartItems = createCartItemsWithProperties(body, user);
 
-    const cartData; 
+    /* 
+    API docs for the cart are available here: 
+    https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts
     
-    //Need to somehow get the guestCheckout variable parsed (maybe?) from cart/checkout.js into here to use. 
-    if(guestCheckout)
-    {
-        //WITH GUEST CHECKOUT ENABLED
-        //using 'none', 'express', and 'none' forces user buy item without signing in 
-        cartData = {
-            cartItems: cartItems,
-            redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
-            allowDuplicatePayments: 'false',
-            loginPolicy: 'none',
-            checkoutStyle: 'express',
-            paymentPreauthPolicy: 'none',
-            returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
-        };
-    } else {
-        //WITHOUT GUEST CHECKOUT ENABLED
-        cartData = {
-            cartItems: cartItems,
-            redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
-            allowDuplicatePayments: 'false',
-            //Remeber the MSB api is broken, and setting the loginPlicy to optional still results in the user being forced to sign in
-            loginPolicy: 'optional',
-            checkoutStyle: 'express',
-            paymentPreauthPolicy: null,
-            returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
-        };
-    }
+    loginPolicy	- string
+    When set to "optional", allows the user to use guest checkout. If set to "required", user must 
+    log into an account. If set to "none", user is not prompted to log in and immediately starts 
+    checkout. If set to null, use district defaults.
+   
+    Unfortunately, this doesn't actually work. loginPolicies of both optional, and required result 
+    in the user being forced to sign in. Only by setting the following values, can authless 
+    checkout be achieved.  
+    
+    loginPolicy: 'none', 
+    checkoutStyle: 'express',
+    paymentPreauthPolicy: none,
+    */
+
+    const cartData = {
+        cartItems: cartItems,
+        redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
+        allowDuplicatePayments: 'false',
+        loginPolicy: 'required',
+        checkoutStyle: 'express',
+        paymentPreauthPolicy: null,
+        returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
+    };
+
     const msbCart = await api.post('/carts', cartData);
 
     if (!msbCart || msbCart.result == 'Error') {
@@ -115,12 +118,15 @@ async function getCart(cartId) {
 
 async function removeDeletedItems(cart) {
     const { app } = await getFirebase();
-    const menuItems = await Promise.all(cart.cartItems.map((cartItem) => {
-        return app.firestore()
-            .collection('items')
-            .doc(cartItem.itemId)
-            .get()
-    }));
+    const menuItems = await Promise.all(
+        cart.cartItems.map((cartItem) => {
+            return app
+                .firestore()
+                .collection('items')
+                .doc(cartItem.itemId)
+                .get();
+        })
+    );
 
     cart.cartItems = cart.cartItems.filter((_, i) => {
         return menuItems[i].exists;

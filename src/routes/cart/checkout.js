@@ -1,13 +1,19 @@
 import getFirebase from '$lib/firebase';
 import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
-import { updateCart, getCart, getCartIdFor, removeOutOfStockItems, removeDeletedItems } from '$lib/cart';
+import {
+    updateCart,
+    getCart,
+    getCartIdFor,
+    removeOutOfStockItems,
+    removeDeletedItems,
+} from '$lib/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
 
-/* this export is unreasonably thicc 😩 */ 
+/* this export is unreasonably thicc 😩 */
 export async function post({ locals, body }) {
     const { user } = locals;
     if (!user) {
@@ -21,8 +27,8 @@ export async function post({ locals, body }) {
     if (!currentPurchaseWindow || currentPurchaseWindow.exhausted) {
         return {
             status: 400,
-            body: "You can't checkout right now because too many orders have been placed"
-        }
+            body: "You can't checkout right now because too many orders have been placed",
+        };
     }
 
     const cartId = await getCartIdFor(user);
@@ -35,22 +41,26 @@ export async function post({ locals, body }) {
     }
 
     // Process cart data
-    await Promise.all([
-        removeOutOfStockItems(cart),
-        removeDeletedItems(cart)
-    ]);
+    await Promise.all([removeOutOfStockItems(cart), removeDeletedItems(cart)]);
 
     const { studentName } = body;
     for (let cartItem of cart.cartItems) {
         cartItem.studentName = studentName || 'Unspecified';
     }
 
+    //Does this even work? I can't even tell fi I'm getting this boolean over here
     const { guestCheckout } = body;
-    for (let cartItem of cart.cartItems) {
-        cartItem.guestCheckout = guestCheckout;
+
+    // If guestCheckout is 'true,' there loginPolicy will be set
+    // to none -- if it's false, still require a login.
+    if (guestCheckout) {
+        cart.loginPolicy = 'none';
+    } else {
+        cart.loginPolicy = 'required';
+        x;
     }
 
-    const success = await updateCart(getCartData(cart), cartId);
+    const success = await updateCart(cart, cartId);
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,

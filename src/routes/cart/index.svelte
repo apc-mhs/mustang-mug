@@ -53,7 +53,7 @@ function onRemove({ detail: item }) {
 }
 
 let checkingOut = false;
-let guestCheckout = false; 
+let guestCheckout = false;
 
 async function checkout(e) {
     if (e) e.preventDefault();
@@ -71,7 +71,6 @@ async function checkout(e) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            
         }).then((res) => res.json());
         stopLoading();
         if (json) {
