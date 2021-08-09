@@ -79,7 +79,7 @@ function setupSnapshotListeners() {
 
     // If the current purchase window becomes outdated, make a request to update it
     interval = setInterval(() => {
-        if (currentPurchaseWindow && !currentPurchaseWindow.current) {
+        if (!currentPurchaseWindow || !currentPurchaseWindow.current) {
             getCurrentPurchaseWindow();
         }
     }, purchaseWindowRefresh);
