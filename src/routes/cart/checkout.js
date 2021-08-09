@@ -13,7 +13,6 @@ import {
  * @type {import('@sveltejs/kit').RequestHandler}
  */
 
-/* this export is unreasonably thicc 😩 */
 export async function post({ locals, body }) {
     const { user } = locals;
     if (!user) {
@@ -51,13 +50,15 @@ export async function post({ locals, body }) {
     //Does this even work? I can't even tell fi I'm getting this boolean over here
     const { guestCheckout } = body;
 
-    // If guestCheckout is 'true,' there loginPolicy will be set
-    // to none -- if it's false, still require a login.
+    /* 
+    If guestCheckout is 'true,' there loginPolicy will be set
+    to none -- if it's false, still require a login. 
+    */ 
+   
     if (guestCheckout) {
         cart.loginPolicy = 'none';
     } else {
         cart.loginPolicy = 'required';
-        x;
     }
 
     const success = await updateCart(cart, cartId);
