@@ -120,7 +120,7 @@ $: if ($currentUser && menuItems.length === 0) {
                 bind:value={studentName}
                 required
                 pattern="[a-zA-Z ]+"
-                maxlength="10"
+                maxlength="15"
                 --flex="none"
                 --font-size="16px" />
         </label>
