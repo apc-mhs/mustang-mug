@@ -2,7 +2,6 @@ import { getCartData, createCartItemsWithProperties, getOptionIdsFromProperties 
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
-import { guestCheckout } from '$routes/cart.svlete';
 
 async function getCartIdFor(user) {
     const { app, firebase } = await getFirebase();
@@ -47,6 +46,7 @@ async function createCartWithItems(body, user, host) {
 
     const cartData; 
     
+    //Need to somehow get the guestCheckout variable parsed (maybe?) from cart/checkout.js into here to use. 
     if(guestCheckout)
     {
         //WITH GUEST CHECKOUT ENABLED

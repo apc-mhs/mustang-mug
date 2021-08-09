@@ -53,6 +53,7 @@ function onRemove({ detail: item }) {
 }
 
 let checkingOut = false;
+let guestCheckout = false; 
 
 async function checkout(e) {
     if (e) e.preventDefault();
@@ -64,6 +65,7 @@ async function checkout(e) {
             method: 'POST',
             body: JSON.stringify({
                 studentName,
+                guestCheckout,
                 pickUpTime: selectedPickUpTime,
             }),
             headers: {
@@ -90,9 +92,6 @@ $: if ($currentUser && menuItems.length === 0) {
         menuItems = items;
     });
 }
-
-export let guestCheckout; 
-
 </script>
 
 <svelte:head>

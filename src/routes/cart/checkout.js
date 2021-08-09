@@ -6,6 +6,8 @@ import { updateCart, getCart, getCartIdFor, removeOutOfStockItems, removeDeleted
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
+
+/* this export is unreasonably thicc 😩 */ 
 export async function post({ locals, body }) {
     const { user } = locals;
     if (!user) {
@@ -41,6 +43,11 @@ export async function post({ locals, body }) {
     const { studentName } = body;
     for (let cartItem of cart.cartItems) {
         cartItem.studentName = studentName || 'Unspecified';
+    }
+
+    const { guestCheckout } = body;
+    for (let cartItem of cart.cartItems) {
+        cartItem.guestCheckout = guestCheckout;
     }
 
     const success = await updateCart(getCartData(cart), cartId);
