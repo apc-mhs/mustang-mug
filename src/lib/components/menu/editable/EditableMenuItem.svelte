@@ -79,7 +79,12 @@ function beforeUnload(e) {
             <Input label="Name:" bind:value={name} --font-size="16px" />
         </span>
         <span>
-            <Input label="Price:" bind:value={price} type="number" step="0.01" min="0" />
+            <Input
+                label="Price:"
+                bind:value={price}
+                type="number"
+                step="0.01"
+                min="0" />
         </span>
     </section>
     <section>

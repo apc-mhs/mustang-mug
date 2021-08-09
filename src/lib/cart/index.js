@@ -2,6 +2,7 @@ import { getCartData, createCartItemsWithProperties, getOptionIdsFromProperties 
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
+import { guestCheckout } from '$routes/cart.svlete';
 
 async function getCartIdFor(user) {
     const { app, firebase } = await getFirebase();
@@ -44,17 +45,34 @@ async function createCartWithItems(body, user, host) {
     const { app } = await getFirebase();
     const cartItems = createCartItemsWithProperties(body, user);
 
-    const cartData = {
-        cartItems: cartItems,
-        redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
-        allowDuplicatePayments: 'false',
+    const cartData; 
+    
+    if(guestCheckout)
+    {
+        //WITH GUEST CHECKOUT ENABLED
         //using 'none', 'express', and 'none' forces user buy item without signing in 
-        loginPolicy: 'optional',
-        checkoutStyle: 'express',
-        paymentPreauthPolicy: null,
-        returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
-    };
-
+        cartData = {
+            cartItems: cartItems,
+            redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
+            allowDuplicatePayments: 'false',
+            loginPolicy: 'none',
+            checkoutStyle: 'express',
+            paymentPreauthPolicy: 'none',
+            returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
+        };
+    } else {
+        //WITHOUT GUEST CHECKOUT ENABLED
+        cartData = {
+            cartItems: cartItems,
+            redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
+            allowDuplicatePayments: 'false',
+            //Remeber the MSB api is broken, and setting the loginPlicy to optional still results in the user being forced to sign in
+            loginPolicy: 'optional',
+            checkoutStyle: 'express',
+            paymentPreauthPolicy: null,
+            returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
+        };
+    }
     const msbCart = await api.post('/carts', cartData);
 
     if (!msbCart || msbCart.result == 'Error') {

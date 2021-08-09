@@ -69,6 +69,7 @@ async function checkout(e) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            
         }).then((res) => res.json());
         stopLoading();
         if (json) {
@@ -89,6 +90,9 @@ $: if ($currentUser && menuItems.length === 0) {
         menuItems = items;
     });
 }
+
+export let guestCheckout; 
+
 </script>
 
 <svelte:head>
@@ -125,6 +129,10 @@ $: if ($currentUser && menuItems.length === 0) {
                 --font-size="16px" />
         </label>
         <div class="button-column">
+            <label>
+                <input type="checkbox" bind:checked={guestCheckout} />
+                Guest Checkout
+            </label>
             <div
                 use:tippy={checkoutUnavailableMessage ||
                     (!validCart
