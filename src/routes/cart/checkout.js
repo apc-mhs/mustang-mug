@@ -66,6 +66,7 @@ export async function post({ locals, body }) {
         /*This is technically redunant as the loginPolicy is 'required' 
         by default */
         cart.loginPolicy = 'required';
+        cart.paymentPreauthPolicy = 'fullpay';
     }
     
     /* getCartData removes properties from the cart object that can't 
