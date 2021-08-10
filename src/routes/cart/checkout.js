@@ -47,17 +47,21 @@ export async function post({ locals, body }) {
         cartItem.studentName = studentName || 'Unspecified';
     }
 
-    //Does this even work? I can't even tell fi I'm getting this boolean over here
     const { guestCheckout } = body;
 
-    /* 
-    If guestCheckout is 'true,' there loginPolicy will be set
-    to none -- if it's false, still require a login. 
-    */ 
-   
+    /* If guestCheckout is set to 'true,' the loginPolicy will be set
+    to none, resulting in no sign in. If it's false, a login will still
+    be required.
+    
+    The checkoutStyle attribute remains express between both auth, and 
+    authless checkout and thus does not need to be modified */ 
+
     if (guestCheckout) {
         cart.loginPolicy = 'none';
+        cart.paymentPreauthPolicy = 'none';
     } else {
+        /*This is technically redunant as the loginPolicy is 'required' 
+        by default */ 
         cart.loginPolicy = 'required';
     }
 
