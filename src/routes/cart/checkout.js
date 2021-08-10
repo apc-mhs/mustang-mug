@@ -68,7 +68,7 @@ export async function post({ locals, body }) {
         cart.loginPolicy = 'required';
     }
 
-    const success = await updateCart(cart, cartId);
+    const success = await updateCart(getCartData(cart), cartId);
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,
