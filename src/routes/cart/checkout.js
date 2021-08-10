@@ -12,7 +12,6 @@ import {
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
  */
-
 export async function post({ locals, body }) {
     const { user } = locals;
     if (!user) {
@@ -53,15 +52,19 @@ export async function post({ locals, body }) {
     to none, resulting in no sign in. If it's false, a login will still
     be required.
     
+    The paymentPreauthPolicy is set to null be default, which defers 
+    to district defaults, which must be overridden to achieve an authless
+    checkout.
+
     The checkoutStyle attribute remains express between both auth, and 
-    authless checkout and thus does not need to be modified */ 
+    authless checkout and thus does not need to be modified. */
 
     if (guestCheckout) {
         cart.loginPolicy = 'none';
         cart.paymentPreauthPolicy = 'none';
     } else {
         /*This is technically redunant as the loginPolicy is 'required' 
-        by default */ 
+        by default */
         cart.loginPolicy = 'required';
     }
 

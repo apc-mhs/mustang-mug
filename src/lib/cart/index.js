@@ -48,23 +48,21 @@ async function createCartWithItems(body, user, host) {
     const { app } = await getFirebase();
     const cartItems = createCartItemsWithProperties(body, user);
 
-    /* 
-    API docs for the cart are available here: 
+    /* API docs for the cart are available here: 
     https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts
     
-    loginPolicy	- string
-    When set to "optional", allows the user to use guest checkout. If set to "required", user must 
-    log into an account. If set to "none", user is not prompted to log in and immediately starts 
+    loginPolicy is a string
+    When set to "optional", allows the user to use guest checkout. If set to 'required', user must 
+    log into an account. If set to 'none', user is not prompted to log in and immediately starts 
     checkout. If set to null, use district defaults.
    
-    Unfortunately, this doesn't actually work. loginPolicies of both optional, and required result 
+    Unfortunately, this doesn't actually work. loginPolicies of both 'optional,' and 'required' result 
     in the user being forced to sign in. Only by setting the following values, can authless 
     checkout be achieved.  
     
     loginPolicy: 'none', 
     checkoutStyle: 'express',
-    paymentPreauthPolicy: none,
-    */
+    paymentPreauthPolicy: 'none', */
 
     const cartData = {
         cartItems: cartItems,
