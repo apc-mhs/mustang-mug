@@ -1,4 +1,8 @@
-import { getCartData, createCartItemsWithProperties, getOptionIdsFromProperties } from '$lib/msb/cart';
+import {
+    getCartData,
+    createCartItemsWithProperties,
+    getOptionIdsFromProperties,
+} from '$lib/msb/cart';
 import { dev } from '$app/env';
 import getFirebase from '$lib/firebase';
 import api from '$lib/msb/api';
@@ -44,12 +48,27 @@ async function createCartWithItems(body, user, host) {
     const { app } = await getFirebase();
     const cartItems = createCartItemsWithProperties(body, user);
 
+    /* API docs for the cart are available here: 
+    https://www.myschoolbucks.com/ver2/developer/swagger/getdocs?apiDocs=msbpayapi#/Cart/post_carts
+    
+    loginPolicy is a string
+    When set to "optional", allows the user to use guest checkout. If set to 'required', user must 
+    log into an account. If set to 'none', user is not prompted to log in and immediately starts 
+    checkout. If set to null, use district defaults.
+   
+    Unfortunately, this doesn't actually work. loginPolicies of both 'optional,' and 'required' result 
+    in the user being forced to sign in. Only by setting the following values, can authless 
+    checkout be achieved.  
+    
+    loginPolicy: 'none', 
+    checkoutStyle: 'express',
+    paymentPreauthPolicy: 'none', */
+
     const cartData = {
         cartItems: cartItems,
         redirectUrl: (dev ? 'http://' : 'https://') + host + '/cart/process',
         allowDuplicatePayments: 'false',
-        //using 'none', 'express', and 'none' forces user buy item without signing in 
-        loginPolicy: 'optional',
+        loginPolicy: 'required',
         checkoutStyle: 'express',
         paymentPreauthPolicy: null,
         returnToSiteUrl: (dev ? 'http://' : 'https://') + host + '/cart',
@@ -97,12 +116,15 @@ async function getCart(cartId) {
 
 async function removeDeletedItems(cart) {
     const { app } = await getFirebase();
-    const menuItems = await Promise.all(cart.cartItems.map((cartItem) => {
-        return app.firestore()
-            .collection('items')
-            .doc(cartItem.itemId)
-            .get()
-    }));
+    const menuItems = await Promise.all(
+        cart.cartItems.map((cartItem) => {
+            return app
+                .firestore()
+                .collection('items')
+                .doc(cartItem.itemId)
+                .get();
+        })
+    );
 
     cart.cartItems = cart.cartItems.filter((_, i) => {
         return menuItems[i].exists;

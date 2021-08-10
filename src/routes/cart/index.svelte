@@ -53,6 +53,7 @@ function onRemove({ detail: item }) {
 }
 
 let checkingOut = false;
+let guestCheckout = false;
 
 async function checkout(e) {
     if (e) e.preventDefault();
@@ -64,6 +65,7 @@ async function checkout(e) {
             method: 'POST',
             body: JSON.stringify({
                 studentName,
+                guestCheckout,
                 pickUpTime: selectedPickUpTime,
             }),
             headers: {
@@ -125,6 +127,10 @@ $: if ($currentUser && menuItems.length === 0) {
                 --font-size="16px" />
         </label>
         <div class="button-column">
+            <label>
+                <input type="checkbox" bind:checked={guestCheckout} />
+                Guest Checkout
+            </label>
             <div
                 use:tippy={checkoutUnavailableMessage ||
                     (!validCart

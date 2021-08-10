@@ -1,7 +1,13 @@
 import getFirebase from '$lib/firebase';
 import { getCartData, getOptionIdsFromProperties } from '$lib/msb/cart';
 import { getCurrentPurchaseWindow } from '$lib/purchase';
-import { updateCart, getCart, getCartIdFor, removeOutOfStockItems, removeDeletedItems } from '$lib/cart';
+import {
+    updateCart,
+    getCart,
+    getCartIdFor,
+    removeOutOfStockItems,
+    removeDeletedItems,
+} from '$lib/cart';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
@@ -19,8 +25,8 @@ export async function post({ locals, body }) {
     if (!currentPurchaseWindow || currentPurchaseWindow.exhausted) {
         return {
             status: 400,
-            body: "You can't checkout right now because too many orders have been placed"
-        }
+            body: "You can't checkout right now because too many orders have been placed",
+        };
     }
 
     const cartId = await getCartIdFor(user);
@@ -33,17 +39,36 @@ export async function post({ locals, body }) {
     }
 
     // Process cart data
-    await Promise.all([
-        removeOutOfStockItems(cart),
-        removeDeletedItems(cart)
-    ]);
+    await Promise.all([removeOutOfStockItems(cart), removeDeletedItems(cart)]);
 
     const { studentName } = body;
     for (let cartItem of cart.cartItems) {
         cartItem.studentName = studentName || 'Unspecified';
     }
 
-    const success = await updateCart(getCartData(cart), cartId);
+    const { guestCheckout } = body;
+
+    /* If guestCheckout is set to 'true,' the loginPolicy will be set
+    to none, resulting in no sign in. If it's false, a login will still
+    be required.
+    
+    The paymentPreauthPolicy is set to null be default, which defers 
+    to district defaults, which must be overridden to achieve an authless
+    checkout.
+
+    The checkoutStyle attribute remains express between both auth, and 
+    authless checkout and thus does not need to be modified. */
+
+    if (guestCheckout) {
+        cart.loginPolicy = 'none';
+        cart.paymentPreauthPolicy = 'none';
+    } else {
+        /*This is technically redunant as the loginPolicy is 'required' 
+        by default */
+        cart.loginPolicy = 'required';
+    }
+
+    const success = await updateCart(cart, cartId);
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,

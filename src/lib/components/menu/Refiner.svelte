@@ -60,7 +60,7 @@ function filter(items, filters) {
             </label>
         </li>
         {#if temperatureFilter !== noFilter}
-            <div transition:slide style="margin: 5px;">
+            <div transition:slide|local style="margin: 5px;">
                 <Button on:click={() => (temperatureFilter = noFilter)}
                     >Clear selection</Button>
             </div>
@@ -88,7 +88,7 @@ function filter(items, filters) {
             </label>
         </li>
         {#if itemTypeFilter !== noFilter}
-            <div transition:slide style="margin: 5px;">
+            <div transition:slide|local style="margin: 5px;">
                 <Button on:click={() => (itemTypeFilter = noFilter)}
                     >Clear selection</Button>
             </div>
