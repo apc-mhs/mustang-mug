@@ -67,8 +67,10 @@ export async function post({ locals, body }) {
         by default */
         cart.loginPolicy = 'required';
     }
-
-    const success = await updateCart(cart, cartId);
+    
+    /* getCartData removes properties from the cart object that can't 
+    be sent through an update request, and subsequently break checkout. */
+    const success = await updateCart(getCartData(cart), cartId);
     if (!success || cart.cartItems.length < 1) {
         return {
             status: 400,
