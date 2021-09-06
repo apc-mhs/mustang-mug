@@ -9,11 +9,7 @@
             href="documentation/fccps_acceptable_use.pdf"
             target="_blank"
             rel="external">Legal</a>
-        <label for="languages" class="language-selection">Language:</label>
-        <select name="languages" id="languages">
-            <option value="English">English</option>
-            <option value="Spanish">Spanish</option>
-        </select>
+       
     </p>
 </div>
 
