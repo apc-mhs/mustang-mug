@@ -8,8 +8,16 @@ import crypto from 'crypto';
  * a cart's data. Essentially removes all metadata.
  */
 function getCartData(cart) {
-    const { id, status, createdDate, lastUpdated, checkoutUrl, checkoutPosUri, ...cartData } =
-        cart;
+    const {
+        id,
+        status,
+        createdDate,
+        lastUpdated,
+        checkoutUrl,
+        checkoutPosUri,
+        checkoutStatus,
+        ...cartData
+    } = cart;
     return cartData;
 }
 
