@@ -19,7 +19,7 @@
     "dayjs": "^1.10.6",
     "dotenv": "^9.0.2",
     "firebase": "^8.8.1",
-    "firebase-admin": "^9.8.0",
+    "firebase-admin": "^11.4.1",
     "jest": "^26.6.3",
     "js-cookie": "^2.2.1",
     "msb_pay_api": "github:AndrewLester/msb_pay_api",
